@@ -127,7 +127,7 @@
         }
         else
         {
-            jQuery('.reset_mrp_price').val(mrp_price);
+            jQuery('.reset_mrp_price').val(mrp_price.toFixed(2));
             jQuery('.currentChangingStockId').val(stock_id);
             jQuery('.currentChangingStockName').text(stock_name);
             jQuery('.calculation_calculator').show(300);
@@ -199,9 +199,9 @@
     function setAndResetAllPriceAfterKeyupChanges(data_id)
     {
         var mrp_price  = nanCheck(parseFloat(jQuery('.reset_mrp_price').val()));
-        var changeType  =  jQuery("option:selected", jQuery(".change_type_set_"+data_id)).val();
-        var calType     =  jQuery("option:selected", jQuery(".calculation_type_set_"+data_id)).val();
-        var setAmount   =  nanCheck(parseFloat(jQuery(".set_price_as_"+data_id).val()));
+        var changeType = jQuery("option:selected", jQuery(".change_type_set_"+data_id)).val();
+        var calType    = jQuery("option:selected", jQuery(".calculation_type_set_"+data_id)).val();
+        var setAmount  = nanCheck(parseFloat(jQuery(".set_price_as_"+data_id).val()));
 
         var priceType = 'set';
 
@@ -231,17 +231,37 @@
     //calculation when keyup or change press//
     jQuery(document).on('click','.set_all_price_after_calculation',function(){
         var mrp_price  = nanCheck(parseFloat(jQuery('.reset_mrp_price').val()));
+        var messageStatus = 0;
         jQuery(".set_price_after_calculation").each(function ()
         {
             //var purchase_id = jQuery('.purchase_price_id').val();
             //var offer_purchase_id = jQuery('.offer_purchase_price_id').val();
             var mrp_price_id = jQuery('.mrp_purchase_sell_id').val();
-            var price  = jQuery(this).val();
-            var price_id  = jQuery(this).data('id');
-            var stock_id  = jQuery('.currentChangingStockId').val();
-            jQuery('.stock_price_id_'+stock_id+"_"+price_id).val(price);
-            jQuery('.stock_price_id_'+stock_id+"_"+mrp_price_id).val(mrp_price);
+
+            var price  = nanCheck(parseFloat(jQuery(this).val()));
+            if(price > 0)
+            {
+                var price_id  = jQuery(this).data('id');
+                var stock_id  = jQuery('.currentChangingStockId').val();
+                jQuery('.stock_price_id_'+stock_id+"_"+price_id).val(price.toFixed(2));
+                jQuery('.stock_price_id_'+stock_id+"_"+mrp_price_id).val(mrp_price.toFixed(2));
+                jQuery('.stock_price_id_'+stock_id+"_"+price_id).css({
+                    'background-color':'green','color':'#ffff'
+                });
+                jQuery('.stock_price_id_'+stock_id+"_"+mrp_price_id).css({
+                    'background-color':'green','color':'#ffff'
+                });
+                messageStatus = 1;
+            }else{
+                messageStatus = 0;
+            }
         });
+        if(messageStatus == 1)
+        {
+            jQuery.notify('Calculation price is changed successfully', 'success');
+        }else{
+            jQuery.notify('Calculation price must be greater than 0', 'error');
+        }
     });
     
 
@@ -261,6 +281,10 @@
                 jQuery('.instant_receiving_qty_'+previousStockId).val(0);
                 previousAction = 1;
                 jQuery('.purchase_qty_check_'+previousStockId).prop('checked', false).change();
+                
+                jQuery('.purchasing_qty_'+previousStockId).css({
+                    'background-color':'#ffff','color':'black'
+                });
             }
         });
 
@@ -270,19 +294,31 @@
             jQuery('.purchasing_qty_'+stock_id).val(0);
             jQuery('.instant_receiving_qty_'+stock_id).val(0);
             jQuery('.calculation_line_subtotal_price_'+stock_id).val(0);
+            jQuery('.purchasing_qty_'+stock_id).css({
+                'background-color':'#ffff','color':'black'
+            });
         }
         else
         {
             if(purchasing_qty > 0)
             {
                 jQuery('.purchase_qty_check_'+stock_id).prop('checked', true).change();
+
+                jQuery('.purchasing_qty_'+stock_id).css({
+                    'background-color':'#618b61','color':'#ffff'
+                });
             }else{
                 jQuery('.purchase_qty_check_'+stock_id).prop('checked', false).change(); 
                 jQuery('.calculation_line_subtotal_price_'+stock_id).val(0);
                 jQuery('.instant_receiving_qty_'+stock_id).val(0);
+
+                jQuery('.purchasing_qty_'+stock_id).css({
+                    'background-color':'#ffff','color':'black'
+                });
             }
         }
     });
+
 
     jQuery(document).on('keyup','.purchasing_qty,.stock_price_id',function(){
         var stock_id = jQuery(this).data('stock_id');
@@ -297,15 +333,25 @@
                 jQuery('.instant_receiving_qty_'+previousStockId).val(0);
                 jQuery('.purchasing_qty_'+previousStockId).val(0);
                 jQuery('.purchase_qty_check_'+previousStockId).prop('checked', false).change();
+                
+                jQuery('.purchasing_qty_'+previousStockId).css({
+                    'background-color':'#ffff','color':'black'
+                });
             }
         });
 
         if(purchasing_qty > 0)
         {
             jQuery('.purchase_qty_check_'+stock_id).prop("checked", true).change();
+            jQuery('.purchasing_qty_'+stock_id).css({
+                'background-color':'#618b61','color':'#ffff'
+            });
         }else{
             jQuery('.purchase_qty_check_'+stock_id).prop('checked', false).change(); 
             jQuery('.calculation_line_subtotal_price_'+stock_id).val(0);
+            jQuery('.purchasing_qty_'+stock_id).css({
+                'background-color':'#ffff','color':'black'
+            });
         }
 
         //var purchase_id = jQuery('.purchase_price_id').val();
@@ -316,8 +362,10 @@
          
         var offer_purchase_price = nanCheck(parseFloat(jQuery('.stock_price_id_'+stock_id+"_"+purchase_or_offer_purchase_price_id).val()));
         var line_subtotal_price = offer_purchase_price * purchasing_qty;
+            line_subtotal_price = line_subtotal_price.toFixed(2);
         jQuery('.calculation_line_subtotal_price_'+stock_id).val(line_subtotal_price);
     });
+
 
     jQuery(document).on('keyup','.purchasing_qty,.instant_receiving_qty',function(){
         var stock_id = jQuery(this).data('stock_id');

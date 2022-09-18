@@ -9,9 +9,7 @@
                     </div>
 
 
-            
-                    
-
+        
                     <div class="modal-body " style="background-color:#ede7e7;"><!-- #e2f7f6; modal body-->
                         
                         <div class="form-group">
@@ -26,7 +24,6 @@
                         </div>
                     
 
-                        
                         <div class="row" style="background-color:#fbfbfb;;margin-bottom:10px;text-align:center;">
                             <div class="col-md-12" style="padding:5px;">
                                 <h4 style="color: forestgreen;">
