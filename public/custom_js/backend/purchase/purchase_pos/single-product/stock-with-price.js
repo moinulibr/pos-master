@@ -36,7 +36,6 @@
             jQuery('.stock_price_id_'+stock_id+"_"+price_id).val(jQuery(this).data('previous_price'));
         });
     }
-
     jQuery('#showProductDetailModal').css('overflow-y', 'auto');
 
     jQuery(document).on("submit",'.updateAllProductPrice',function(e){
@@ -71,20 +70,15 @@
         });
         //end ajax
     });
-  //-----------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------
   
    
 
   
 
-    /*
-    |------------------------------------------------------------------------------------------
-    | Update mrp, whole sale, online price modal and set price Current Value of Pruchase Cart
-    |-----------------------------------------------------------------------------------
-    */
     
 
-
+    //when calculator press for calculation
     jQuery(document).on('click','.calculation_price',function(){
         var stock_id = jQuery(this).data('stock_id');
         var price_id = jQuery(this).data('price_id');
@@ -134,8 +128,10 @@
             jQuery('.default_calculation_part_div').hide(300);
         }
     });
-   
+    //when calculator press for calculation
 
+
+    //calculator : where calculate functional is applied
     function seperateAmountByCalculationType(changeType,mrp,priceType,amount)
     {
         var cal_amount    = 0;
@@ -159,8 +155,10 @@
         }
         return finalResult;
     }
+    //calculator : where calculate functional is applied
 
-     /**calculation when keyup or change press */
+
+    //calculation when keyup or change press //
     jQuery(document).on('change keyup','.keyup_change_from_calculator',function(e){
         e.preventDefault();
         var action = 0;
@@ -195,7 +193,9 @@
         var data_id    = jQuery(this).data('id');
         setAndResetAllPriceAfterKeyupChanges(data_id);
     });
+    //calculation when keyup or change press //
 
+    //process for caculation through the caculator 
     function setAndResetAllPriceAfterKeyupChanges(data_id)
     {
         var mrp_price  = nanCheck(parseFloat(jQuery('.reset_mrp_price').val()));
@@ -215,7 +215,11 @@
         }
         jQuery(".set_price_after_calculation_"+data_id).val(final_result.toFixed(2));
     }
+    //process for caculation through the caculator
 
+
+
+    //reset or cancel calculator functional data 
     jQuery(document).on('click','.reset_all_price_on_calculator',function(){
         allFieldEmptyWhenCloseCalculationByCalculator();
     });
@@ -226,9 +230,11 @@
         jQuery('.currentChangingStockName').text('');
         jQuery('.reset_mrp_price').val('');
     }
+    //reset or cancel calculator functional data 
 
 
-    //calculation when keyup or change press//
+
+    //set all price to the stock price list after calculation//
     jQuery(document).on('click','.set_all_price_after_calculation',function(){
         var mrp_price  = nanCheck(parseFloat(jQuery('.reset_mrp_price').val()));
         var messageStatus = 0;
@@ -263,8 +269,12 @@
             jQuery.notify('Calculation price must be greater than 0', 'error');
         }
     });
-    
+    //set all price to the stock price list after calculation//
 
+
+
+
+    //changing pruchase quantity checkbox button
     jQuery(document).on('click','.purchase_qty_check',function(){
         var stock_id = jQuery(this).data('stock_id');
         var purchasing_qty = nanCheck(parseFloat(jQuery('.purchasing_qty_'+stock_id).val()));
@@ -318,8 +328,12 @@
             }
         }
     });
+    //changing pruchase quantity checkbox button
 
 
+
+
+    //line subtotal: changing purchasing quantity and stock price ..for subtotal amount    
     jQuery(document).on('keyup','.purchasing_qty,.stock_price_id',function(){
         var stock_id = jQuery(this).data('stock_id');
         var purchasing_qty = nanCheck(parseFloat(jQuery('.purchasing_qty_'+stock_id).val()));
@@ -365,8 +379,12 @@
             line_subtotal_price = line_subtotal_price.toFixed(2);
         jQuery('.calculation_line_subtotal_price_'+stock_id).val(line_subtotal_price);
     });
+    //line subtotal: changing purchasing quantity and stock price .. for subtotal amount
 
 
+
+
+    //instantly receiving quantity section    
     jQuery(document).on('keyup','.purchasing_qty,.instant_receiving_qty',function(){
         var stock_id = jQuery(this).data('stock_id');
         var purchasing_qty = nanCheck(parseFloat(jQuery('.purchasing_qty_'+stock_id).val()));
@@ -394,40 +412,48 @@
         }
         jQuery('.instant_receiving_qty_'+stock_id).val(instantlyQty)
     });
+    //instantly receiving quantity section
 
 
-    /**update value in  the cart */
-   /*  jQuery(document).on('click','.updateResultCalculationModel',function(){
-        var id                  = jQuery('.product_id').val();
-
-        var mrp_price           = jQuery('.reset_mrp_price').val();
-        var regular_price       = jQuery('.reset_regular_sale_price').val();
-        var whole_sale_price    = jQuery('.reset_whole_sale_price').val();
-        var online_sale_price   = jQuery('.reset_online_sale_price').val();
 
 
-        var purchaePrice    = jQuery('#purchase_unit_price_before_tax_id_'+id).val();
-        var profit          = regular_price - purchaePrice ;
-        var profitMargin    = ((profit / purchaePrice) * 100).toFixed(2) ;
+     /**update value in  the cart */
+    /*  jQuery(document).on('click','.updateResultCalculationModel',function(){
+            var id                  = jQuery('.product_id').val();
 
-        jQuery('#unit_selling_price_inc_tax_id_'+id).val(regular_price);
-        jQuery('#profit_margin_parcent_id_'+id).val(profitMargin);
-        jQuery('#whole_sale_price_'+id).val(whole_sale_price);
-        jQuery('#mrp_price_'+id).val(mrp_price);
-        jQuery('#online_sale_price_'+id).val(online_sale_price);
+            var mrp_price           = jQuery('.reset_mrp_price').val();
+            var regular_price       = jQuery('.reset_regular_sale_price').val();
+            var whole_sale_price    = jQuery('.reset_whole_sale_price').val();
+            var online_sale_price   = jQuery('.reset_online_sale_price').val();
 
-        updateCurrentValueOfCart(id);
 
-        allFieldEmptyWhenCloseCalculationByCalculator();
-        jQuery('#baseOnMrpPriceModal').modal('hide');
-    }); */
-    /**update value in  the cart */
-/*
-|------------------------------------------------------------------------------------------
-| Update mrp, whole sale, online price modal and set price Current Value of Pruchase Cart
-|-----------------------------------------------------------------------------------
-*/
+            var purchaePrice    = jQuery('#purchase_unit_price_before_tax_id_'+id).val();
+            var profit          = regular_price - purchaePrice ;
+            var profitMargin    = ((profit / purchaePrice) * 100).toFixed(2) ;
 
+            jQuery('#unit_selling_price_inc_tax_id_'+id).val(regular_price);
+            jQuery('#profit_margin_parcent_id_'+id).val(profitMargin);
+            jQuery('#whole_sale_price_'+id).val(whole_sale_price);
+            jQuery('#mrp_price_'+id).val(mrp_price);
+            jQuery('#online_sale_price_'+id).val(online_sale_price);
+
+            updateCurrentValueOfCart(id);
+
+            allFieldEmptyWhenCloseCalculationByCalculator();
+            jQuery('#baseOnMrpPriceModal').modal('hide');
+        }); */
+        /**update value in  the cart */
+    /*
+    |------------------------------------------------------------------------------------------
+    | Update mrp, whole sale, online price modal and set price Current Value of Pruchase Cart
+    |-----------------------------------------------------------------------------------
+    */
+
+    /*
+    |------------------------------------------------------------------------------------------
+    | Update mrp, whole sale, online price modal and set price Current Value of Pruchase Cart
+    |-----------------------------------------------------------------------------------
+    */
 
 
     /*
@@ -452,6 +478,8 @@
     |-------------------------------------------------------------
     */
 
+
+    
     /*
     |----------------------------------------------------------------
     | display single product details for showing and adding to cart
