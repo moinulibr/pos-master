@@ -1,0 +1,1 @@
+@include('backend.sell.sell_quotation.partial.list')

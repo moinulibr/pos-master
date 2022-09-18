@@ -1,0 +1,1 @@
+$(function(){$('.datatables-demo').dataTable();});

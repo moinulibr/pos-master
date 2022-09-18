@@ -1,0 +1,47 @@
+  
+
+.breadcrumbs.layout-navbar-fixed {
+    position: fixed;
+    background: #f0f4f5;
+    border-bottom: 1px solid #e3e7e9;
+    top: 70px;
+    padding-left: 20px;
+    padding-right: 300px;
+    width: 100%;
+    z-index:999;
+}
+.products {
+    float: right;
+    margin-top: -60px;
+}
+
+.content_space_for_page{
+    margin-top:10%;
+}
+.status_message_in_content_space{
+    margin-top:2%;
+}
+.real_space_in_content{
+    margin-top:1%;
+}
+
+/*For more action from index page*/
+.btnGroupForMoreAction {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+    z-index: 9;
+    }
+    .btnGroupForMoreAction .btn-see-more-action{
+        font-size: 10px;
+    }
+/*For more action from index page*/
+
+/*form control*/
+.form-control, .custom-select, .custom-file-label, .input-group-text {
+    padding: calc(0.5rem - 1px)!important;
+}
+.form-control {
+    border: 1px solid #e3e7e9;
+}
+/*form control*/
