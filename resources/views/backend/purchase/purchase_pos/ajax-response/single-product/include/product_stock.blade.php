@@ -33,11 +33,11 @@
                     </th>
                     @foreach ($productStock->productStockWiseProductPrices() as $pSPPrice) 
                         <td>
-                            <input type="text" data-price_id="{{$pSPPrice->pId}}" data-stock_id="{{$productStock->sId}}"  data-previous_price="{{$pSPPrice->price}}"  class="stock_price_id_{{$productStock->sId}}_{{$pSPPrice->pId}} stock_price_id mrp_price_id_{{$pSPPrice->pId}} price_set_common_class form-control inputFieldValidateWithNumber" name="p_{{$pSPPrice->pId}}_s_{{$productStock->sId}}">
+                            <input type="text" data-price_id="{{$pSPPrice->pId}}" data-stock_id="{{$productStock->sId}}"  data-previous_price="{{$pSPPrice->price}}"  class="stock_price_id_{{$productStock->sId}}_{{$pSPPrice->pId}} stock_price_id mrp_price_id_{{$pSPPrice->pId}} price_set_common_class form-control inputFieldValidateWithNumber" name="price_sid_{{$productStock->sId}}_pid_{{$pSPPrice->pId}}">
                         </td>
                     @endforeach
                     <td>
-                        <input type="text" class="form-control purchasing_qty purchasing_qty_{{$productStock->sId}} inputFieldValidateWithNumber" data-stock_id="{{$productStock->sId}}">
+                        <input type="text" class="form-control purchasing_qty purchasing_qty_{{$productStock->sId}} inputFieldValidateWithNumber" data-stock_id="{{$productStock->sId}}" name="purchase_quantity_sid_{{$productStock->sId}}">
                     </td>
                     <td>
                         <input type="checkbox" class="form-control purchase_qty_check purchase_qty_check_{{$productStock->sId}}" data-stock_id="{{$productStock->sId}}" data-stock_name="{{$productStock->label}}">
@@ -47,10 +47,10 @@
                     </td> 
                     <td>
                         <input type="text" disabled class="form-control calculation_line_subtotal_price calculation_line_subtotal_price_{{$productStock->sId}}" data-stock_id="{{$productStock->sId}}">
-                        <input type="hidden" name="" class="form-control calculation_line_subtotal_price calculation_line_subtotal_price_{{$productStock->sId}}" data-stock_id="{{$productStock->sId}}">
+                        <input type="hidden" name="" class="form-control calculation_line_subtotal_price calculation_line_subtotal_price_{{$productStock->sId}}" data-stock_id="{{$productStock->sId}}" name="subtotal_sid_{{$productStock->sId}}">
                     </td>
                     <td>
-                        <input type="text" class="form-control instant_receiving_qty instant_receiving_qty_{{$productStock->sId}}" data-stock_id="{{$productStock->sId}}">
+                        <input type="text" class="form-control instant_receiving_qty instant_receiving_qty_{{$productStock->sId}}" data-stock_id="{{$productStock->sId}}" name="instant_receive_sid_{{$productStock->sId}}">
                     </td>
                 </tr>
             @endforeach
