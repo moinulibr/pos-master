@@ -151,27 +151,75 @@ use App\Models\Backend\Stock\ProductStock;
     |----------------------------------------------------------------------------
     */
 
-    function defaultSellingSession_hh()
-    {
-        return "defaultSellingSession";
-    }
-    function defaultSellingSessionName_hh()
-    {
-        return "Default Selling Customer";
-    }
-    function sellCreateCartSessionName_hh()
-    {
-        return "SellCreateAddToCart_".currentSellingSession_hh(); 
-    }
-    function sellCreateCartInvoiceSummerySessionName_hh()
-    {
-        return "SellCartInvoiceSummery_".currentSellingSession_hh();
-    } 
-    function sellCreateCartShippingAddressSessionName_hh()
-    {
-        return "customerShippingAddress_".currentSellingSession_hh();
-    }
+    /*
+    |---------------------------------------
+    | sell related session part
+    |-------------------------------------
+    */
+        function defaultSellingSession_hh()
+        {
+            return "defaultSellingSession";
+        }
+        function defaultSellingSessionName_hh()
+        {
+            return "Default Selling Customer";
+        }
+        function sellCreateCartSessionName_hh()
+        {
+            return "SellCreateAddToCart_".currentSellingSession_hh(); 
+        }
+        function sellCreateCartInvoiceSummerySessionName_hh()
+        {
+            return "SellCartInvoiceSummery_".currentSellingSession_hh();
+        } 
+        function sellCreateCartShippingAddressSessionName_hh()
+        {
+            return "customerShippingAddress_".currentSellingSession_hh();
+        }
+    /*
+    |---------------------------------------
+    | sell related session part
+    |-------------------------------------
+    */
 
+
+    
+    /*
+    |---------------------------------------
+    | purchase related session part
+    |-------------------------------------
+    */
+        function defaultPurchaseSession_hh()
+        {
+            return "defaultPurchaseSession";
+        }
+        function defaultPurchaseSessionName_hh()
+        {
+            return "Default Purchase Customer";
+        }
+        function purchaseCreateCartSessionName_hh()
+        {
+            return "PurchaseCreateAddToCart_".currentPurchaseSession_hh(); 
+        }
+        function purchaseCreateCartInvoiceSummerySessionName_hh()
+        {
+            return "PurchaseCartInvoiceSummery_".currentPurchaseSession_hh();
+        } 
+        function purchaseCreateCartShippingAddressSessionName_hh()
+        {
+            return "customerShippingAddress_".currentPurchaseSession_hh();
+        }
+
+        //current selling session from master session
+        function currentPurchaseSession_hh()
+        {
+            return getSellingCurrentSession_hh();
+        }
+    /*
+    |---------------------------------------
+    | purchase related session part
+    |-------------------------------------
+    */
 
 
     //get only single price, by product id,product stock id, stock id, price id

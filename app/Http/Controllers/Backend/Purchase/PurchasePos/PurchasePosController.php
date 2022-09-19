@@ -82,8 +82,8 @@ class PurchasePosController extends Controller
         $data['categories']     = Category::latest()->get();
         $data['allproducts']    = Product::select('name','id')->latest()->get();
         $data['products']       = Product::select('name','id','photo','available_base_stock')
-                                ->latest()
-                                ->paginate(15);
+                                        ->latest()
+                                        ->paginate(15);
         return view('backend.purchase.purchase_pos.landing.create_pos',$data);
     }
 
@@ -95,76 +95,12 @@ class PurchasePosController extends Controller
     public function singleProductDetails(Request $request)
     {
         $data['product'] = Product::findOrFail($request->id);
-        //$html = view('backend.product.product-price.update_price',$data)->render();
         $html = view('backend.purchase.purchase_pos.ajax-response.single-product.single_product',$data)->render();
         return response()->json([
             'status' => true,
             'data' => $html
         ]);
-        
-        /* $data['product']        = Product::find($request->id);
-        $unitBaseId             = Unit::find($data['product']->unit_id)->base_unit_id;
-        $data['units']          = Unit::where('base_unit_id',$unitBaseId)->latest()->get();
-        
-        //default price id 
-        $data['defaultPriceId'] = 1;
-        //default stock 
-        $defaultStock = 1 ;
-        $dafault = ProductStock::select("product_stocks.id","stocks.id as sId")
-                ->join("stocks","stocks.id","=","product_stocks.stock_id")
-                ->where('product_stocks.product_id',$request->id)
-                ->where('product_stocks.branch_id',authBranch_hh())
-                ->where('stocks.id',defaultSelectedProductStockId_hh())//default stock id
-                ->where('product_stocks.status',1)
-                ->where('stocks.status',1)
-                ->orderBy('stocks.custom_serial','ASC')
-                ->where('stocks.branch_id',authBranch_hh())
-                ->first(); 
-        $data['defaultProductStockId'] = $dafault ? $dafault->id : 1;
-        //default stock 
-
-        //default product stocks price
-        $product                = $data['product'];
-        $data['productStock']   = $product->productStockWithActivePriceByProductStockIdNORWhereStatusIsActiveWhenCreateSale($dafault->id);
-        //default product stocks price
-
-        $view   = view('backend.purchase.purchase_pos.ajax-response.single-product.single_product',$data)->render();
-        $stock  = view('backend.purchase.purchase_pos.ajax-response.single-product.include.product_stock',$data)->render();
-        return response()->json([
-            'status'    => true,
-            'html'      => $view,
-            'stock'     => $stock,
-        ]); */
     }
-
-
-    public function displaySinglePriceListByProductStockId(Request $request)
-    {
-        $product                = Product::find($request->product_id);
-        $data['productStock']   = $product->productStockWithActivePriceByProductStockIdNORWhereStatusIsActiveWhenCreateSale($request->product_stock_id);
-
-        $stock = view('backend.purchase.purchase_pos.ajax-response.single-product.include.product_stock_price',$data)->render();
-        return response()->json([
-            'status'    => true,
-            'stock'     => $stock,
-        ]);
-    }
-
-    //display product stock and price, when sell create. more than stock, from others stock
-    public function displayQuantityWiseSingleProductStockByProductId(Request $request)
-    {
-        $product                        = Product::find($request->product_id);
-        $data['sellingQuantity']        = $request->sellingQuantity;
-        $data['sellingPrice']           = $request->sellingPrice;
-        $data['primarySellingStock']    = $request->primarySellingStock;
-        $data['product'] = $product;
-        $stock = view('backend.purchase.purchase_pos.ajax-response.single-product.include.quantity_wise_product_stock',$data)->render();
-        return response()->json([
-            'status'    => true,
-            'stock'     => $stock,
-        ]);
-    }
-  
     
 
     /**
@@ -176,7 +112,7 @@ class PurchasePosController extends Controller
     public function store(Request $request)
     {
         return $request;
-        $this->cartName     = sellCreateCartSessionName_hh();//"SellCreateAddToCart";
+        $this->cartName     = purchaseCreateCartSessionName_hh();//"PurchaseCreateAddToCart";
         $this->requestAllCartData = $request;
         $this->addingToCartWhenSellCreate();
         $list = view('backend.purchase.purchase_pos.ajax-response.landing.added-to-cart.list')->render();
