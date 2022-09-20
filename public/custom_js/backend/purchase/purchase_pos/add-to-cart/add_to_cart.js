@@ -28,7 +28,7 @@
 
 
     // add to sale cart [submit]
-    jQuery(document).on("submit",'.addToSaleCart',function(e){
+    jQuery(document).on("submit",'.addToPurchaseCart',function(e){
         e.preventDefault();
         var form = jQuery(this);
         var url = form.attr("action");

@@ -199,7 +199,7 @@ trait SellCreateAddToCart
             //$cartName[$this->saleDetails->id]['quantity']             = $quantity;
         }
         else{
-            $cartName[$this->product_var_id] = [
+            $cartName[$this->product_id] = [
                 'price_cat_id'              => $this->saleDetails->price_cat_id,
                 'productVari_id'            => $this->saleDetails->product_variation_id,
                 'product_id'                => $this->saleDetails->product_id,

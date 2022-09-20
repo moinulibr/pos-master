@@ -1,7 +1,7 @@
 
             <div class="modal-dialog modal-xl" >
 
-                <form action="{{route('admin.purchase.regular.pos.store')}}" method="POST" class="addToSaleCart modal-content">
+                <form action="{{route('admin.purchase.regular.pos.store')}}" method="POST" class="addToPurchaseCart modal-content">
                     @csrf
                     <div class="modal-header" style="background-color:#f9f5f4;"> <!---#e2f7f6;-->
                         <h5 class="modal-title">&nbsp;</h5>
@@ -31,10 +31,8 @@
                                     <input type="hidden" id="main_product_id" class="product_id" name="product_id" value="{{$product->id}}">
                                     <input type="hidden" name="product_name" value="{{$product->name}}">
                                     <input type="hidden" name="custom_code" value="{{$product->custom_code}}">
-                                    <input type="hidden" name="warehouse_id" value="{{$product->warehouse_id}}">
                                     <input type="hidden" name="supplier_id" value="{{$product->supplier_id}}">
                                     <input type="hidden" name="product_id" value="{{$product->id}}">
-                                    <input type="hidden" name="warehouse_rack_id" value="{{$product->warehouse_rack_id}}">
                                 </h4>    
                             </div>              
                         </div>

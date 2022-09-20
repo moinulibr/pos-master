@@ -38,39 +38,6 @@
         });
     }
     jQuery('#showProductDetailModal').css('overflow-y', 'auto');
-
-    jQuery(document).on("submit",'.updateAllProductPrice',function(e){
-        e.preventDefault();
-        var form = jQuery(this);
-        var url = form.attr("action");
-        var type = form.attr("method");
-        var data = form.serialize();
-        jQuery('.color-red').text('');
-        jQuery.ajax({
-            url: url,
-            data: data,
-            type: type,
-            datatype:"JSON",
-            beforeSend:function(){
-                jQuery('.processing').fadeIn();
-            },
-            success: function(response){
-                if(response.status == true)
-                {
-                    jQuery.notify(response.message, response.type);
-                    form[0].reset();
-                    setTimeout(function(){
-                        productList();
-                        jQuery('#editProductPriceModal').modal('hide');//hide modal
-                    },1000);
-                }
-            },
-            complete:function(){
-                jQuery('.processing').fadeOut();
-            },
-        });
-        //end ajax
-    });
     //-----------------------------------------------------------------------------------------
   
    
@@ -440,32 +407,6 @@
     }
 
 
-    /**update value in  the cart */
-    /*  jQuery(document).on('click','.updateResultCalculationModel',function(){
-            var id                  = jQuery('.product_id').val();
-
-            var mrp_price           = jQuery('.reset_mrp_price').val();
-            var regular_price       = jQuery('.reset_regular_sale_price').val();
-            var whole_sale_price    = jQuery('.reset_whole_sale_price').val();
-            var online_sale_price   = jQuery('.reset_online_sale_price').val();
-
-
-            var purchaePrice    = jQuery('#purchase_unit_price_before_tax_id_'+id).val();
-            var profit          = regular_price - purchaePrice ;
-            var profitMargin    = ((profit / purchaePrice) * 100).toFixed(2) ;
-
-            jQuery('#unit_selling_price_inc_tax_id_'+id).val(regular_price);
-            jQuery('#profit_margin_parcent_id_'+id).val(profitMargin);
-            jQuery('#whole_sale_price_'+id).val(whole_sale_price);
-            jQuery('#mrp_price_'+id).val(mrp_price);
-            jQuery('#online_sale_price_'+id).val(online_sale_price);
-
-            updateCurrentValueOfCart(id);
-
-            allFieldEmptyWhenCloseCalculationByCalculator();
-            jQuery('#baseOnMrpPriceModal').modal('hide');
-        }); */
-        /**update value in  the cart */
     /*
     |------------------------------------------------------------------------------------------
     | Update mrp, whole sale, online price modal and set price Current Value of Pruchase Cart

@@ -47,15 +47,14 @@
                     </td> 
                     <td>
                         <input type="text" disabled class="form-control calculation_line_subtotal_price calculation_line_subtotal_price_{{$productStock->sId}}" data-stock_id="{{$productStock->sId}}">
-                        <input type="hidden" name="" class="form-control calculation_line_subtotal_price calculation_line_subtotal_price_{{$productStock->sId}}" data-stock_id="{{$productStock->sId}}" name="subtotal_sid_{{$productStock->sId}}">
+                        <input type="hidden" class="form-control calculation_line_subtotal_price calculation_line_subtotal_price_{{$productStock->sId}}" data-stock_id="{{$productStock->sId}}" name="subtotal_sid_{{$productStock->sId}}">
                     </td>
                     <td>
                         <input type="text" class="form-control instant_receiving_qty instant_receiving_qty_{{$productStock->sId}}" data-stock_id="{{$productStock->sId}}" name="instant_receive_sid_{{$productStock->sId}}">
                     </td>
                 </tr>
             @endforeach
-        </tbody>
-                        
+        </tbody>       
         <input type="hidden" name="" class="mrp_purchase_sell_id" value="{{mrpSellId_hh()}}">
         <input type="hidden" name="" class="purchase_price_id" value="{{purchasePriceId_hh()}}">
         <input type="hidden" name="" class="offer_purchase_price_id" value="{{offerPurchasePriceId_hh()}}">

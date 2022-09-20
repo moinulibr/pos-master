@@ -1,5 +1,5 @@
 <?php
-namespace App\Traits\Backend\Pos\Create;
+namespace App\Traits\Backend\PurchasePos\Create;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Backend\Sell\SellInvoice;
@@ -14,7 +14,7 @@ use App\Traits\Backend\Stock\Logical\StockChangingTrait;
  * pricing trait
  * 
  */
-trait StoreDataFromSellCartTrait
+trait StoreDataFromPurchaseCartTrait
 {
     use StockChangingTrait;
 

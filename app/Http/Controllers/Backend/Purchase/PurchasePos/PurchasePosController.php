@@ -31,13 +31,13 @@ use App\Traits\Backend\Product\Logical\ProductTrait;
 use App\Models\Backend\ProductAttribute\ProductGrade;
 use App\Models\Backend\Reference\Reference;
 use App\Traits\Backend\Product\Request\ProductValidationTrait;
-use App\Traits\Backend\Pos\Create\SellCreateAddToCart;
+use App\Traits\Backend\PurchasePos\Create\PurchaseCreateAddToCart;
 
-use App\Traits\Backend\Pos\Create\StoreDataFromSellCartTrait;
+use App\Traits\Backend\PurchasePos\Create\StoreDataFromPurchaseCartTrait;
 
 class PurchasePosController extends Controller
 {
-    use SellCreateAddToCart, StoreDataFromSellCartTrait;
+    use PurchaseCreateAddToCart, StoreDataFromPurchaseCartTrait;
     /**
      * Display a listing of the resource.
      *
@@ -74,6 +74,7 @@ class PurchasePosController extends Controller
      */
     public function create()
     {
+        //$this->removeAllItemFromSellCreateAddedToCartList();
         // first time default sell session create
         firstTimeDefaultMasterSellSessionCreate_hh();
 
@@ -111,10 +112,10 @@ class PurchasePosController extends Controller
      */
     public function store(Request $request)
     {
-        return $request;
+        //return $request;
         $this->cartName     = purchaseCreateCartSessionName_hh();//"PurchaseCreateAddToCart";
         $this->requestAllCartData = $request;
-        $this->addingToCartWhenSellCreate();
+        $this->addingToCartWhenPurchaseCreate();
         $list = view('backend.purchase.purchase_pos.ajax-response.landing.added-to-cart.list')->render();
         return response()->json([
             'status'    => true,
