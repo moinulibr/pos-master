@@ -14,7 +14,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="{{route('admin.sell.regular.pos.customer.shipping.address')}}" class="submitCustomerShippingAddress" id="submitCustomerShippingAddress">
+                    <form method="POST" action="" class="submitCustomerShippingAddress" id="submitCustomerShippingAddress">
                         @csrf
                         <div class="response_shipping_information"></div>
 

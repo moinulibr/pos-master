@@ -10,7 +10,7 @@
             </th>
             <td class="border-0 " style="width:25%;">
                 <strong style="color:#8428e7">
-                    <span class="totalItemFromSellCartList">0</span>
+                    <span class="totalItemFromPurchaseCartList">0</span>
                 </strong>
             </td>
             <th class="border-0" style="width:25%;text-align: left !important;">
@@ -22,9 +22,9 @@
             </th>
             <td class="border-0  d-flex text-dark font-size-base" >
                 <strong style="color:#9e53ee">
-                    <span class="subtotalFromSellCartList">0</span>
-                    <input type="hidden" class="subtotalFromSellCartListValue" name="invoice_subtotal_before_discount" value="">
-                    <input type="hidden" class="totalPurchasePriceForThisInvoiceFromSellCartList" name="invoice_subtotal_before_discount" value="">
+                    <span class="subtotalFromPurchaseCartList">0</span>
+                    <input type="hidden" class="subtotalFromPurchaseCartListValue" name="invoice_subtotal_before_discount" value="">
+                    <input type="hidden" class="totalPurchasePriceForThisInvoiceFromPurchaseCartList" name="invoice_subtotal_before_discount" value="">
                 </strong>
             </td>
         </tr>
@@ -37,7 +37,7 @@
                         <i class="fa fa-plus"></i>
                     </span>
                 </div>
-                @include('backend.sell.pos.landing.modal.shipping_cost_modal')
+                @include('backend.purchase.purchase_pos.landing.modal.shipping_cost_modal')
             </th>
             <td class="border-0 " style="width:25%;text-align: left !important;">
                <strong class="invoiceFinalShippingCostAmount">0.0</strong>
@@ -54,7 +54,7 @@
                         <i class="fa fa-minus"></i>
                     </span>
                 </div>
-                @include('backend.sell.pos.landing.modal.discount_modal')
+                @include('backend.purchase.purchase_pos.landing.modal.discount_modal')
             </th>
             <td class="border-0  d-flex text-dark font-size-base" >
                 <strong class="invoiceFinalTotalDiscountAmount">0</strong>
@@ -69,7 +69,7 @@
                         <i class="fa fa-plus"></i>
                     </span>
                 </div>
-                @include('backend.sell.pos.landing.modal.other_cost_modal')
+                @include('backend.purchase.purchase_pos.landing.modal.other_cost_modal')
             </th>
             <td  class="border-0"  style="text-align: left !important;width:25%;">
                 <strong  class="invoiceFinalTotalOtherCostAmount" style="padding-left: 25%;">0.0</strong>
@@ -86,7 +86,7 @@
                         <i class="fa fa-plus"></i>
                     </span>
                 </div>
-                @include('backend.sell.pos.landing.modal.vat_modal')
+                @include('backend.purchase.purchase_pos.landing.modal.vat_modal')
             </th>
             <td class="border-0 justify-content-end d-flex text-dark font-size-base" style="width:20%;">
                 <strong  class="invoiceFinalTotalVatAmount">0.0</strong>

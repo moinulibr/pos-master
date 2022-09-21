@@ -311,7 +311,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                             }
                                         </style>
                                         <div class="col-3" style="border-right: 1px solid #e9ecef;">
-                                            <a href="#" class="btn btn-danger btnFullWidth white removeOrEmptyAllItemFromCreateSellCartList" style="margin-top: 1%;">
+                                            <a href="#" class="btn btn-danger btnFullWidth white removeOrEmptyAllItemFromCreatePurchaseCartList" style="margin-top: 1%;">
                                                 Cancel
                                             </a>
 
@@ -331,10 +331,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                             </a>
 
 
-                                            <a href="#" class="pos_print_direct_from_sell_cart btn btn-info btnFullWidth white" style="margin-top: 1%;" data-href="{{ route('admin.sell.regular.pos.normal.print.from.direct.sell.cart') }}">
+                                            <a href="#" class="pos_print_direct_from_purchase_cart btn btn-info btnFullWidth white" style="margin-top: 1%;" data-href="{{ route('admin.purchase.regular.purchase.normal.print.from.direct.purchase.cart') }}">
                                                 Print
                                             </a>
-                                            <a href="{{ route('admin.sell.regular.pos.pos.print.from.direct.sell.cart') }}" class="print normal_print_direct_from_sell_cart btn btn-primary btnFullWidth white" data-href="#" style="margin-top: 1%;" target="_blank">
+                                            <a href="{{ route('admin.purchase.regular.purchase.pos.print.from.direct.purchase.cart') }}" class="print normal_print_direct_from_purchase_cart btn btn-primary btnFullWidth white" data-href="#" style="margin-top: 1%;" target="_blank">
                                                 POS Print
                                             </a>
                                         </div>
@@ -451,28 +451,28 @@ License: You must have a valid license purchased only from themeforest(the above
         <!-------display product list------> 
         
         <!-------display added to product list------> 
-        <input type="hidden" class="displaySellCreateAddedToCartProductListUrl" value="{{ route('admin.purchase.regular.pos.display.sell.created.added.to.cart.product.list') }}">
+        <input type="hidden" class="displayPurchaseCreateAddedToCartProductListUrl" value="{{ route('admin.purchase.regular.pos.display.purchase.created.added.to.cart.product.list') }}">
         <!-------display added to product list------> 
         
         <!------- invoice final calculation summery------> 
-        <input type="hidden" class="invoiceFinalSellCalculationSummeryUrl" value="{{ route('admin.purchase.regular.pos.sell.final.invoice.calculation.summery') }}">
+        <input type="hidden" class="invoiceFinalPurchaseCalculationSummeryUrl" value="{{ route('admin.purchase.regular.pos.purchase.final.invoice.calculation.summery') }}">
         <!------- invoice final calculation summery------> 
 
-        <!-------remove single item from added to sell cart list------> 
-        <div class="modal fade" id="removeSingleItemFromSellAddedToCartModal"  aria-modal="true"></div>
-        <input type="hidden" class="removeConfirmationRequiredSingleItemFromSellAddedToCartListUrl" value="{{ route('admin.sell.regular.pos.remove.confirmation.required.single.item.from.sell.added.to.cart.list') }}">
-        <input type="hidden" class="removeSingleItemFromSellAddedToCartListUrl" value="{{ route('admin.sell.regular.pos.remove.single.item.from.sell.added.to.cart.list') }}">
-        <!-------remove single item from added to sell cart list------> 
+        <!-------remove single item from added to purchase cart list------> 
+        <div class="modal fade" id="removeSingleItemFromPurchaseAddedToCartModal"  aria-modal="true"></div>
+        <input type="hidden" class="removeConfirmationRequiredSingleItemFromPurchaseAddedToCartListUrl" value="{{ route('admin.purchase.regular.pos.remove.confirmation.required.single.item.from.purchase.added.to.cart.list') }}">
+        <input type="hidden" class="removeSingleItemFromPurchaseAddedToCartListUrl" value="{{ route('admin.purchase.regular.pos.remove.single.item.from.purchase.added.to.cart.list') }}">
+        <!-------remove single item from added to purchase cart list------> 
 
-        <!-------remove all item from added to sell cart list------> 
-        <div class="modal fade" id="removeAllItemFromSellAddedToCartModal"  aria-modal="true"></div>
-        <input type="hidden" class="removeConfirmationRequiredAllItemFromSellAddedToCartListUrl" value="{{ route('admin.sell.regular.pos.remove.confirmation.required.all.item.from.sell.added.to.cart.list') }}">
-        <input type="hidden" class="removeAllItemFromSellAddedToCartListUrl" value="{{ route('admin.sell.regular.pos.remove.all.item.from.sell.added.to.cart.list') }}">
-        <!-------remove all item from added to sell cart list------> 
+        <!-------remove all item from added to purchase cart list------> 
+        <div class="modal fade" id="removeAllItemFromPurchaseAddedToCartModal"  aria-modal="true"></div>
+        <input type="hidden" class="removeConfirmationRequiredAllItemFromPurchaseAddedToCartListUrl" value="{{ route('admin.purchase.regular.pos.remove.confirmation.required.all.item.from.purchase.added.to.cart.list') }}">
+        <input type="hidden" class="removeAllItemFromPurchaseAddedToCartListUrl" value="{{ route('admin.purchase.regular.pos.remove.all.item.from.purchase.added.to.cart.list') }}">
+        <!-------remove all item from added to purchase cart list------> 
 
-        <!-------change quantity from added to sell cart list------> 
-        <input type="hidden" class="changeQuantityFromSellAddedToCartListUrl" value="{{ route('admin.sell.regular.pos.change.quantity.from.sell.added.to.cart.list') }}">
-        <!-------change quantity from added to sell cart list------> 
+        <!-------change quantity from added to purchase cart list------> 
+        <input type="hidden" class="changeQuantityFromPurchaseAddedToCartListUrl" value="{{ route('admin.purchase.regular.pos.change.quantity.from.purchase.added.to.cart.list') }}">
+        <!-------change quantity from added to purchase cart list------> 
 
 
         <script src="{{asset('backend/pos')}}/assets/js/plugin.bundle.min.js"></script>

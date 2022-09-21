@@ -74,7 +74,7 @@ class PurchasePosController extends Controller
      */
     public function create()
     {
-        //$this->removeAllItemFromSellCreateAddedToCartList();
+        //$this->removeAllItemFromPurchaseCreateAddedToCartList();
         // first time default sell session create
         firstTimeDefaultMasterSellSessionCreate_hh();
 
@@ -138,9 +138,9 @@ class PurchasePosController extends Controller
     //sell final invoice calculation summery [save in session]
     public function invoiceFinalSellCalculationSummery(Request $request)
     {
-        $this->cartName     = sellCreateCartInvoiceSummerySessionName_hh();//"SellCartInvoiceSummery";
+        $this->cartName     = sellCreateCartInvoiceSummerySessionName_hh();//"purchaseCartInvoiceSummery";
         $this->requestAllCartData = $request;
-        $this->sellCartInvoiceSummery();
+        $this->purchaseCartInvoiceSummery();
         $cartName           = [];
         $cartName           = session()->has($this->cartName) ? session()->get($this->cartName)  : [];
         return $cartName;
@@ -166,7 +166,7 @@ class PurchasePosController extends Controller
     public function removeSingleItemFromSellAddedToCartList(Request $request)
     {
         $this->requestAllCartData = $request;
-        $this->removeSingleItemFromSellCreateAddedToCartList();
+        $this->removeSingleItemFromPurchaseCreateAddedToCartList();
 
         $list = view('backend.purchase.purchase_pos.ajax-response.landing.added-to-cart.list')->render();
         return response()->json([
@@ -189,7 +189,7 @@ class PurchasePosController extends Controller
 
     public function removeAllItemFromSellAddedToCartList()
     {
-        $this->removeAllItemFromSellCreateAddedToCartList();
+        $this->removeAllItemFromPurchaseCreateAddedToCartList();
         $list = view('backend.purchase.purchase_pos.ajax-response.landing.added-to-cart.list')->render();
         return response()->json([
             'status'    => true,

@@ -19,6 +19,7 @@
                     <th class="sticky-head" style="width: 3%;background-color: #f7f7f7;">Sl</th>
                     <th class="sticky-head" style="width: 35%;text-align:center;background-color: #f7f7f7;">Name</th>
                     <th class="sticky-head" style="width: 11%;text-align:center;background-color: #f7f7f7;">Unit</th>
+                    <th class="sticky-head" style="width: 15%;text-align:center;background-color: #f7f7f7;">MRP Price</th>
                     <th class="sticky-head" style="width: 15%;text-align:center;background-color: #f7f7f7;">Purchase  Price</th>
                     <th class="sticky-head" style="width: 11%;text-align:center;background-color: #f7f7f7;">Quantity</th>
                     <th class="sticky-head" style="width: 11%;text-align:center;background-color: #f7f7f7;">Subtotal</th>
@@ -43,7 +44,10 @@
                         {{$item['unit_name']}}<br/>
                     </td>
                     <td style="text-align:center;padding-top:1%;padding-bottom:1%;">
-                        {{$item['custom_code']}}
+                        {{$item['mrp_price']}}
+                    </td>
+                    <td style="text-align:center;padding-top:1%;padding-bottom:1%;">
+                        {{$item['purchase_price']}}
                     </td>
 
                     <td style="text-align:center;background-color: #f5f5f5;padding-top:1%;padding-bottom:1%;">

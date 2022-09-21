@@ -28,6 +28,10 @@ use App\Models\Backend\Stock\ProductStock;
     {
         return 1;
     }
+    function mrpPriceId_hh()
+    {
+        return 1;
+    }
     function purchasePriceId_hh()
     {
         return 5;

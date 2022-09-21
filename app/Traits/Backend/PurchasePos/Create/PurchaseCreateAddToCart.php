@@ -16,41 +16,22 @@ trait PurchaseCreateAddToCart
     protected $product_id;
     protected $product_name;
     protected $custom_code;
+    protected $totalPurchaseQuantity;
+    protected $purchase_price;
 
     protected $changeType;
     protected $discountType;
     protected $discountValue;
     protected $discountAmount;
-    protected $totalSellingQuantity;
-    protected $mainProductStockQuantity;
-    protected $otherProductStockQuantityPurchasePrice;
-    protected $mainProductStockQuantityPurchasePrice;
-    protected $totalPurchasePriceOfAllQuantity;
     protected $changingQuantity;
+    protected $quantity;
 
 
-    protected $saleDetails;
-    protected $singleCartId;
-    protected $available_status;
-    protected $saleUnitPrice;
-    protected $sale_unit_price;
-    protected $sale_quantity;
-    protected $sale_return_quantity;
-
-    protected $identityNumber;
-    protected $sale_from_stock_id;
-    protected $sale_type_id;
-    protected $sale_unit_id;
-    protected $purchase_price;
-    protected $sub_total;
-    protected $selling_unit_name;
-    protected $price_cat_id;
-
-    //sell cart invoice summery [session:SellCartInvoiceSummery]
-    protected function sellCartInvoiceSummery()
+    //sell cart invoice summery [session:purchaseCartInvoiceSummery]
+    protected function purchaseCartInvoiceSummery()
     {
         //return $this->requestAllCartData;
-        //$this->cartName     = "SellCartInvoiceSummery";
+        //$this->cartName     = "purchaseCartInvoiceSummery";
         $cartName           = [];
         $cartName           = session()->has($this->cartName) ? session()->get($this->cartName)  : [];
 
@@ -131,6 +112,10 @@ trait PurchaseCreateAddToCart
         $purchasingStockId = NULL;
         $instantlyReceivingQty = 0;
         $lineSubtotal = 0;
+        $purchasePrice = 0;
+        $mrpPrice = 0;
+        $purchasePrice = 0;
+        $allPrices = [];
         if(count($this->requestAllCartData['stocks']) > 0)
         {
             foreach($this->requestAllCartData['stocks'] as $stock){
@@ -140,23 +125,19 @@ trait PurchaseCreateAddToCart
                     $purchasingStockId =  $stock;
                     $instantlyReceivingQty = $this->requestAllCartData['instant_receive_sid_'.$stock];
                     $lineSubtotal = $this->requestAllCartData['subtotal_sid_'.$stock];
-                }
-            }
-        }
+                    $mrpPrice = $this->requestAllCartData['price_sid_'.$stock.'_pid_'.mrpPriceId_hh()];
+                    $purchasePrice = $this->requestAllCartData['price_sid_'.$stock.'_pid_'.purchaseLineTotalSubtotalWhenCartCreateAndShowCartList_hh()];
+                }//end basic information for session store
 
-
-        $othersProductStocks = [];
-        if($this->requestAllCartData['more_quantity_from_others_product_stock'] == 1)
-        {
-            if(count($this->requestAllCartData['product_stock_id']) > 0)
-            {
-                foreach($this->requestAllCartData['product_stock_id'] as $productStockId)
+                //all pricess
+                foreach($this->requestAllCartData['prices'] as $priceId)
                 {
-                    $othersProductStocks[$this->product_id]['others_product_stock_ids'][]   = $productStockId;  
-                    $othersProductStocks[$this->product_id]['others_product_stock_qtys'][]  = $this->requestAllCartData['product_stock_quantity_'.$productStockId] ;  
+                    $allPrices[$stock][$priceId] =  $this->requestAllCartData['price_sid_'.$stock.'_pid_'.$priceId];
                 }
             }
         }
+        //$allPrices[3][1];heigh stock, mrp price
+        
        
         $cartName[$this->product_id] = [
             'product_id'    => $this->product_id,
@@ -166,27 +147,26 @@ trait PurchaseCreateAddToCart
             'unit_id'       => $this->requestAllCartData['unit_id'],
             'unit_name'     => $this->requestAllCartData['unit_name'],
             
+            'mrp_price'  => $mrpPrice,
+            'purchase_price'  => $purchasePrice,
             'purchase_qty'  => $purchasingQty,
             'stock_id' => $purchasingStockId,
             'instantly_receiving_qty' => $instantlyReceivingQty,
-            'purchase_line_subtotal'  => $lineSubtotal,           
+            'purchase_line_subtotal'  => $lineSubtotal,  
+            
+            'stocks' => $this->requestAllCartData['stocks'],
+            'prices' => $this->requestAllCartData['prices'],
+            'product_prices' => $allPrices,
         ];
         session([$this->cartName => $cartName]);
         return true;
         if(array_key_exists($this->product_id,$cartName))
         {
-            //$cartName[$this->saleDetails->id]['sale_price']           = number_format($sale_price,2,'.', '');
-            //$cartName[$this->saleDetails->id]['quantity']             = $quantity;
+            //$cartName[$this->requestAllCartData['stocks']] = number_format($sale_price,2,'.', '');
         }
         else{
             $cartName[$this->product_id] = [
-                'price_cat_id'              => $this->saleDetails->price_cat_id,
-                'productVari_id'            => $this->saleDetails->product_variation_id,
-                'product_id'                => $this->saleDetails->product_id,
-                'sale_from_stock_id'        => $this->saleDetails->sale_from_stock_id,
-                'selling_unit_name'         => $this->saleDetails->units?$this->saleDetails->units->short_name:NULL,
-                'sale_type_id'              => $this->saleDetails->sale_type_id,
-                'identityNumber'            => $this->saleDetails->saleWarrantyGrarantees?$this->saleDetails->saleWarrantyGrarantees->identity_number:NULL,
+                'product_id'                => $this->product_id,
             ];
         }
         session([$this->cartName => $cartName]);
@@ -194,7 +174,7 @@ trait PurchaseCreateAddToCart
     }
     
     /*Remove Single item From  Cart Working Properly*/
-    public function removeSingleItemFromSellCreateAddedToCartList()
+    public function removeSingleItemFromPurchaseCreateAddedToCartList()
     {
         $this->cartName     = purchaseCreateCartSessionName_hh();//"SellCreateAddToCart";
         $this->product_id   = $this->requestAllCartData['product_id'];
@@ -205,7 +185,7 @@ trait PurchaseCreateAddToCart
     }
 
     /*Remove All item From Cart Working Properly*/
-    public function removeAllItemFromSellCreateAddedToCartList()
+    public function removeAllItemFromPurchaseCreateAddedToCartList()
     {
         $this->cartName = purchaseCreateCartSessionName_hh();;//"SellCreateAddToCart";
         session([$this->cartName => []]);
@@ -215,66 +195,34 @@ trait PurchaseCreateAddToCart
     /*When changing quantity*/
     public function whenChangingQuantityFromCartList()
     {   
-        $this->cartName         = purchaseCreateCartSessionName_hh();//"SellCreateAddToCart";
-        $cartName               = session()->has($this->cartName) ? session()->get($this->cartName)  : [];
+        $this->cartName = purchaseCreateCartSessionName_hh();//"SellCreateAddToCart";
+        $cartName       = session()->has($this->cartName) ? session()->get($this->cartName)  : [];
         
-        $this->product_id       = $this->requestAllCartData['product_id'];
-        $this->changeType       = $this->requestAllCartData['change_type'];
+        $this->product_id  = $this->requestAllCartData['product_id'];
+        $this->changeType  = $this->requestAllCartData['change_type'];
         $this->changingQuantity = $this->requestAllCartData['quantity'];
         
-        $this->totalSellingQuantity             = $cartName[$this->product_id]['final_sell_quantity'];
-        $this->mainProductStockQuantity         = $cartName[$this->product_id]['total_qty_of_main_product_stock'];
-        
+        $this->totalPurchaseQuantity     = $cartName[$this->product_id]['purchase_qty'];
+
         if(array_key_exists($this->product_id,$cartName))
         {
-            $this->available_status   = NULL;
             if($this->changeType == 'minus')
             {
-                if((double) $cartName[$this->product_id]['total_qty_of_main_product_stock'] ==  1)
+                if((double) $cartName[$this->product_id]['purchase_qty'] ==  1)
                 {
-                    //unset($cartName[$this->product_id]);
-                    //session([$this->cartName => $cartName]);
-                    //return true;
-                    $this->totalSellingQuantity     = $cartName[$this->product_id]['final_sell_quantity'];
-                    $this->mainProductStockQuantity = $cartName[$this->product_id]['total_qty_of_main_product_stock'];
+                    $this->totalPurchaseQuantity     = $cartName[$this->product_id]['purchase_qty'];
                 }
-                else if((double) $cartName[$this->product_id]['total_qty_of_main_product_stock'] > 1)
+                else if((double) $cartName[$this->product_id]['purchase_qty'] > 1)
                 {
-                    $this->totalSellingQuantity     = $cartName[$this->product_id]['final_sell_quantity'] - $this->changingQuantity;
-                    $this->mainProductStockQuantity = $cartName[$this->product_id]['total_qty_of_main_product_stock'] - $this->changingQuantity;
+                    $this->totalPurchaseQuantity     = $cartName[$this->product_id]['purchase_qty'] - $this->changingQuantity;
                 }
             }
             else if($this->changeType == 'plus')
             {
-                $this->totalSellingQuantity     = $cartName[$this->product_id]['final_sell_quantity']   + $this->changingQuantity;
-                $this->mainProductStockQuantity = $cartName[$this->product_id]['total_qty_of_main_product_stock'] + $this->changingQuantity;
+                $this->totalPurchaseQuantity     = $cartName[$this->product_id]['purchase_qty']   + $this->changingQuantity;
             }
-
-            if($cartName[$this->product_id]['discount_type'] == "percentage" && $cartName[$this->product_id]['discount_amount'])
-            {
-                $totalDiscountAmount =  (($this->totalSellingQuantity *  $cartName[$this->product_id]['final_sell_price']) * ($cartName[$this->product_id]['discount_amount']) / 100);
-            }
-            else if($cartName[$this->product_id]['discount_type'] == "fixed" && $cartName[$this->product_id]['discount_amount'])
-            {
-                $totalDiscountAmount =  $cartName[$this->product_id]['discount_amount'] ;
-            }
-            else{
-                $totalDiscountAmount = 0 ;
-            }
-            $this->mainProductStockQuantityPurchasePrice    = $cartName[$this->product_id]['purchase_price'] * $this->mainProductStockQuantity;
-            $this->otherProductStockQuantityPurchasePrice   = $cartName[$this->product_id]['others_product_stock_quantity_purchase_price'];
-            $this->totalPurchasePriceOfAllQuantity          = $this->mainProductStockQuantityPurchasePrice + $this->otherProductStockQuantityPurchasePrice;
-
-            $cartName[$this->product_id]['main_product_stock_quantity_purchase_price']      = $this->mainProductStockQuantityPurchasePrice; 
-            $cartName[$this->product_id]['others_product_stock_quantity_purchase_price']    = $this->otherProductStockQuantityPurchasePrice;
-            $cartName[$this->product_id]['total_purchase_price_of_all_quantity']            = $this->totalPurchasePriceOfAllQuantity;
-            
-            $cartName[$this->product_id]['final_sell_quantity']                             =  $this->totalSellingQuantity;
-            $cartName[$this->product_id]['final_sell_quantity']                             =  $this->totalSellingQuantity;
-            $cartName[$this->product_id]['selling_final_amount']                            =  number_format(($this->totalSellingQuantity *   $cartName[$this->product_id]['final_sell_price']) - $totalDiscountAmount,2,'.', '');
-            $cartName[$this->product_id]['total_qty_of_main_product_stock']                 =  $this->mainProductStockQuantity;
-            $cartName[$this->product_id]['total_discount_amount']                           =  $totalDiscountAmount;
-            $cartName[$this->product_id]['total_amount_before_discount']                    =  number_format(($this->totalSellingQuantity *  $cartName[$this->product_id]['final_sell_price']),2,'.', '');;
+            $cartName[$this->product_id]['purchase_qty']  =  $this->totalPurchaseQuantity;
+            $cartName[$this->product_id]['purchase_line_subtotal']  =  number_format(($this->totalPurchaseQuantity * $cartName[$this->product_id]['purchase_price']),2,'.', '');
         }
         session([$this->cartName => $cartName]);   
         return true;
@@ -299,42 +247,13 @@ trait PurchaseCreateAddToCart
         $cartName = [];
         $cartName           = session()->has($this->cartName) ? session()->get($this->cartName)  : [];
 
-        //$this->discountType     = $this->saleDetails->discount_type;
-        //$this->discountValue    = $this->saleDetails->discount_value;
-        //$this->discountAmount   = $this->saleDetails->discount_amount;
-
-        $this->sale_unit_price  = $this->saleDetails->unit_price;
-        $this->purchase_price   = $this->saleDetails->purchase_price;
-        $this->sale_quantity    = $this->saleDetails->quantity;
-        $this->sale_return_quantity = $this->saleDetails->return_quantity?$this->saleDetails->return_quantity:0;
-
-        //$this->saleUnitPrice    = $this->netUnitSalePriceWithOutDiscount();
-
-        $productName    = $this->saleDetails->products->name;
-
         if(array_key_exists($this->product_var_id,$cartName))
-            {
-                //$cartName[$this->saleDetails->id]['sale_price']           = number_format($sale_price,2,'.', '');
-                //$cartName[$this->saleDetails->id]['quantity']             = $quantity;
-            }
+        {
+
+        }
         else{
             $cartName[$this->product_var_id] = [
-                'price_cat_id'              => $this->saleDetails->price_cat_id,
-                'productVari_id'            => $this->saleDetails->product_variation_id,
-                'product_id'                => $this->saleDetails->product_id,
-                'name'                      => $productName,
-                'sale_price'                => number_format($this->sale_unit_price,2,'.', ''),
-                'purchase_price'            => number_format($this->purchase_price,2,'.', ''),
-                'discountType'              => $this->saleDetails->discount_type,
-                'discountValue'             => $this->saleDetails->discount_value,
-                'discountAmount'            => $this->saleDetails->discount_amount,
-                'sub_total'                 => number_format((($this->sale_quantity * $this->sale_unit_price) - $this->discountAmount()),2,'.',''),
-                'quantity'                  => $this->sale_quantity,
-                'sale_unit_id'              => $this->saleDetails->sale_unit_id,
-                'sale_from_stock_id'        => $this->saleDetails->sale_from_stock_id,
-                'selling_unit_name'         => $this->saleDetails->units?$this->saleDetails->units->short_name:NULL,
-                'sale_type_id'              => $this->saleDetails->sale_type_id,
-                'identityNumber'            => $this->saleDetails->saleWarrantyGrarantees?$this->saleDetails->saleWarrantyGrarantees->identity_number:NULL,
+                'name'   => "",
             ];
         }
         session([$this->cartName => $cartName]);
@@ -347,7 +266,8 @@ trait PurchaseCreateAddToCart
         $distAmount = 0;
         if($this->discountType == 'percentage')
         {
-            $distAmount = number_format((($this->sale_unit_price * ($this->sale_quantity) * $this->discountValue) / 100),2,'.','');
+            $unit_price = 0;
+            $distAmount = number_format((($unit_price * ($this->quantity) * $this->discountValue) / 100),2,'.','');
         }else{
             $distAmount = $this->discountValue;
         }
@@ -360,12 +280,13 @@ trait PurchaseCreateAddToCart
         $disAmount = 0;
         if($this->discountType == 'percentage')
         {
-            $disAmount = number_format((($this->sale_unit_price * ($this->sale_quantity + $this->sale_return_quantity) * $this->discountValue) / 100),2,'.','');
+            $unit_price = 0;
+            $disAmount = number_format((($unit_price * ($this->quantity + $this->quantity) * $this->discountValue) / 100),2,'.','');
         }else{
             $disAmount = $this->discountValue;
         }
-        $singleDiscount = ($disAmount / ($this->sale_quantity + $this->sale_return_quantity));
-       return  number_format((($this->sale_unit_price) - $singleDiscount),2,'.','');
+        $singleDiscount = ($disAmount / ($this->quantity + $this->quantity));
+       return  number_format((($unit_price) - $singleDiscount),2,'.','');
     }
 
 
@@ -373,7 +294,7 @@ trait PurchaseCreateAddToCart
     /*Remove Single Data From  Cart Working Properly*/
     public function removeSingleDataFromCart()
     {
-        $cartName           = session()->has($this->cartName) ? session()->get($this->cartName)  : [];
+        $cartName  = session()->has($this->cartName) ? session()->get($this->cartName)  : [];
 		unset($cartName[$this->product_var_id]);
         session([$this->cartName => $cartName]);
         return true;

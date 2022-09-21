@@ -6,7 +6,7 @@
     //display sale cart added to cart product list
    function displaySellCreateAddedToCartProductList()
    {
-       var url = jQuery('.displaySellCreateAddedToCartProductListUrl').val();
+       var url = jQuery('.displayPurchaseCreateAddedToCartProductListUrl').val();
        jQuery.ajax({
            url:url,
            //data:{},
@@ -78,7 +78,7 @@
     jQuery(document).on('click','.remove_this_item_from_sell_cart_list',function(e){
         e.preventDefault();
         var product_id = jQuery(this).data('product_id');
-        var url = jQuery('.removeConfirmationRequiredSingleItemFromSellAddedToCartListUrl').val();
+        var url = jQuery('.removeConfirmationRequiredSingleItemFromPurchaseAddedToCartListUrl').val();
         jQuery.ajax({
             url:url,
             data:{product_id:product_id},
@@ -88,7 +88,7 @@
             success:function(response){
                 if(response.status == true)
                 {
-                    jQuery('#removeSingleItemFromSellAddedToCartModal').html(response.html).modal('show');
+                    jQuery('#removeSingleItemFromPurchaseAddedToCartModal').html(response.html).modal('show');
                 }
             },
             complete:function(){
@@ -98,10 +98,10 @@
     });  
     jQuery(document).on('click','.removeSingleItemFromSellCartProductList',function(){
         
-        var totalCartItem = nanCheck(parseFloat(jQuery('.totalItemFromSellCartList').text()));
+        var totalCartItem = nanCheck(parseFloat(jQuery('.totalItemFromPurchaseCartList').text()));
     
         var product_id = jQuery('.remove_product_id').val();
-        var url = jQuery('.removeSingleItemFromSellAddedToCartListUrl').val();
+        var url = jQuery('.removeSingleItemFromPurchaseAddedToCartListUrl').val();
         jQuery.ajax({
             url:url,
             data:{product_id:product_id},
@@ -112,7 +112,7 @@
                 if(response.status == true)
                 {
                     jQuery('.display_added_to_cart_list').html(response.list);
-                    jQuery('#removeSingleItemFromSellAddedToCartModal').modal('hide');
+                    jQuery('#removeSingleItemFromPurchaseAddedToCartModal').modal('hide');
                     jQuery.notify(response.message, response.type);
 
                     if(totalCartItem == 1)
@@ -130,9 +130,9 @@
     //remove/delete single item from sell cart product list
 
     //remove/delete all item from sell cart product list
-    jQuery(document).on('click','.removeOrEmptyAllItemFromCreateSellCartList',function(e){
+    jQuery(document).on('click','.removeOrEmptyAllItemFromCreatePurchaseCartList',function(e){
         e.preventDefault();
-        var url = jQuery('.removeConfirmationRequiredAllItemFromSellAddedToCartListUrl').val();
+        var url = jQuery('.removeConfirmationRequiredAllItemFromPurchaseAddedToCartListUrl').val();
         jQuery.ajax({
             url:url,
             //data:{},
@@ -142,7 +142,7 @@
             success:function(response){
                 if(response.status == true)
                 {
-                    jQuery('#removeAllItemFromSellAddedToCartModal').html(response.html).modal('show');
+                    jQuery('#removeAllItemFromPurchaseAddedToCartModal').html(response.html).modal('show');
                 }
             },
             complete:function(){
@@ -151,7 +151,7 @@
         });
     });
     jQuery(document).on('click','.removeOrEmptyAllItemFromSellCartProductList',function(){
-        var url = jQuery('.removeAllItemFromSellAddedToCartListUrl').val();
+        var url = jQuery('.removeAllItemFromPurchaseAddedToCartListUrl').val();
         jQuery.ajax({
             url:url,
             //data:{},
@@ -159,7 +159,7 @@
                 jQuery('.processing').fadeIn();
             },
             success:function(response){
-                jQuery('#removeAllItemFromSellAddedToCartModal').modal('hide');
+                jQuery('#removeAllItemFromPurchaseAddedToCartModal').modal('hide');
                 jQuery('.display_added_to_cart_list').html(response.list);
                 jQuery.notify(response.message, response.type);
 
@@ -168,13 +168,13 @@
                 finalCalculationForThisInvoice();
             },
             complete:function(){
-                jQuery('#removeAllItemFromSellAddedToCartModal').modal('hide');
+                jQuery('#removeAllItemFromPurchaseAddedToCartModal').modal('hide');
                 jQuery('.processing').fadeOut();
             },
         });
     });
     jQuery(document).on('click','.cancelRemoveAllItemFromSaleCart',function(){
-        jQuery('#removeAllItemFromSellAddedToCartModal').modal('hide');
+        jQuery('#removeAllItemFromPurchaseAddedToCartModal').modal('hide');
     });
     //remove/delete all item from sell cart product list
 
@@ -186,7 +186,7 @@
         var product_id  = jQuery(this).data('product_id');
         var change_type = jQuery(this).data('change_type');
         var quantity    = jQuery(this).data('quantity');
-        var url = jQuery('.changeQuantityFromSellAddedToCartListUrl').val();
+        var url = jQuery('.changeQuantityFromPurchaseAddedToCartListUrl').val();
         jQuery.ajax({
             url:url,
             data:{product_id:product_id,change_type:change_type,quantity:quantity},
@@ -197,7 +197,7 @@
                 if(response.status == true)
                 {
                     jQuery('.display_added_to_cart_list').html(response.list);
-                    jQuery('#removeAllItemFromSellAddedToCartModal').modal('hide');
+                    jQuery('#removeAllItemFromPurchaseAddedToCartModal').modal('hide');
                     jQuery.notify(response.message, response.type);
                 }
                 finalCalculationForThisInvoice();
@@ -235,8 +235,8 @@
             subtotalFromCartList += nanCheck(parseFloat(jQuery(this).val()));
         });
         subtotalFromCartList = ((subtotalFromCartList).toFixed(2));
-        jQuery('.subtotalFromSellCartList').text(subtotalFromCartList);
-        jQuery('.subtotalFromSellCartListValue').val(subtotalFromCartList);
+        jQuery('.subtotalFromPurchaseCartList').text(subtotalFromCartList);
+        jQuery('.subtotalFromPurchaseCartListValue').val(subtotalFromCartList);
         return subtotalFromCartList;
     } 
 
@@ -247,7 +247,7 @@
         jQuery(".total_purchase_price_of_all_quantity_from_cartlist").each(function() {
             totalPurchasePriceFromCartList += nanCheck(parseFloat(jQuery(this).val()));
         });
-        jQuery('.totalPurchasePriceForThisInvoiceFromSellCartList').val(totalPurchasePriceFromCartList);
+        jQuery('.totalPurchasePriceForThisInvoiceFromPurchaseCartList').val(totalPurchasePriceFromCartList);
         return totalPurchasePriceFromCartList;
     } 
 
@@ -255,7 +255,7 @@
     function totalItemFromCartList()
     {
        var totalItme = (nanCheck(parseFloat(jQuery(".total_item_from_cartlist").val())).toFixed(2));
-       jQuery('.totalItemFromSellCartList').text(totalItme);
+       jQuery('.totalItemFromPurchaseCartList').text(totalItme);
        return totalItme;
     }
 
@@ -424,8 +424,8 @@
        //--------------discount making-----------------//
         var invoiceDiscountAmount               = jQuery('.invoice_discount_amount').val();
         var invoiceDiscountType                 = jQuery('.invoice_discount_type option:selected').val();
-        var subtotalFromSellCartList            = nanCheck(parseFloat(jQuery('.subtotalFromSellCartListValue').val())); 
-        var totalPurchasePriceForThisInvoice    = nanCheck(parseFloat(jQuery('.totalPurchasePriceForThisInvoiceFromSellCartList').val())); 
+        var subtotalFromSellCartList            = nanCheck(parseFloat(jQuery('.subtotalFromPurchaseCartListValue').val())); 
+        var totalPurchasePriceForThisInvoice    = nanCheck(parseFloat(jQuery('.totalPurchasePriceForThisInvoiceFromPurchaseCartList').val())); 
         var totalInvoiceDiscountAmount  = 0; 
         if(invoiceDiscountType == 'fixed'){
             totalInvoiceDiscountAmount  = invoiceDiscountAmount;
@@ -544,7 +544,7 @@
 
         var invoiceDiscountAmount               = nanCheck(parseFloat(jQuery('.invoice_discount_amount').val()));
         var invoiceDiscountType                 = jQuery('.invoice_discount_type option:selected').val();
-        var subtotalFromSellCartList            = nanCheck(parseFloat(jQuery('.subtotalFromSellCartListValue').val()));
+        var subtotalFromSellCartList            = nanCheck(parseFloat(jQuery('.subtotalFromPurchaseCartListValue').val()));
         
         var invoiceVatAmount = nanCheck(parseFloat(jQuery('.invoiceVatAmount').text()));
         //jQuery('.invoiceVatType').text();
@@ -558,11 +558,11 @@
         var invoiceOtherCostAmount   = nanCheck(parseFloat(jQuery('.invoice_other_cost_amount').val()));
         //jQuery('.invoiceFinalTotalOtherCostAmount').text(invoiceOtherCostAmount);
 
-        var totalItem = nanCheck(parseFloat(jQuery('.totalItemFromSellCartList').text()));
+        var totalItem = nanCheck(parseFloat(jQuery('.totalItemFromPurchaseCartList').text()));
         var totalQuantity = totalQuantityFromCartList();
         var totalInvoicePayableAmount = nanCheck(parseFloat(jQuery('.netPayableInvoiceTotal').text()));
 
-        var url = jQuery('.invoiceFinalSellCalculationSummeryUrl').val();
+        var url = jQuery('.invoiceFinalPurchaseCalculationSummeryUrl').val();
         jQuery.ajax({
             url:url,
             data:{subtotalFromSellCartList:subtotalFromSellCartList,totalItem:totalItem,totalQuantity:totalQuantity,
@@ -590,12 +590,12 @@
 
 
 
-    /* jQuery(document).on('click','.pos_print_direct_from_sell_cart',function(){
-        //var url = jQuery('.pos_print_direct_from_sell_cart').data('href');
+    /* jQuery(document).on('click','.pos_print_direct_from_purchase_cart',function(){
+        //var url = jQuery('.pos_print_direct_from_purchase_cart').data('href');
         console.log('yes pos');
     }); 
-    jQuery(document).on('click','.normal_print_direct_from_sell_cart',function(){
-        //var url = jQuery('.normal_print_direct_from_sell_cart').data('href');
+    jQuery(document).on('click','.normal_print_direct_from_purchase_cart',function(){
+        //var url = jQuery('.normal_print_direct_from_purchase_cart').data('href');
         console.log('yes normal');
     }); */
 

@@ -55,7 +55,7 @@
                 </tr>
             @endforeach
         </tbody>       
-        <input type="hidden" name="" class="mrp_purchase_sell_id" value="{{mrpSellId_hh()}}">
+        <input type="hidden" name="" class="mrp_purchase_sell_id" value="{{mrpPriceId_hh()}}">
         <input type="hidden" name="" class="purchase_price_id" value="{{purchasePriceId_hh()}}">
         <input type="hidden" name="" class="offer_purchase_price_id" value="{{offerPurchasePriceId_hh()}}">
         <input type="hidden" name="" class="purchaseLineTotalSubtotalWhenCartCreateAndShowCartList" value="{{purchaseLineTotalSubtotalWhenCartCreateAndShowCartList_hh()}}">

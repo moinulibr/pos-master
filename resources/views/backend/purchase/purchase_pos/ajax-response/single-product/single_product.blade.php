@@ -132,7 +132,7 @@
                                                             <label style="margin-top:6px;color:white;font-weight:600;">MRP Price</label>
                                                         </div>
                                                         <div class="col-md-9">
-                                                            <input data-idtype="mrp" type="text" data-id="{{mrpSellId_hh()}}"  data-name="calculation_by_mrp_price"  class="keyup_change_from_calculator reset_mrp_price form-control makeEmptyField inputFieldValidatedOnlyNumeric" name="calculation_by_mrp_price" style="color:black;font-weight:600">
+                                                            <input data-idtype="mrp" type="text" data-id="{{mrpPriceId_hh()}}"  data-name="calculation_by_mrp_price"  class="keyup_change_from_calculator reset_mrp_price form-control makeEmptyField inputFieldValidatedOnlyNumeric" name="calculation_by_mrp_price" style="color:black;font-weight:600">
                                                         </div>
                                                     </div>
                                                 </td>

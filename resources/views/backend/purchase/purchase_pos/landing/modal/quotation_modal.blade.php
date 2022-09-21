@@ -1,7 +1,7 @@
 <div class="modal fade text-left" id="quotation-popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel11" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <form action="{{route('admin.sell.regular.pos.store.data.from.sell.cart')}}" method="POST" class="storeDataFromSellCart">
+            <form action="{{route('admin.purchase.regular.pos.store.data.from.purchase.cart')}}" method="POST" class="storeDataFromSellCart">
                 @csrf
                 <div class="modal-header">
                     <h3 class="modal-title" id="myModalLabel11">Quotation</h3>
