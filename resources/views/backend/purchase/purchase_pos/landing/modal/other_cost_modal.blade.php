@@ -18,7 +18,7 @@
                         <div class="p-3 bg-light-dark d-flex justify-content-between border-bottom">
                             <h5 class="font-size-bold mb-0">Subtotal:</h5>
                             <h5 class="font-size-bold mb-0">
-                                <span class="subtotalBasedOnSellCartDiscountVatAndShippingCost">0</span>
+                                <span class="subtotalBasedOnPurchaseCartDiscountVatAndShippingCost">0</span>
                             </h5>
                         </div>
                     </div>

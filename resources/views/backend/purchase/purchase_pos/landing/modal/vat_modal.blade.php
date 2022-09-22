@@ -18,14 +18,14 @@
                         <div class="p-3 bg-light-dark d-flex justify-content-between border-bottom">
                             <h5 class="font-size-bold mb-0">Subtotal:</h5>
                             <h5 class="font-size-bold mb-0">
-                                <span class="subtotalAfterDiscountBasedOnSellCartList">0</span>
+                                <span class="subtotalAfterDiscountBasedOnPurchaseCartList">0</span>
                             </h5>
                         </div>
                     </div>
                     <div class="col-12" style="padding-left: 20px;">
                         <label class="text-body">Vat Amount</label>
                         <fieldset class="form-group mb-3 d-flex">
-                            <input type="text" name="invoice_vat_amount" class="invoice_vat_amount form-control bg-white inputFieldValidatedOnlyNumeric" value="{{ vatApplicableOrNotWithVatAmountWhenSellCreate_hh() }}" placeholder="Enter Vat Amount" @if (vatCustomizationApplicableOrNotWhenSellCreate_hh() == 0) disabled="disabled"  @endif />
+                            <input type="text" name="invoice_vat_amount" class="invoice_vat_amount form-control bg-white inputFieldValidatedOnlyNumeric" value="{{ vatApplicableOrNotWithVatAmountWhenPurchaseCreate_hh() }}" placeholder="Enter Vat Amount" @if (vatCustomizationApplicableOrNotWhenPurchaseCreate_hh() == 0) disabled="disabled"  @endif />
                             <span class="bg-light-dark  btn ml-2  pt-1 pb-1 d-flex align-items-center justify-content-center" style="width: 35%;">
                                 <strong class="invoice_total_vat_amount">0</strong>
                             </span>

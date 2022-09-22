@@ -209,9 +209,9 @@ use App\Models\Backend\Stock\ProductStock;
         {
             return "PurchaseCartInvoiceSummery_".currentPurchaseSession_hh();
         } 
-        function purchaseCreateCartShippingAddressSessionName_hh()
+        function purchaseCreateCartShippingCostSessionName_hh()
         {
-            return "customerShippingAddress_".currentPurchaseSession_hh();
+            return "purchaseShippingCost_".currentPurchaseSession_hh();
         }
 
         //current selling session from master session
@@ -321,7 +321,7 @@ use App\Models\Backend\Stock\ProductStock;
         // 1 = mrp price
     }
 
-    //vat
+    //vat for sell
     function vatApplicableOrNotWhenSellCreate_hh()
     {
         return 0;
@@ -343,7 +343,33 @@ use App\Models\Backend\Stock\ProductStock;
         // 0 = no
         // 1 = yes
     }
-    //vat
+    //vat for sell
+
+
+    //vat for purchase
+    function vatApplicableOrNotWhenPurchaseCreate_hh()
+    {
+        return 0;
+        // 0 = no
+        // 1 = yes
+    }
+    function vatApplicableOrNotWithVatAmountWhenPurchaseCreate_hh()
+    {
+       if(vatApplicableOrNotWhenPurchaseCreate_hh() == 1)
+       {
+            return 5; 
+       }else{
+        return 0;
+       }
+    }
+    function vatCustomizationApplicableOrNotWhenPurchaseCreate_hh()
+    {
+        return 0;
+        // 0 = no
+        // 1 = yes
+    }
+    //vat for purchase
+
 
 
     //product stock

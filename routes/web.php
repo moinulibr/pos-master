@@ -502,27 +502,29 @@ Route::group(['middleware' => ['auth']], function ()
             
             Route::post('store','PurchasePosController@store')->name('store');
             //display addted to product list
-            Route::get('display/sell/create/added/to/cart/product/list','PurchasePosController@displaySellCreateAddedToCartProductList')->name('display.purchase.created.added.to.cart.product.list');
+            Route::get('display/purchase/create/added/to/cart/product/list','PurchasePosController@displayPurchaseCreateAddedToCartProductList')->name('display.purchase.created.added.to.cart.product.list');
             
-            //sell final invoice calculation summery [save in session]
-            Route::get('/sell/final/invoice/calculation/summery','PurchasePosController@invoiceFinalSellCalculationSummery')->name('purchase.final.invoice.calculation.summery');
+            //purchase final invoice calculation summery [save in session]
+            Route::get('/purchase/final/invoice/calculation/summery','PurchasePosController@invoiceFinalPurchaseCalculationSummery')->name('purchase.final.invoice.calculation.summery');
 
-            //remove single item from sell added to cart list
-            Route::get('remove/confirm-req/for/single/item/from/sell/added/to/cart/list','PurchasePosController@removeConfirmationRequiredForSingleItemFromSellAddedToCartList')->name('remove.confirmation.required.single.item.from.purchase.added.to.cart.list');
-            Route::get('remove/single/item/from/sell/added/to/cart/list','PurchasePosController@removeSingleItemFromSellAddedToCartList')->name('remove.single.item.from.purchase.added.to.cart.list');
+            //remove single item from purchase added to cart list
+            Route::get('remove/confirm-req/for/single/item/from/purchase/added/to/cart/list','PurchasePosController@removeConfirmationRequiredForSingleItemFromPurchaseAddedToCartList')->name('remove.confirmation.required.single.item.from.purchase.added.to.cart.list');
+            Route::get('remove/single/item/from/purchase/added/to/cart/list','PurchasePosController@removeSingleItemFromPurchaseAddedToCartList')->name('remove.single.item.from.purchase.added.to.cart.list');
             
-            //remove all item from sell added to cart list
-            Route::get('remove/confirm-req/for/all/item/from/sell/added/to/cart/list','PurchasePosController@removeConfirmationRequiredForAllItemFromSellAddedToCartList')->name('remove.confirmation.required.all.item.from.purchase.added.to.cart.list');
-            Route::get('remove/all/item/from/sell/added/to/cart/list','PurchasePosController@removeAllItemFromSellAddedToCartList')->name('remove.all.item.from.purchase.added.to.cart.list');
+            //remove all item from purchase added to cart list
+            Route::get('remove/confirm-req/for/all/item/from/purchase/added/to/cart/list','PurchasePosController@removeConfirmationRequiredForAllItemFromPurchaseAddedToCartList')->name('remove.confirmation.required.all.item.from.purchase.added.to.cart.list');
+            Route::get('remove/all/item/from/purchase/added/to/cart/list','PurchasePosController@removeAllItemFromPurchaseAddedToCartList')->name('remove.all.item.from.purchase.added.to.cart.list');
             //change quantity [plus or minus]
             Route::get('change/quantity/from/added/to/cart/list','PurchasePosController@changeQuantity')->name('change.quantity.from.purchase.added.to.cart.list');
             
 
-            // Store data from sell cart
-            Route::post('store/data/from/sell/cart','PurchasePosController@storeDataFromSellCart')->name('store.data.from.purchase.cart');
+            // Store data from purchase cart
+            Route::post('store/data/from/purchase/cart','PurchasePosController@storeDataFromPurchaseCart')->name('store.data.from.purchase.cart');
 
+            //customer shipping address
+            Route::post('shipping/cost/with/other','PurchasePosController@purchaseShippingCostAndOther')->name('shipping.cost.and.others.store.in.session');
         });
-    
+        //have to process later
         Route::group(['as'=> 'admin.purchase.regular.purchase.', 'prefix'=>'admin/regular/purchase','namespace'=>'Backend\Sell\Prints'],function(){
             //print sell invoice :- pos print
             Route::get('pos/print/from/direct/sell/cart','InvoicePrintController@posPrintFromDirectSellCart')->name('pos.print.from.direct.purchase.cart');

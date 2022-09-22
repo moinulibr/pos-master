@@ -14,11 +14,9 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="" class="submitCustomerShippingAddress" id="submitCustomerShippingAddress">
+                    <form method="POST" action="{{route('admin.purchase.regular.pos.shipping.cost.and.others.store.in.session')}}" class="submitShippingCostAndOtherInformation" id="submitShippingCostAndOtherInformation">
                         @csrf
-                        <div class="response_shipping_information"></div>
-
-
+                        
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <label class="text-body">Shipping Charges</label>
@@ -41,9 +39,9 @@
                                 </fieldset>
                             </div>
                             <div class="col-md-6">
-                                <label class="text-body">Sell Note</label>
+                                <label class="text-body">Purchase Note</label>
                                 <fieldset class="form-label-group">
-                                    <textarea name="sell_note" class="form-control" placeholder="Sell Note"></textarea>
+                                    <textarea name="purchase_note" class="form-control" placeholder="Purchase Note"></textarea>
                                 </fieldset>
                             </div>
                         </div>
@@ -57,5 +55,3 @@
             </div>
         </div>
     </div>
-
-    <input type="hidden" class="getShippingAddressDetailsUrl" value="{{route('admin.customer.shipping.address.details.by.customer.id')}}">

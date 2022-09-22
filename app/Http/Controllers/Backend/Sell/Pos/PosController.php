@@ -77,45 +77,6 @@ class PosController extends Controller
         // first time default sell session create
         firstTimeDefaultMasterSellSessionCreate_hh();
 
-        /* $mastersessionname = masterSellingSession_hh();
-        $mastersession    = [];
-        $mastersession    = session()->has($mastersessionname) ? session()->get($mastersessionname)  : [];
-        if(count($mastersession) == 0)
-        {
-            $mastersession[defaultSellingSession()] = [
-                    'session_name' => defaultSellingSession(),
-                    'name' => defaultSellingSessionName(),
-                    'status' => 'active',
-                ];
-            session([$mastersessionname => $mastersession]);
-        } */
-           
-        /* $mastersessionname = masterSellingSession_hh();
-        //session([$mastersessionname => []]);
-        $mastersession    = [];
-        $mastersession    = session()->has($mastersessionname) ? session()->get($mastersessionname)  : [];
-        echo "<pre>";
-        print_r($mastersession);
-        echo "</pre>";
-        echo"<br/><br/>";
-        echo getSellingCurrentSession();
-        echo"<br/><br/>";
-        return var_dump($mastersession); */
-        /* $data['brands']         = Brand::latest()->get();
-        $data['colors']         = Color::latest()->get();
-        $data['suppliers']      = Supplier::latest()->get();
-        $data['productGrades']  = ProductGrade::latest()->get();
-        $data['supplierGroups'] = SupplierGroup::latest()->get();
-        $data['units']          = Unit::latest()->get();
-
-        $data['warehouses']     = Warehouse::latest()->get();
-        $data['prices']         = Price::where('status',1)
-                                ->where('branch_id',authBranch_hh())
-                                ->whereNull('deleted_at')
-                                ->orderBy('custom_serial','ASC')
-                                ->get(); */
-
-
         $data['customers']      = Customer::latest()->get();
         $data['references']     = Reference::latest()->get();
 

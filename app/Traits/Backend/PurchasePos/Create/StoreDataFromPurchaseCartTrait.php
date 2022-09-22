@@ -19,7 +19,7 @@ trait StoreDataFromPurchaseCartTrait
     use StockChangingTrait;
 
 
-    protected $sellCreateFormData;
+    protected $purchaseCreateFormData;
 
     protected $cartName;
     protected $product_id;
@@ -31,10 +31,10 @@ trait StoreDataFromPurchaseCartTrait
 
 
 
-    protected function storeSessionDataFromSellCart()
+    protected function storeSessionDataFromPurchaseCart()
     {   
         
-        $sellCartName = sellCreateCartSessionName_hh();
+        $sellCartName = purchaseCreateCartSessionName_hh();
         $sellCart   = [];
         $sellCart   = session()->has($sellCartName) ? session()->get($sellCartName)  : [];
         
@@ -134,7 +134,7 @@ trait StoreDataFromPurchaseCartTrait
            $stockProcessLaterQty   = $overStock;
         }
 
-        $sellType = $this->sellCreateFormData['sell_type'];
+        $sellType = $this->purchaseCreateFormData['sell_type'];
         //if sell_type==1, then reduce stock from product stocks table 
         if($sellType  == 1 && $instantlyProcessedQty > 0)
         {
@@ -254,7 +254,7 @@ trait StoreDataFromPurchaseCartTrait
         $sellInvoice->round_type = $sign;
         $sellInvoice->total_payable_amount = $sellInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'];
         
-        $sellInvoice->sell_type = $this->sellCreateFormData['sell_type'];
+        $sellInvoice->sell_type = $this->purchaseCreateFormData['sell_type'];
 
         $customerId = $sellInvoiceSummeryCart['invoice_customer_id'];
         if(count($shippingCart) > 0)
@@ -278,7 +278,7 @@ trait StoreDataFromPurchaseCartTrait
         }else{
             $sellInvoice->customer_type_id = 2;  //temporary
         }
-        if( $this->sellCreateFormData['sell_type'] == 1) 
+        if( $this->purchaseCreateFormData['sell_type'] == 1) 
         {
             $sellInvoice->sell_date = date('Y-m-d h:i:s');
         }
@@ -288,17 +288,17 @@ trait StoreDataFromPurchaseCartTrait
 
         $sellInvoice->save();
 
-        if( $this->sellCreateFormData['sell_type'] == 2) 
+        if( $this->purchaseCreateFormData['sell_type'] == 2) 
         {
             $quotation =  new SellQuotation();
             $quotation->sell_invoice_id  = $sellInvoice->id;
             $quotation->invoice_no       = $sellInvoice->invoice_no;
-            $quotation->customer_name    = $this->sellCreateFormData['customer_name'];
-            $quotation->phone            = $this->sellCreateFormData['phone'];
-            $quotation->quotation_no     = $this->sellCreateFormData['quotation_no'];
-            $quotation->validate_date    = $this->sellCreateFormData['validate_date'];
-            $quotation->quotation_note   = $this->sellCreateFormData['quotation_note'];
-            $quotation->sell_date        = $this->sellCreateFormData['sale_date'];
+            $quotation->customer_name    = $this->purchaseCreateFormData['customer_name'];
+            $quotation->phone            = $this->purchaseCreateFormData['phone'];
+            $quotation->quotation_no     = $this->purchaseCreateFormData['quotation_no'];
+            $quotation->validate_date    = $this->purchaseCreateFormData['validate_date'];
+            $quotation->quotation_note   = $this->purchaseCreateFormData['quotation_note'];
+            $quotation->sell_date        = $this->purchaseCreateFormData['sale_date'];
             $quotation->created_by       = authId_hh();
             $quotation->save(); 
         }

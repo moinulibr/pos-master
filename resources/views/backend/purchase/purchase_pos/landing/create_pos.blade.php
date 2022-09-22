@@ -282,7 +282,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                             </span>
                                             <span style="padding-left:1px;">Shipping Address</span> -->
                                         </label>
-                                        <select class="addedNewCustomer customer_id arabic-select" style="width: 100%;"> <!--arabic-select--->
+                                        <select class="addedNewCustomer supplier_id arabic-select" style="width: 100%;"> <!--arabic-select--->
                                             <option value="">Select Supplier</option>
                                             @foreach ($suppliers as $item)
                                             <option value="{{$item->id}}">{{$item->name}} ({{$item->phone}})</option>

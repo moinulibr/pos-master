@@ -66,12 +66,12 @@
                     </td>
                     <td style="text-align:center;background-color: #f5f5f5;padding-top:1%;padding-bottom:1%;">
                         {{$item['purchase_line_subtotal'] ?? 00.00 }}
-                        <input type="hidden" class="selling_final_subtotal_amount_from_cartlist" value=" {{$item['purchase_line_subtotal'] ?? 00.00 }}">
+                        <input type="hidden" class="purchase_final_subtotal_amount_from_cartlist" value=" {{$item['purchase_line_subtotal'] ?? 00.00 }}">
                         <input type="hidden" class="total_purchase_price_of_all_quantity_from_cartlist" value=" {{$item['purchase_qty'] ?? 00.00 }}">
                     </td>
                     <td style="padding-top:1%;padding-bottom:1%;">
                         <div class="card-toolbar text-right">
-                            <a href="#" data-product_id="{{$item['product_id']}}" class="remove_this_item_from_sell_cart_list remove_this_item_from_sell_cart_list_{{$item['product_id']}}" title="Delete"><i style="color: red" class="fas fa-trash-alt"></i></a>
+                            <a href="#" data-product_id="{{$item['product_id']}}" class="remove_this_item_from_purchase_cart_list remove_this_item_from_purchase_cart_list_{{$item['product_id']}}" title="Delete"><i style="color: red" class="fas fa-trash-alt"></i></a>
                         </div>
                     </td>
                 </tr>

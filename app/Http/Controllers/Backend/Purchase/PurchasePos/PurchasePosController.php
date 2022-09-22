@@ -61,7 +61,7 @@ class PurchasePosController extends Controller
         $data['products']       = $query->select('name','id','photo','available_base_stock')
                                 ->latest()
                                 ->paginate(15);
-        $view = view('backend.sell.pos.ajax-response.landing.product-list.product_list',$data)->render();
+        $view = view('backend.purchase.purchase_pos.ajax-response.landing.product-list.product_list',$data)->render();
         return response()->json([
             'status'    => true,
             'html'      => $view,
@@ -75,7 +75,7 @@ class PurchasePosController extends Controller
     public function create()
     {
         //$this->removeAllItemFromPurchaseCreateAddedToCartList();
-        // first time default sell session create
+        // first time default Purchase session create
         firstTimeDefaultMasterSellSessionCreate_hh();
 
         $data['suppliers']      = Supplier::latest()->get();
@@ -125,8 +125,8 @@ class PurchasePosController extends Controller
         ]);
     }
 
-    //display sell created added to cart product list
-    public function displaySellCreateAddedToCartProductList()
+    //display Purchase created added to cart product list
+    public function displayPurchaseCreateAddedToCartProductList()
     {
         $list = view('backend.purchase.purchase_pos.ajax-response.landing.added-to-cart.list')->render();
         return response()->json([
@@ -135,10 +135,10 @@ class PurchasePosController extends Controller
         ]);
     }
 
-    //sell final invoice calculation summery [save in session]
-    public function invoiceFinalSellCalculationSummery(Request $request)
+    //Purchase final invoice calculation summery [save in session]
+    public function invoiceFinalPurchaseCalculationSummery(Request $request)
     {
-        $this->cartName     = sellCreateCartInvoiceSummerySessionName_hh();//"purchaseCartInvoiceSummery";
+        $this->cartName     = purchaseCreateCartInvoiceSummerySessionName_hh();//"purchaseCartInvoiceSummery";
         $this->requestAllCartData = $request;
         $this->purchaseCartInvoiceSummery();
         $cartName           = [];
@@ -153,7 +153,7 @@ class PurchasePosController extends Controller
 
 
     //remove single item confirmation modal
-    public function removeConfirmationRequiredForSingleItemFromSellAddedToCartList(Request $request)
+    public function removeConfirmationRequiredForSingleItemFromPurchaseAddedToCartList(Request $request)
     {
         $data['product_id'] = $request->product_id;
         $html = view('backend.purchase.purchase_pos.ajax-response.landing.remove-added-to-cart.remove_single_item',$data)->render();
@@ -163,7 +163,7 @@ class PurchasePosController extends Controller
         ]);
     }
 
-    public function removeSingleItemFromSellAddedToCartList(Request $request)
+    public function removeSingleItemFromPurchaseAddedToCartList(Request $request)
     {
         $this->requestAllCartData = $request;
         $this->removeSingleItemFromPurchaseCreateAddedToCartList();
@@ -178,7 +178,7 @@ class PurchasePosController extends Controller
     }
 
     //remove all itme confirmation modal
-    public function removeConfirmationRequiredForAllItemFromSellAddedToCartList()
+    public function removeConfirmationRequiredForAllItemFromPurchaseAddedToCartList()
     {
         $html = view('backend.purchase.purchase_pos.ajax-response.landing.remove-added-to-cart.remove_all_item')->render();
         return response()->json([
@@ -187,7 +187,7 @@ class PurchasePosController extends Controller
         ]);
     }
 
-    public function removeAllItemFromSellAddedToCartList()
+    public function removeAllItemFromPurchaseAddedToCartList()
     {
         $this->removeAllItemFromPurchaseCreateAddedToCartList();
         $list = view('backend.purchase.purchase_pos.ajax-response.landing.added-to-cart.list')->render();
@@ -216,22 +216,36 @@ class PurchasePosController extends Controller
 
 
 
-
+    /*======================================================= */
+    //customer shipping address from sell cart (pos)
+    public function purchaseShippingCostAndOther(Request $request)
+    {
+        //return $request; 
+        $this->requestAllCartData = $request;
+        $this->cartName = purchaseCreateCartShippingCostSessionName_hh();
+        $this->shippingCostAndOtherInformationStoreInSession();
+        return response()->json([
+            'status'    => true,
+        ]);
+    }
 
     /*======================================================= */
-    // store sell and quotation data from sell cart (pos)
-    public function storeDataFromSellCart(Request $request)
+    // store Purchase and quotation data from Purchase cart (pos)
+    public function storeDataFromPurchaseCart(Request $request)
     {   
+        $this->sellCreateFormData = $request;
+        $this->storeSessionDataFromPurchaseCart();  
+        return 0;
         DB::beginTransaction();
 
         try {
             $this->sellCreateFormData = $request;
-            $this->storeSessionDataFromSellCart();   
+            $this->storeSessionDataFromPurchaseCart();   
             DB::commit();
             
-            session([sellCreateCartSessionName_hh() => []]);
-            session([sellCreateCartInvoiceSummerySessionName_hh() => []]);
-            session([sellCreateCartShippingAddressSessionName_hh() => []]);
+            session([purchaseCreateCartSessionName_hh() => []]);
+            session([purchaseCreateCartInvoiceSummerySessionName_hh() => []]);
+            session([purchaseCreateCartShippingCostSessionName_hh() => []]);
             $list = view('backend.purchase.purchase_pos.ajax-response.landing.added-to-cart.list')->render();
             return response()->json([
                 'status'    => true,

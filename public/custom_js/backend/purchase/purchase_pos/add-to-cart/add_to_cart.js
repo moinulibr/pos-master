@@ -1,10 +1,10 @@
 
     jQuery(document).ready(function(){
-        displaySellCreateAddedToCartProductList();
+        displayPurchaseCreateAddedToCartProductList();
     });
 
     //display sale cart added to cart product list
-   function displaySellCreateAddedToCartProductList()
+   function displayPurchaseCreateAddedToCartProductList()
    {
        var url = jQuery('.displayPurchaseCreateAddedToCartProductListUrl').val();
        jQuery.ajax({
@@ -74,8 +74,8 @@
 
 
     
-    //remove/delete single item from sell cart product list
-    jQuery(document).on('click','.remove_this_item_from_sell_cart_list',function(e){
+    //remove/delete single item from Purchase cart product list
+    jQuery(document).on('click','.remove_this_item_from_purchase_cart_list',function(e){
         e.preventDefault();
         var product_id = jQuery(this).data('product_id');
         var url = jQuery('.removeConfirmationRequiredSingleItemFromPurchaseAddedToCartListUrl').val();
@@ -96,7 +96,7 @@
             },
         });
     });  
-    jQuery(document).on('click','.removeSingleItemFromSellCartProductList',function(){
+    jQuery(document).on('click','.removeSingleItemFromPurchaseCartProductList',function(){
         
         var totalCartItem = nanCheck(parseFloat(jQuery('.totalItemFromPurchaseCartList').text()));
     
@@ -127,9 +127,9 @@
             },
         });
     });  
-    //remove/delete single item from sell cart product list
+    //remove/delete single item from Purchase cart product list
 
-    //remove/delete all item from sell cart product list
+    //remove/delete all item from Purchase cart product list
     jQuery(document).on('click','.removeOrEmptyAllItemFromCreatePurchaseCartList',function(e){
         e.preventDefault();
         var url = jQuery('.removeConfirmationRequiredAllItemFromPurchaseAddedToCartListUrl').val();
@@ -150,7 +150,7 @@
             },
         });
     });
-    jQuery(document).on('click','.removeOrEmptyAllItemFromSellCartProductList',function(){
+    jQuery(document).on('click','.removeOrEmptyAllItemFromPurchaseCartProductList',function(){
         var url = jQuery('.removeAllItemFromPurchaseAddedToCartListUrl').val();
         jQuery.ajax({
             url:url,
@@ -176,7 +176,7 @@
     jQuery(document).on('click','.cancelRemoveAllItemFromSaleCart',function(){
         jQuery('#removeAllItemFromPurchaseAddedToCartModal').modal('hide');
     });
-    //remove/delete all item from sell cart product list
+    //remove/delete all item from Purchase cart product list
 
 
 
@@ -231,7 +231,7 @@
     function subtotalFromCartList()
     {
         var subtotalFromCartList = 0;
-        jQuery(".selling_final_subtotal_amount_from_cartlist").each(function() {
+        jQuery(".purchase_final_subtotal_amount_from_cartlist").each(function() {
             subtotalFromCartList += nanCheck(parseFloat(jQuery(this).val()));
         });
         subtotalFromCartList = ((subtotalFromCartList).toFixed(2));
@@ -424,20 +424,20 @@
        //--------------discount making-----------------//
         var invoiceDiscountAmount               = jQuery('.invoice_discount_amount').val();
         var invoiceDiscountType                 = jQuery('.invoice_discount_type option:selected').val();
-        var subtotalFromSellCartList            = nanCheck(parseFloat(jQuery('.subtotalFromPurchaseCartListValue').val())); 
+        var subtotalFromPurchaseCartList            = nanCheck(parseFloat(jQuery('.subtotalFromPurchaseCartListValue').val())); 
         var totalPurchasePriceForThisInvoice    = nanCheck(parseFloat(jQuery('.totalPurchasePriceForThisInvoiceFromPurchaseCartList').val())); 
         var totalInvoiceDiscountAmount  = 0; 
         if(invoiceDiscountType == 'fixed'){
             totalInvoiceDiscountAmount  = invoiceDiscountAmount;
         }
         else if(invoiceDiscountType == 'percentage'){
-            totalInvoiceDiscountAmount = ((((invoiceDiscountAmount * subtotalFromSellCartList) / 100)).toFixed(2));
+            totalInvoiceDiscountAmount = ((((invoiceDiscountAmount * subtotalFromPurchaseCartList) / 100)).toFixed(2));
         }else{
             totalInvoiceDiscountAmount  = 0; 
         }
         jQuery('.invoice_total_discount_amount').css({'color':'black','background-color':'white','padding':'0px 30%'});
         jQuery('.invoice_discount_amount_error_message').text('');
-        if((subtotalFromSellCartList - totalInvoiceDiscountAmount) < totalPurchasePriceForThisInvoice)
+        if((subtotalFromPurchaseCartList - totalInvoiceDiscountAmount) < totalPurchasePriceForThisInvoice)
         {
             jQuery('.invoice_discount_amount_error_message').text('-Not Allowed');
             jQuery('.invoice_total_discount_amount').css({'color':'white','background-color':'red','padding':'0px 30%'});
@@ -448,10 +448,10 @@
             jQuery('.invoice_total_discount_amount').css({'color':'black','background-color':'white','padding':'0px 30%'});
         }
         totalInvoiceDiscountAmount  = (nanCheck(parseFloat(totalInvoiceDiscountAmount)).toFixed(2)); 
-        var invoiceSubtotalAfterDiscount = (nanCheck(parseFloat((subtotalFromSellCartList - totalInvoiceDiscountAmount))).toFixed(2));
+        var invoiceSubtotalAfterDiscount = (nanCheck(parseFloat((subtotalFromPurchaseCartList - totalInvoiceDiscountAmount))).toFixed(2));
         var totalInvoiceProfit           = (nanCheck(parseFloat((invoiceSubtotalAfterDiscount - totalPurchasePriceForThisInvoice))).toFixed(2));
         jQuery('.invoice_total_discount_amount').text(totalInvoiceDiscountAmount);
-        jQuery('.totalInvoiceProfit').text(totalInvoiceProfit);
+        //jQuery('.totalInvoiceProfit').text(totalInvoiceProfit);
         jQuery('.invoice_subtotal_after_discount').text(invoiceSubtotalAfterDiscount);
 
         //..........set invoice discount .........//
@@ -476,7 +476,7 @@
 
 
         //-------------- Vat making-----------------//
-        jQuery('.subtotalAfterDiscountBasedOnSellCartList').text(invoiceSubtotalAfterDiscount);
+        jQuery('.subtotalAfterDiscountBasedOnPurchaseCartList').text(invoiceSubtotalAfterDiscount);
         var invoiceVatAmount   = jQuery('.invoice_vat_amount').val();
         var totalVatAmountCalculation =  ((((invoiceVatAmount * invoiceSubtotalAfterDiscount) / 100)).toFixed(2));
         //jQuery('.invoice_total_vat_amount').css({'color':'black','background-color':'white','padding':'0px 30%'});
@@ -504,7 +504,7 @@
         //-------------- other cost making-----------------//
         var totalInvoiceAmountAfterDiscountAndVat = totalInvoiceSubtotalAfterVat;
         var totalInvoiceAmountAfterDiscountVatAndShippingCost = (((parseFloat(totalInvoiceAmountAfterDiscountAndVat) + (totalShippingCost))).toFixed(2));
-        jQuery('.subtotalBasedOnSellCartDiscountVatAndShippingCost').text(totalInvoiceAmountAfterDiscountVatAndShippingCost);
+        jQuery('.subtotalBasedOnPurchaseCartDiscountVatAndShippingCost').text(totalInvoiceAmountAfterDiscountVatAndShippingCost);
         var invoiceOtherCostAmount   = (nanCheck(parseFloat(jQuery('.invoice_other_cost_amount').val())));
         
         var totalInvoiceAmountAfterDiscountVatAndShippingCostAndOtherCost =  (parseFloat( (parseFloat(totalInvoiceAmountAfterDiscountAndVat) + (totalShippingCost)) + (invoiceOtherCostAmount) ).toFixed(2));
@@ -520,7 +520,7 @@
 
         setTimeout(function() 
         {   
-            invoiceFinalSellCalculationSummeryProcessingInTheSession();
+            invoiceFinalPurchaseCalculationSummeryProcessingInTheSession();
         },2000);
 
     }
@@ -536,15 +536,14 @@
     }
 
 
-    //invoice final sell calculation summery processing in the session.
-    function invoiceFinalSellCalculationSummeryProcessingInTheSession()
+    //invoice final Purchase calculation summery processing in the session.
+    function invoiceFinalPurchaseCalculationSummeryProcessingInTheSession()
     {
-        var customer_id = jQuery('.customer_id option:selected').val();
-        var reference_id = jQuery('.reference_id option:selected').val();
-
-        var invoiceDiscountAmount               = nanCheck(parseFloat(jQuery('.invoice_discount_amount').val()));
-        var invoiceDiscountType                 = jQuery('.invoice_discount_type option:selected').val();
-        var subtotalFromSellCartList            = nanCheck(parseFloat(jQuery('.subtotalFromPurchaseCartListValue').val()));
+        var supplier_id = jQuery('.supplier_id option:selected').val();
+       
+        var invoiceDiscountAmount        = nanCheck(parseFloat(jQuery('.invoice_discount_amount').val()));
+        var invoiceDiscountType          = jQuery('.invoice_discount_type option:selected').val();
+        var subtotalFromPurchaseCartList = nanCheck(parseFloat(jQuery('.subtotalFromPurchaseCartListValue').val()));
         
         var invoiceVatAmount = nanCheck(parseFloat(jQuery('.invoiceVatAmount').text()));
         //jQuery('.invoiceVatType').text();
@@ -565,12 +564,12 @@
         var url = jQuery('.invoiceFinalPurchaseCalculationSummeryUrl').val();
         jQuery.ajax({
             url:url,
-            data:{subtotalFromSellCartList:subtotalFromSellCartList,totalItem:totalItem,totalQuantity:totalQuantity,
+            data:{subtotalFromPurchaseCartList:subtotalFromPurchaseCartList,totalItem:totalItem,totalQuantity:totalQuantity,
                 invoiceDiscountAmount:invoiceDiscountAmount,invoiceDiscountType:invoiceDiscountType,
                 totalInvoiceDiscountAmount:totalInvoiceDiscountAmount,invoiceVatAmount:invoiceVatAmount,
                 totalVatAmountCalculation:totalVatAmountCalculation,totalShippingCost:totalShippingCost,
                 invoiceOtherCostAmount:invoiceOtherCostAmount,totalInvoicePayableAmount:totalInvoicePayableAmount,
-                customer_id:customer_id,reference_id:reference_id
+                supplier_id:supplier_id
             },
             beforeSend:function(){
                 jQuery('.processing').fadeIn();
@@ -607,38 +606,7 @@
     |shipping address and add new shipping address
     |----------------------------------------------
     */
-        jQuery(document).on('click','.invoiceShippingCostApplyModal',function(){
-            var customer_id = jQuery('.customer_id option:selected').val();
-            var reference_id = jQuery('.reference_id option:selected').val();
-            var url = jQuery('.getShippingAddressDetailsUrl').val();
-            jQuery.ajax({
-                url:url,
-                data:{customer_id:customer_id,reference_id:reference_id},
-                beforeSend:function(){
-                    jQuery('.processing').fadeIn();
-                },
-                success:function(response){
-                    jQuery('.response_shipping_information').html(response.html);
-                },
-                complete:function(){
-                    jQuery('.processing').fadeOut();
-                },
-            });
-        });  
-        
-        jQuery(document).on('change','.use_shipping_address',function(){
-            var id = jQuery('.use_shipping_address option:selected').val();
-            if(id == 1)
-            {
-                jQuery('.existing_shipping_address_div').show(200);
-                jQuery('.new_shipping_address_div').hide(200);
-            }else{
-                jQuery('.existing_shipping_address_div').hide(200);
-                jQuery('.new_shipping_address_div').show(200);
-            }
-        }); 
-
-        jQuery(document).on("submit",'.submitCustomerShippingAddress',function(e){
+        jQuery(document).on("submit",'.submitShippingCostAndOtherInformation',function(e){
             e.preventDefault();
             var form = jQuery(this);
             var url = form.attr("action");
@@ -668,7 +636,7 @@
         //empty all shipping related information
         function makingEmptyshippingRelatedInformation()
         {
-            jQuery(':input','#submitCustomerShippingAddress')
+            jQuery(':input','#submitShippingCostAndOtherInformation')
             .not(':button, :submit, :reset')
             .val('')
             .removeAttr('checked')
@@ -685,10 +653,10 @@
 
     /*
     |-----------------------------------------------
-    | finally submit sell (final sell and quotation)
+    | finally submit Purchase (final Purchase and quotation)
     |----------------------------------------------
     */ 
-        jQuery(document).on("submit",'.storeDataFromSellCart',function(e){
+        jQuery(document).on("submit",'.storeDataFromPurchaseCart',function(e){
             e.preventDefault();
             var form = jQuery(this);
             var url = form.attr("action");
@@ -724,7 +692,7 @@
         });
     /*
     |-----------------------------------------------
-    | finally submit sell 
+    | finally submit Purchase 
     |----------------------------------------------
     */
     

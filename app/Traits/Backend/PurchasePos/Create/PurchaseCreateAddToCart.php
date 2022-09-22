@@ -35,7 +35,7 @@ trait PurchaseCreateAddToCart
         $cartName           = [];
         $cartName           = session()->has($this->cartName) ? session()->get($this->cartName)  : [];
 
-        $subtotalFromSellCartList   = $this->requestAllCartData['subtotalFromSellCartList'];
+        $subtotalFromPurchaseCartList   = $this->requestAllCartData['subtotalFromPurchaseCartList'];
         $totalItem   = $this->requestAllCartData['totalItem'];
         $totalQuantity   = $this->requestAllCartData['totalQuantity'];
         $invoiceDiscountAmount   = $this->requestAllCartData['invoiceDiscountAmount'];
@@ -48,19 +48,18 @@ trait PurchaseCreateAddToCart
         $totalInvoicePayableAmount   = $this->requestAllCartData['totalInvoicePayableAmount'];
 
         //line total calculation
-        $lineInvoiceSubTotal   = number_format($this->requestAllCartData['subtotalFromSellCartList'],2,'.', '');
-        $lineAfterDiscountWithInvoiceSubTotal   = number_format(($this->requestAllCartData['subtotalFromSellCartList'] - $this->requestAllCartData['totalInvoiceDiscountAmount']),2,'.', '');
-        $lineAfterDiscountAndVatWithInvoiceSubTotal   = number_format((($this->requestAllCartData['subtotalFromSellCartList'] - $this->requestAllCartData['totalInvoiceDiscountAmount'])+ $this->requestAllCartData['totalVatAmountCalculation']),2,'.', '');
-        $lineAfterShippingCostDiscountAndVatWithInvoiceSubTotal   = number_format((($this->requestAllCartData['subtotalFromSellCartList'] - $this->requestAllCartData['totalInvoiceDiscountAmount']) +  $this->requestAllCartData['totalVatAmountCalculation'] + $this->requestAllCartData['totalShippingCost']),2,'.', '');
-        $lineAfterOtherCostShippingCostDiscountAndVatWithInvoiceSubTotal   = number_format((($this->requestAllCartData['subtotalFromSellCartList'] - $this->requestAllCartData['totalInvoiceDiscountAmount']) +  $this->requestAllCartData['totalVatAmountCalculation'] + $this->requestAllCartData['totalShippingCost'] + $this->requestAllCartData['invoiceOtherCostAmount']),2,'.', '');
+        $lineInvoiceSubTotal   = number_format($this->requestAllCartData['subtotalFromPurchaseCartList'],2,'.', '');
+        $lineAfterDiscountWithInvoiceSubTotal   = number_format(($this->requestAllCartData['subtotalFromPurchaseCartList'] - $this->requestAllCartData['totalInvoiceDiscountAmount']),2,'.', '');
+        $lineAfterDiscountAndVatWithInvoiceSubTotal   = number_format((($this->requestAllCartData['subtotalFromPurchaseCartList'] - $this->requestAllCartData['totalInvoiceDiscountAmount'])+ $this->requestAllCartData['totalVatAmountCalculation']),2,'.', '');
+        $lineAfterShippingCostDiscountAndVatWithInvoiceSubTotal   = number_format((($this->requestAllCartData['subtotalFromPurchaseCartList'] - $this->requestAllCartData['totalInvoiceDiscountAmount']) +  $this->requestAllCartData['totalVatAmountCalculation'] + $this->requestAllCartData['totalShippingCost']),2,'.', '');
+        $lineAfterOtherCostShippingCostDiscountAndVatWithInvoiceSubTotal   = number_format((($this->requestAllCartData['subtotalFromPurchaseCartList'] - $this->requestAllCartData['totalInvoiceDiscountAmount']) +  $this->requestAllCartData['totalVatAmountCalculation'] + $this->requestAllCartData['totalShippingCost'] + $this->requestAllCartData['invoiceOtherCostAmount']),2,'.', '');
         $lineInvoiceRoundingAmount   = number_format((round($lineAfterOtherCostShippingCostDiscountAndVatWithInvoiceSubTotal) - $lineAfterOtherCostShippingCostDiscountAndVatWithInvoiceSubTotal),2,'.', '');
         $lineInvoicePayableAmountWithRounding   = number_format(round($lineAfterOtherCostShippingCostDiscountAndVatWithInvoiceSubTotal),2,'.', '');
 
         $cartName = [
-            'invoice_customer_id'=> $this->requestAllCartData['customer_id'],
-            'invoice_reference_id'=> $this->requestAllCartData['reference_id'],
+            'invoice_supplier_id'=> $this->requestAllCartData['supplier_id'],
 
-            'subtotalFromSellCartList'=> $subtotalFromSellCartList,
+            'subtotalFromPurchaseCartList'=> $subtotalFromPurchaseCartList,
             'totalItem'=> $totalItem,
             'totalQuantity'=> $totalQuantity,
             'invoiceDiscountAmount'=> $invoiceDiscountAmount,
@@ -83,17 +82,6 @@ trait PurchaseCreateAddToCart
         ];
         session([$this->cartName => $cartName]);
         return $this->cartName;
-        /* $subtotalFromSellCartList = $request->subtotalFromSellCartList;
-        $totalItem = $request->totalItem;
-        $invoiceDiscountAmount = $request->invoiceDiscountAmount;
-        $invoiceDiscountType = $request->invoiceDiscountType;
-        $totalInvoiceDiscountAmount = $request->totalInvoiceDiscountAmount;
-        $invoiceVatAmount = $request->invoiceVatAmount;
-        $totalVatAmountCalculation = $request->totalVatAmountCalculation;
-        $totalShippingCost = $request->totalShippingCost;
-        $invoiceOtherCostAmount = $request->invoiceOtherCostAmount;
-        $totalInvoicePayableAmount = $request->totalInvoicePayableAmount;
-        return $request; */
     }
 
     //adding to sell cart [session:SellCreateAddToCart]
@@ -232,7 +220,27 @@ trait PurchaseCreateAddToCart
 
 
 
-    
+        
+    //====================================================================
+    protected function shippingCostAndOtherInformationStoreInSession()
+    {
+        $invoice_shipping_cost = $this->requestAllCartData['invoice_shipping_cost'];
+        $shipping_note = $this->requestAllCartData['shipping_note'];
+        $purchase_note = $this->requestAllCartData['purchase_note'];
+        $receiver_details = $this->requestAllCartData['receiver_details'];
+
+        $cartName           = [];
+        $cartName           = session()->has($this->cartName) ? session()->get($this->cartName)  : [];
+        $cartName = [
+            'invoice_shipping_cost'=> $invoice_shipping_cost,
+            'shipping_note'=> $shipping_note,
+            'purchase_note'=> $purchase_note,
+            'receiver_details'=> $receiver_details,
+        ];
+        session([$this->cartName => $cartName]);
+        return $this->cartName;
+    }
+    //====================================================================
 
 
 

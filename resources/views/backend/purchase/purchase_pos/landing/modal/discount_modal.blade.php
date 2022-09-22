@@ -18,7 +18,7 @@
                         <div class="p-3 bg-light-dark d-flex justify-content-between border-bottom">
                             <h5 class="font-size-bold mb-0">Subtotal:</h5>
                             <h5 class="font-size-bold mb-0">
-                                <span class="subtotalFromSellCartList">0</span>
+                                <span class="subtotalFromPurchaseCartList">0</span>
                             </h5>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                             </h5>
                             {{-- <a href="javascript:void(0)" class="invoice_discount_apply btn-secondary btn ml-2 white pt-1 pb-1 d-flex align-items-center justify-content-center">Apply</a> --}}
                         </div>
-                        Total Profit: <span class="totalInvoiceProfit"></span>
+                        {{-- Total Profit: <span class="totalInvoiceProfit"></span> --}}
                     </div>
                 </div>
             </div>

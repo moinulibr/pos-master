@@ -17,7 +17,7 @@
 
         <div class="modal-footer" style="background-color:#f9f5f4;">
             <button type="button" style="padding:6px;color:white;cursor: pointer;" class="btn btn-danger cancelRemoveAllItemFromSaleCart" data-dismiss="modal">Close</button>
-            <strong style="cursor: pointer; padding:6px;" class="removeOrEmptyAllItemFromSellCartProductList btn btn-primary">Yes</strong>
+            <strong style="cursor: pointer; padding:6px;" class="removeOrEmptyAllItemFromPurchaseCartProductList btn btn-primary">Yes</strong>
         </div>
     </div>
 </div>

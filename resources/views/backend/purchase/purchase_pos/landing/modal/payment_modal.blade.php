@@ -1,7 +1,7 @@
 <div class="modal fade text-left" id="payment-popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel11" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <form action="{{route('admin.purchase.regular.pos.store.data.from.purchase.cart')}}" method="POST"  class="storeDataFromSellCart">
+            <form action="{{route('admin.purchase.regular.pos.store.data.from.purchase.cart')}}" method="POST"  class="storeDataFromPurchaseCart">
                 @csrf
                 <div class="modal-header">
                     <h3 class="modal-title" id="myModalLabel11">Payment</h3>
@@ -57,7 +57,7 @@
                         </div>
                     </div> --}}
                     <h2>Have to implement more function</h2>
-                    <input type="hidden" name="sell_type" value="1">
+                    <input type="hidden" name="purchase_type" value="1">
 
                     <div class="form-group row justify-content-end mb-0">
                         <div class="col-md-6 text-right">
