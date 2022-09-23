@@ -1,7 +1,7 @@
 <div class="modal fade text-left" id="payment-popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel11" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
-            <form action="{{route('admin.purchase.regular.pos.store.data.from.purchase.cart')}}" method="POST"  class="storeDataFromPurchaseCart">
+            <form action="{{route('admin.purchase.regular.pos.store.data.from.purchase.cart')}}" method="POST"  class="storeDataFromPurchaseCart" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-header">
                     <h3 class="modal-title" id="myModalLabel11">Payment</h3>
@@ -15,48 +15,9 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    {{-- <table class="table right-table">
-                        <tbody>
-                            <tr class="d-flex align-items-center justify-content-between">
-                                <th class="border-0 px-0 font-size-lg mb-0 font-size-bold text-primary">
-                                    Total Amount to Pay :
-                                </th>
-                                <td class="border-0 justify-content-end d-flex text-primary font-size-lg font-size-bold px-0 font-size-lg mb-0 font-size-bold text-primary">
-                                    $722
-                                </td>
-                            </tr>
-                            <tr class="d-flex align-items-center justify-content-between">
-                                <th class="border-0 px-0 font-size-lg mb-0 font-size-bold text-primary">
-                                    Payment Mode :
-                                </th>
-                                <td class="border-0 justify-content-end d-flex text-primary font-size-lg font-size-bold px-0 font-size-lg mb-0 font-size-bold text-primary">
-                                    Cash
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table> --}}
+                    <div class="payment_data_response"></div>
                     
-                   {{--  <div class="form-group row">
-                        <div class="col-md-12">
-                            <label class="text-body">Received Amount</label>
-                            <fieldset class="form-group mb-3">
-                                <input type="text" name="number" class="form-control" value="$1000" placeholder="Enter Amount " />
-                            </fieldset>
-                            <div class="p-3 bg-light-dark d-flex justify-content-between border-bottom">
-                                <h5 class="font-size-bold mb-0">Amount to Return :</h5>
-                                <h5 class="font-size-bold mb-0">-$20</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-12">
-                            <label class="text-body">Note (If any)</label>
-                            <fieldset class="form-label-group">
-                                <textarea class="form-control fixed-size" id="horizontalTextarea" rows="5" placeholder="Enter Note"></textarea>
-                            </fieldset>
-                        </div>
-                    </div> --}}
-                    <h2>Have to implement more function</h2>
+
                     <input type="hidden" name="purchase_type" value="1">
 
                     <div class="form-group row justify-content-end mb-0">

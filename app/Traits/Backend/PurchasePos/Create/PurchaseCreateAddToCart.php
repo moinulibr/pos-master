@@ -99,6 +99,7 @@ trait PurchaseCreateAddToCart
         $purchasingQty = 0;
         $purchasingStockId = NULL;
         $instantlyReceivingQty = 0;
+        $remainingQty = 0;
         $lineSubtotal = 0;
         $purchasePrice = 0;
         $mrpPrice = 0;
@@ -112,6 +113,7 @@ trait PurchaseCreateAddToCart
                     $purchasingQty = $this->requestAllCartData['purchase_quantity_sid_'.$stock];
                     $purchasingStockId =  $stock;
                     $instantlyReceivingQty = $this->requestAllCartData['instant_receive_sid_'.$stock];
+                    $remainingQty = $this->requestAllCartData['remaining_qty_sid_'.$stock];
                     $lineSubtotal = $this->requestAllCartData['subtotal_sid_'.$stock];
                     $mrpPrice = $this->requestAllCartData['price_sid_'.$stock.'_pid_'.mrpPriceId_hh()];
                     $purchasePrice = $this->requestAllCartData['price_sid_'.$stock.'_pid_'.purchaseLineTotalSubtotalWhenCartCreateAndShowCartList_hh()];
@@ -140,6 +142,7 @@ trait PurchaseCreateAddToCart
             'purchase_qty'  => $purchasingQty,
             'stock_id' => $purchasingStockId,
             'instantly_receiving_qty' => $instantlyReceivingQty,
+            'remaining_qty' => $remainingQty,
             'purchase_line_subtotal'  => $lineSubtotal,  
             
             'stocks' => $this->requestAllCartData['stocks'],
@@ -160,6 +163,8 @@ trait PurchaseCreateAddToCart
         session([$this->cartName => $cartName]);
         return true;
     }
+    
+
     
     /*Remove Single item From  Cart Working Properly*/
     public function removeSingleItemFromPurchaseCreateAddedToCartList()

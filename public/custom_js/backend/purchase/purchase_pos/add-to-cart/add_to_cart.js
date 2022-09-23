@@ -651,6 +651,28 @@
     */
     
 
+    jQuery(document).on('click','.paymentModalOpen',function(){
+        var url = jQuery('.paymentModalOpenUrl').val();
+       jQuery.ajax({
+           url:url,
+           //data:{},
+           beforeSend:function(){
+               jQuery('.processing').fadeIn();
+           },
+           success:function(response){
+               if(response.status == true)
+               {
+                   jQuery('.payment_data_response').html(response.list);
+                   //finalCalculationForThisInvoice();
+               }
+           },
+           complete:function(){
+               jQuery('.processing').fadeOut();
+           },
+       });
+    });
+
+
     /*
     |-----------------------------------------------
     | finally submit Purchase (final Purchase and quotation)

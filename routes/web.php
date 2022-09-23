@@ -517,7 +517,9 @@ Route::group(['middleware' => ['auth']], function ()
             //change quantity [plus or minus]
             Route::get('change/quantity/from/added/to/cart/list','PurchasePosController@changeQuantity')->name('change.quantity.from.purchase.added.to.cart.list');
             
-
+            //purchase payment modal open 
+            Route::get('purchase/payment/modal/open','PurchasePosController@paymentModalOpen')->name('purchase.payment.modal.open');
+                        
             // Store data from purchase cart
             Route::post('store/data/from/purchase/cart','PurchasePosController@storeDataFromPurchaseCart')->name('store.data.from.purchase.cart');
 

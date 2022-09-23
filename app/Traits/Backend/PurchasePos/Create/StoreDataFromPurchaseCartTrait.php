@@ -33,24 +33,27 @@ trait StoreDataFromPurchaseCartTrait
 
     protected function storeSessionDataFromPurchaseCart()
     {   
+        $purchaseCartName = purchaseCreateCartSessionName_hh();
+        $purchaseCart  = [];
+        $purchaseCart  = session()->has($purchaseCartName) ? session()->get($purchaseCartName)  : [];
         
-        $sellCartName = purchaseCreateCartSessionName_hh();
-        $sellCart   = [];
-        $sellCart   = session()->has($sellCartName) ? session()->get($sellCartName)  : [];
+        $purchaseInvoiceSummeryCartName = purchaseCreateCartInvoiceSummerySessionName_hh();
+        $purchaseInvoiceSummeryCart = [];
+        $purchaseInvoiceSummeryCart = session()->has($purchaseInvoiceSummeryCartName) ? session()->get($purchaseInvoiceSummeryCartName)  : [];
         
-        $sellInvoiceSummeryCartName = sellCreateCartInvoiceSummerySessionName_hh();
-        $sellInvoiceSummeryCart = [];
-        $sellInvoiceSummeryCart = session()->has($sellInvoiceSummeryCartName) ? session()->get($sellInvoiceSummeryCartName)  : [];
-        
-        $sellInvoice =  $this->insertDataInTheSellInvoiceTable($sellInvoiceSummeryCart);
+        echo "<pre>";
+        print_r($purchaseCart);
+        echo "</pre>";
+        return 0;
+        $purchaseInvoice =  $this->insertDataInThePurchaseInvoiceTable($purchaseInvoiceSummeryCart);
        
         $this->totalSellingQuantity = 0;
         $this->otherProductStockQuantityPurchasePrice = 0;
         $this->mainProductStockQuantityPurchasePrice = 0;
         $this->totalPurchasePriceOfAllQuantityOfThisInvoice = 0;
-        foreach($sellCart as $cart)
+        foreach($purchaseCart as $cart)
         {
-           $sellProduct =  $this->insertDataInTheSellProduct($sellInvoice,$cart);
+           $sellProduct =  $this->insertDataInTheSellProduct($purchaseInvoice,$cart);
 
             if($cart['more_quantity_from_others_product_stock'] == 1)
             {
@@ -62,27 +65,27 @@ trait StoreDataFromPurchaseCartTrait
                         $qty = $ostock['others_product_stock_qtys'][$key];
                         $purchase_price = $ostock['others_product_stock_purchase_prices'][$key];
                         $process_duration = $ostock['over_stock_quantity_process_duration'][$key];
-                        $this->insertDataInTheSellProductStockTable($cart,$sellInvoice,$sellProduct,$stock,$qty,$purchase_price,$process_duration);
+                        $this->insertDataInTheSellProductStockTable($cart,$purchaseInvoice,$sellProduct,$stock,$qty,$purchase_price,$process_duration);
                    }//end foreach
                 }//end foreach
             }else{
-               $this->insertDataInTheSellProductStockTable($cart,$sellInvoice,$sellProduct,$cart['selling_main_product_stock_id'],$cart['total_qty_of_main_product_stock'],$cart['purchase_price'],1);
+               $this->insertDataInTheSellProductStockTable($cart,$purchaseInvoice,$sellProduct,$cart['selling_main_product_stock_id'],$cart['total_qty_of_main_product_stock'],$cart['purchase_price'],1);
             }
         }//end foreach
         
-        $sellInvoice->total_purchase_amount = $this->totalPurchasePriceOfAllQuantityOfThisInvoice;
-        $sellInvoice->total_invoice_profit = (($sellInvoiceSummeryCart['lineInvoicePayableAmountWithRounding']) - ($this->totalPurchasePriceOfAllQuantityOfThisInvoice) - ($sellInvoiceSummeryCart['totalShippingCost'] + $sellInvoiceSummeryCart['invoiceOtherCostAmount'] ));
-        $sellInvoice->save();
-        return $sellCart;
+        $purchaseInvoice->total_purchase_amount = $this->totalPurchasePriceOfAllQuantityOfThisInvoice;
+        $purchaseInvoice->total_invoice_profit = (($purchaseInvoiceSummeryCart['lineInvoicePayableAmountWithRounding']) - ($this->totalPurchasePriceOfAllQuantityOfThisInvoice) - ($purchaseInvoiceSummeryCart['totalShippingCost'] + $purchaseInvoiceSummeryCart['invoiceOtherCostAmount'] ));
+        $purchaseInvoice->save();
+        return $purchaseCart;
     }
 
 
     
-    private function insertDataInTheSellProductStockTable($cart,$sellInvoice,$sellProduct,$product_stock_id,$qty,$purchase_price,$process_duration)
+    private function insertDataInTheSellProductStockTable($cart,$purchaseInvoice,$sellProduct,$product_stock_id,$qty,$purchase_price,$process_duration)
     {
         $productStock = new SellProductStock();
         $productStock->branch_id = authBranch_hh();
-        $productStock->sell_invoice_id = $sellInvoice->id;
+        $productStock->sell_invoice_id = $purchaseInvoice->id;
         $productStock->sell_product_id = $sellProduct->id;
         $productStock->product_stock_id = $product_stock_id;
 
@@ -134,8 +137,8 @@ trait StoreDataFromPurchaseCartTrait
            $stockProcessLaterQty   = $overStock;
         }
 
-        $sellType = $this->purchaseCreateFormData['sell_type'];
-        //if sell_type==1, then reduce stock from product stocks table 
+        $sellType = $this->purchaseCreateFormData['purchase_type'];
+        //if purchase_type==1, then reduce stock from product stocks table 
         if($sellType  == 1 && $instantlyProcessedQty > 0)
         {
             $this->stock_id_FSCT = $stockId;
@@ -168,11 +171,11 @@ trait StoreDataFromPurchaseCartTrait
     }
 
 
-    private function insertDataInTheSellProduct($sellInvoice,$cart)
+    private function insertDataInTheSellProduct($purchaseInvoice,$cart)
     {
         $productStock = new SellProduct();
         $productStock->branch_id = authBranch_hh();
-        $productStock->sell_invoice_id = $sellInvoice->id;
+        $productStock->sell_invoice_id = $purchaseInvoice->id;
         $productStock->product_id = $cart['product_id'];
         $productStock->unit_id = $cart['unit_id'];
         $productStock->supplier_id = $cart['supplier_id'];
@@ -218,81 +221,81 @@ trait StoreDataFromPurchaseCartTrait
         return $productStock;
     }
 
-    private function insertDataInTheSellInvoiceTable($sellInvoiceSummeryCart)
+    private function insertDataInThePurchaseInvoiceTable($purchaseInvoiceSummeryCart)
     {  
         $shippingCart = [];
-        $shippingCart = session()->has(sellCreateCartShippingAddressSessionName_hh()) ? session()->get(sellCreateCartShippingAddressSessionName_hh())  : [];
+        $shippingCart = session()->has(purchaseCreateCartShippingCostSessionName_hh()) ? session()->get(purchaseCreateCartShippingCostSessionName_hh())  : [];
 
-        //return $sellInvoiceSummeryCart;
-        $sellInvoice = new SellInvoice();
-        $sellInvoice->branch_id = authBranch_hh();
+        //return $purchaseInvoiceSummeryCart;
+        $purchaseInvoice = new SellInvoice();
+        $purchaseInvoice->branch_id = authBranch_hh();
         $rand = rand(01,99);
         $makeInvoice = date("iHsymd").$rand;
-        $sellInvoice->invoice_no = $makeInvoice;
-        $sellInvoice->total_item = $sellInvoiceSummeryCart['totalItem'];
-        $sellInvoice->total_quantity = $sellInvoiceSummeryCart['totalQuantity'];
-        $sellInvoice->subtotal = $sellInvoiceSummeryCart['lineInvoiceSubTotal'];
-        $sellInvoice->discount_amount = $sellInvoiceSummeryCart['invoiceDiscountAmount'];
-        $sellInvoice->discount_type = $sellInvoiceSummeryCart['invoiceDiscountType'];
-        $sellInvoice->total_discount = $sellInvoiceSummeryCart['totalInvoiceDiscountAmount'];
-        $sellInvoice->vat_amount = $sellInvoiceSummeryCart['invoiceVatAmount'];
-        $sellInvoice->total_vat = $sellInvoiceSummeryCart['totalVatAmountCalculation'];
-        $sellInvoice->shipping_cost = $sellInvoiceSummeryCart['totalShippingCost'];
-        $sellInvoice->others_cost = $sellInvoiceSummeryCart['invoiceOtherCostAmount'];
-        $sellInvoice->round_amount = $sellInvoiceSummeryCart['lineInvoiceRoundingAmount'];
+        $purchaseInvoice->invoice_no = $makeInvoice;
+        $purchaseInvoice->total_item = $purchaseInvoiceSummeryCart['totalItem'];
+        $purchaseInvoice->total_quantity = $purchaseInvoiceSummeryCart['totalQuantity'];
+        $purchaseInvoice->subtotal = $purchaseInvoiceSummeryCart['lineInvoiceSubTotal'];
+        $purchaseInvoice->discount_amount = $purchaseInvoiceSummeryCart['invoiceDiscountAmount'];
+        $purchaseInvoice->discount_type = $purchaseInvoiceSummeryCart['invoiceDiscountType'];
+        $purchaseInvoice->total_discount = $purchaseInvoiceSummeryCart['totalInvoiceDiscountAmount'];
+        $purchaseInvoice->vat_amount = $purchaseInvoiceSummeryCart['invoiceVatAmount'];
+        $purchaseInvoice->total_vat = $purchaseInvoiceSummeryCart['totalVatAmountCalculation'];
+        $purchaseInvoice->shipping_cost = $purchaseInvoiceSummeryCart['totalShippingCost'];
+        $purchaseInvoice->others_cost = $purchaseInvoiceSummeryCart['invoiceOtherCostAmount'];
+        $purchaseInvoice->round_amount = $purchaseInvoiceSummeryCart['lineInvoiceRoundingAmount'];
         $sign = "";
-        if($sellInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'] >=  $sellInvoiceSummeryCart['lineAfterOtherCostShippingCostDiscountAndVatWithInvoiceSubTotal'])
+        if($purchaseInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'] >=  $purchaseInvoiceSummeryCart['lineAfterOtherCostShippingCostDiscountAndVatWithInvoiceSubTotal'])
         {
             $sign = "+";
         }
-        else if($sellInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'] <  $sellInvoiceSummeryCart['lineAfterOtherCostShippingCostDiscountAndVatWithInvoiceSubTotal'])
+        else if($purchaseInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'] <  $purchaseInvoiceSummeryCart['lineAfterOtherCostShippingCostDiscountAndVatWithInvoiceSubTotal'])
         {
             $sign = "-";
         }else{
             $sign = "";
         }
-        $sellInvoice->round_type = $sign;
-        $sellInvoice->total_payable_amount = $sellInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'];
+        $purchaseInvoice->round_type = $sign;
+        $purchaseInvoice->total_payable_amount = $purchaseInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'];
         
-        $sellInvoice->sell_type = $this->purchaseCreateFormData['sell_type'];
+        $purchaseInvoice->purchase_type = $this->purchaseCreateFormData['purchase_type'];
 
-        $customerId = $sellInvoiceSummeryCart['invoice_customer_id'];
+        $customerId = $purchaseInvoiceSummeryCart['invoice_customer_id'];
         if(count($shippingCart) > 0)
         {
-            $sellInvoice->customer_id = $shippingCart['customer_id'];
+            $purchaseInvoice->customer_id = $shippingCart['customer_id'];
             $customerId = $shippingCart['customer_id'];
-            $sellInvoice->reference_id = $shippingCart['reference_id'];
-            $sellInvoice->shipping_id = $shippingCart['customer_shipping_address_id'];
-            $sellInvoice->shipping_note = $shippingCart['shipping_note'];
-            $sellInvoice->sell_note = $shippingCart['sell_note'];
-            $sellInvoice->receiver_details = $shippingCart['receiver_details'];
+            $purchaseInvoice->reference_id = $shippingCart['reference_id'];
+            $purchaseInvoice->shipping_id = $shippingCart['customer_shipping_address_id'];
+            $purchaseInvoice->shipping_note = $shippingCart['shipping_note'];
+            $purchaseInvoice->sell_note = $shippingCart['sell_note'];
+            $purchaseInvoice->receiver_details = $shippingCart['receiver_details'];
         }else{
-            $sellInvoice->customer_id = $sellInvoiceSummeryCart['invoice_customer_id'];
-            $sellInvoice->reference_id = $sellInvoiceSummeryCart['invoice_reference_id'];
+            $purchaseInvoice->customer_id = $purchaseInvoiceSummeryCart['invoice_customer_id'];
+            $purchaseInvoice->reference_id = $purchaseInvoiceSummeryCart['invoice_reference_id'];
         }
 
         $customer = Customer::select('customer_type_id')->where('id',$customerId)->first();
         if($customer)
         {
-            $sellInvoice->customer_type_id = $customer->customer_type_id;  
+            $purchaseInvoice->customer_type_id = $customer->customer_type_id;  
         }else{
-            $sellInvoice->customer_type_id = 2;  //temporary
+            $purchaseInvoice->customer_type_id = 2;  //temporary
         }
-        if( $this->purchaseCreateFormData['sell_type'] == 1) 
+        if( $this->purchaseCreateFormData['purchase_type'] == 1) 
         {
-            $sellInvoice->sell_date = date('Y-m-d h:i:s');
+            $purchaseInvoice->sell_date = date('Y-m-d h:i:s');
         }
-        $sellInvoice->status = 1;
-        $sellInvoice->delivery_status = 1;
-        $sellInvoice->created_by = authId_hh();
+        $purchaseInvoice->status = 1;
+        $purchaseInvoice->delivery_status = 1;
+        $purchaseInvoice->created_by = authId_hh();
 
-        $sellInvoice->save();
+        $purchaseInvoice->save();
 
-        if( $this->purchaseCreateFormData['sell_type'] == 2) 
+        if( $this->purchaseCreateFormData['purchase_type'] == 2) 
         {
             $quotation =  new SellQuotation();
-            $quotation->sell_invoice_id  = $sellInvoice->id;
-            $quotation->invoice_no       = $sellInvoice->invoice_no;
+            $quotation->sell_invoice_id  = $purchaseInvoice->id;
+            $quotation->invoice_no       = $purchaseInvoice->invoice_no;
             $quotation->customer_name    = $this->purchaseCreateFormData['customer_name'];
             $quotation->phone            = $this->purchaseCreateFormData['phone'];
             $quotation->quotation_no     = $this->purchaseCreateFormData['quotation_no'];
@@ -303,8 +306,8 @@ trait StoreDataFromPurchaseCartTrait
             $quotation->save(); 
         }
 
-        return $sellInvoice;
-        return $sellInvoiceSummeryCart;
+        return $purchaseInvoice;
+        return $purchaseInvoiceSummeryCart;
     }
 
 

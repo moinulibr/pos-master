@@ -326,9 +326,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <a class="paymentQuotationButtonWhenCartItemZero btn btn-success btnFullWidth white" style="margin-top: 1%; cursor: pointer;">
                                                 Payment
                                             </a>
-                                            <a href="#" class="paymentQuotationButtonWhenCartItemMoreThenZero btn btn-success btnFullWidth white" style="margin-top: 1%; display:none; cursor: pointer;" data-toggle="modal" data-target="#payment-popup">
+                                            <a href="#" class="paymentModalOpen paymentQuotationButtonWhenCartItemMoreThenZero btn btn-success btnFullWidth white" style="margin-top: 1%; display:none; cursor: pointer;" data-toggle="modal" data-target="#payment-popup">
                                                 Payment
                                             </a>
+                                            <input type="hidden" class="paymentModalOpenUrl" value="{{route('admin.purchase.regular.pos.purchase.payment.modal.open')}}">
 
 
                                             <a href="#" class="pos_print_direct_from_purchase_cart btn btn-info btnFullWidth white" style="margin-top: 1%;" data-href="{{ route('admin.purchase.regular.purchase.normal.print.from.direct.purchase.cart') }}">

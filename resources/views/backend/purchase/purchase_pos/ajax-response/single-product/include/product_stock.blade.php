@@ -51,6 +51,7 @@
                     </td>
                     <td>
                         <input type="text" class="form-control instant_receiving_qty instant_receiving_qty_{{$productStock->sId}}" data-stock_id="{{$productStock->sId}}" name="instant_receive_sid_{{$productStock->sId}}">
+                        <input type="hidden" class="form-control remaining_qty remaining_qty_{{$productStock->sId}}" data-stock_id="{{$productStock->sId}}" name="remaining_qty_sid_{{$productStock->sId}}">
                     </td>
                 </tr>
             @endforeach

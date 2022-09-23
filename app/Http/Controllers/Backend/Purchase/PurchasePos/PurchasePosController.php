@@ -229,12 +229,26 @@ class PurchasePosController extends Controller
         ]);
     }
 
+    //customer shipping address from sell cart (pos)
+    public function paymentModalOpen(Request $request)
+    {
+        $purchaseInvoiceSummeryCartName = purchaseCreateCartInvoiceSummerySessionName_hh();
+        $purchaseInvoiceSummeryCart = [];
+        $purchaseInvoiceSummeryCart = session()->has($purchaseInvoiceSummeryCartName) ? session()->get($purchaseInvoiceSummeryCartName)  : [];
+        
+        $list = view('backend.purchase.purchase_pos.ajax-response.payment_quotation.payment_data')->render();
+        return response()->json([
+            'status'    => true,
+            'list'     => $list,
+        ]);
+    }
+
     /*======================================================= */
     // store Purchase and quotation data from Purchase cart (pos)
     public function storeDataFromPurchaseCart(Request $request)
     {   
         $this->sellCreateFormData = $request;
-        $this->storeSessionDataFromPurchaseCart();  
+       return $this->storeSessionDataFromPurchaseCart();  
         return 0;
         DB::beginTransaction();
 

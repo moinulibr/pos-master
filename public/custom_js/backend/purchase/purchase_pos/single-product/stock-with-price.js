@@ -33,6 +33,7 @@
             var stock_id = jQuery(this).data('stock_id');
             jQuery('.purchasing_qty').val(0);
             jQuery('.instant_receiving_qty').val(0);
+            jQuery('.remaining_qty').val(0);
             jQuery('.calculation_line_subtotal_price').val(0);
             jQuery('.stock_price_id_'+stock_id+"_"+price_id).val(jQuery(this).data('previous_price'));
         });
@@ -257,6 +258,7 @@
                 jQuery('.calculation_line_subtotal_price_'+previousStockId).val(0);
                 jQuery('.purchasing_qty_'+previousStockId).val(0);
                 jQuery('.instant_receiving_qty_'+previousStockId).val(0);
+                jQuery('.remaining_qty_'+previousStockId).val(0);
                 previousAction = 1;
                 jQuery('.purchase_qty_check_'+previousStockId).prop('checked', false).change();
                 
@@ -271,6 +273,7 @@
             jQuery('.purchase_qty_check_'+stock_id).prop('checked', false).change();
             jQuery('.purchasing_qty_'+stock_id).val(0);
             jQuery('.instant_receiving_qty_'+stock_id).val(0);
+            jQuery('.remaining_qty_'+stock_id).val(0);
             jQuery('.calculation_line_subtotal_price_'+stock_id).val(0);
             jQuery('.purchasing_qty_'+stock_id).css({
                 'background-color':'#ffff','color':'black'
@@ -289,7 +292,7 @@
                 jQuery('.purchase_qty_check_'+stock_id).prop('checked', false).change(); 
                 jQuery('.calculation_line_subtotal_price_'+stock_id).val(0);
                 jQuery('.instant_receiving_qty_'+stock_id).val(0);
-
+                jQuery('.remaining_qty_'+stock_id).val(0);
                 jQuery('.purchasing_qty_'+stock_id).css({
                     'background-color':'#ffff','color':'black'
                 });
@@ -314,6 +317,7 @@
             {
                 jQuery('.calculation_line_subtotal_price_'+previousStockId).val(0);
                 jQuery('.instant_receiving_qty_'+previousStockId).val(0);
+                jQuery('.remaining_qty_'+previousStockId).val(0);
                 jQuery('.purchasing_qty_'+previousStockId).val(0);
                 jQuery('.purchase_qty_check_'+previousStockId).prop('checked', false).change();
                 
@@ -379,7 +383,9 @@
         }else{
             instantlyQty = 0; 
         }
+        var remainingQty = purchasing_qty - instantlyQty; 
         jQuery('.instant_receiving_qty_'+stock_id).val(instantlyQty);
+        jQuery('.remaining_qty_'+stock_id).val(remainingQty);
         enableDisableAddToCartButton();
     });
     //instantly receiving quantity section
