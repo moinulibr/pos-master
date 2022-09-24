@@ -247,13 +247,13 @@ class PurchasePosController extends Controller
     // store Purchase and quotation data from Purchase cart (pos)
     public function storeDataFromPurchaseCart(Request $request)
     {   
-        $this->sellCreateFormData = $request;
+        $this->purchaseCreateFormRequestData = $request;
        return $this->storeSessionDataFromPurchaseCart();  
         return 0;
         DB::beginTransaction();
 
         try {
-            $this->sellCreateFormData = $request;
+            $this->purchaseCreateFormRequestData = $request;
             $this->storeSessionDataFromPurchaseCart();   
             DB::commit();
             

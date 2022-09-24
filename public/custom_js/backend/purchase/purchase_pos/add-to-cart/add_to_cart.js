@@ -678,7 +678,52 @@
     | finally submit Purchase (final Purchase and quotation)
     |----------------------------------------------
     */ 
-        jQuery(document).on("submit",'.storeDataFromPurchaseCart',function(e){
+    $(document).on("submit",'.storeDataFromPurchaseCart',function(e){
+        e.preventDefault();
+        $('.color-red').text('');
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                beforeSend:function(){
+                    $('.processing').fadeIn();
+                },
+                success: function(response){
+                    if(response.status == 'errors')
+                    {   
+                        printErrorMsg(response.error);
+                    }
+                    if(response.status == true)
+                    {
+                        jQuery('.display_added_to_cart_list').html(response.list);
+                        jQuery('#payment-popup').modal('hide');
+                        jQuery('#quotation-popup').modal('hide');
+
+                        makingEmptyshippingRelatedInformation();
+                        makingZeroInShippingCostOtherCostDiscountAndVat();
+                        finalCalculationForThisInvoice();
+                        jQuery.notify(response.message, response.type);
+                    }
+                },
+                complete:function(){
+                    $('.processing').fadeOut();
+                },
+            });
+            //end ajax
+
+            function printErrorMsg(msg) {
+                $('.color-red').css({'color':'red'});
+                $.each(msg, function(key, value ) {
+                    $('.'+key+'_err').text(value);
+                });
+            }
+        });
+
+
+        /* jQuery(document).on("submit",'.storeDataFromPurchaseCart',function(e){
             e.preventDefault();
             var form = jQuery(this);
             var url = form.attr("action");
@@ -711,7 +756,7 @@
                 },
             });
             //end ajax
-        });
+        }); */
     /*
     |-----------------------------------------------
     | finally submit Purchase 

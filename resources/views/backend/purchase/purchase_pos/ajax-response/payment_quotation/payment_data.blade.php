@@ -24,7 +24,7 @@
     <div class="col-md-6">
         <label class="text-body">Attachment File</label>
         <fieldset class="form-group mb-3">
-            <input type="file" name="file" style="display:block!important;" />
+            <input type="file" name="attach_file" style="display:block!important;" />
         </fieldset>
     </div>
 </div>

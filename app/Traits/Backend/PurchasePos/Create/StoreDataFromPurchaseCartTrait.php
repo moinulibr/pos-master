@@ -1,6 +1,7 @@
 <?php
 namespace App\Traits\Backend\PurchasePos\Create;
 
+use App\Models\Backend\Purchase\PurchaseInvoice;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Backend\Sell\SellInvoice;
 use App\Models\Backend\Sell\SellPackage;
@@ -8,18 +9,22 @@ use App\Models\Backend\Sell\SellProduct;
 use App\Models\Backend\Customer\Customer;
 use App\Models\Backend\Sell\SellQuotation;
 use App\Models\Backend\Sell\SellProductStock;
+use App\Models\Backend\Supplier\Supplier;
 use App\Traits\Backend\Stock\Logical\StockChangingTrait;
-
+use App\Traits\Backend\FileUpload\FileUploadTrait;
+use App\Setting\Backend\Product\ProductSetting;
 /**
  * pricing trait
  * 
  */
 trait StoreDataFromPurchaseCartTrait
-{
+{    
+    use FileUploadTrait;
     use StockChangingTrait;
+    use ProductSetting;
 
 
-    protected $purchaseCreateFormData;
+    protected $purchaseCreateFormRequestData;
 
     protected $cartName;
     protected $product_id;
@@ -41,11 +46,11 @@ trait StoreDataFromPurchaseCartTrait
         $purchaseInvoiceSummeryCart = [];
         $purchaseInvoiceSummeryCart = session()->has($purchaseInvoiceSummeryCartName) ? session()->get($purchaseInvoiceSummeryCartName)  : [];
         
-        echo "<pre>";
+       /*  echo "<pre>";
         print_r($purchaseCart);
         echo "</pre>";
-        return 0;
-        $purchaseInvoice =  $this->insertDataInThePurchaseInvoiceTable($purchaseInvoiceSummeryCart);
+        //return 0; */
+       return $purchaseInvoice =  $this->insertDataInThePurchaseInvoiceTable($purchaseInvoiceSummeryCart);
        
         $this->totalSellingQuantity = 0;
         $this->otherProductStockQuantityPurchasePrice = 0;
@@ -53,7 +58,7 @@ trait StoreDataFromPurchaseCartTrait
         $this->totalPurchasePriceOfAllQuantityOfThisInvoice = 0;
         foreach($purchaseCart as $cart)
         {
-           $sellProduct =  $this->insertDataInTheSellProduct($purchaseInvoice,$cart);
+           $sellProduct =  $this->insertDataInThePurchaseProduct($purchaseInvoice,$cart);
 
             if($cart['more_quantity_from_others_product_stock'] == 1)
             {
@@ -65,11 +70,11 @@ trait StoreDataFromPurchaseCartTrait
                         $qty = $ostock['others_product_stock_qtys'][$key];
                         $purchase_price = $ostock['others_product_stock_purchase_prices'][$key];
                         $process_duration = $ostock['over_stock_quantity_process_duration'][$key];
-                        $this->insertDataInTheSellProductStockTable($cart,$purchaseInvoice,$sellProduct,$stock,$qty,$purchase_price,$process_duration);
+                        $this->insertDataInThePurchaseProductStockTable($cart,$purchaseInvoice,$sellProduct,$stock,$qty,$purchase_price,$process_duration);
                    }//end foreach
                 }//end foreach
             }else{
-               $this->insertDataInTheSellProductStockTable($cart,$purchaseInvoice,$sellProduct,$cart['selling_main_product_stock_id'],$cart['total_qty_of_main_product_stock'],$cart['purchase_price'],1);
+               $this->insertDataInThePurchaseProductStockTable($cart,$purchaseInvoice,$sellProduct,$cart['selling_main_product_stock_id'],$cart['total_qty_of_main_product_stock'],$cart['purchase_price'],1);
             }
         }//end foreach
         
@@ -81,7 +86,7 @@ trait StoreDataFromPurchaseCartTrait
 
 
     
-    private function insertDataInTheSellProductStockTable($cart,$purchaseInvoice,$sellProduct,$product_stock_id,$qty,$purchase_price,$process_duration)
+    private function insertDataInThePurchaseProductStockTable($cart,$purchaseInvoice,$sellProduct,$product_stock_id,$qty,$purchase_price,$process_duration)
     {
         $productStock = new SellProductStock();
         $productStock->branch_id = authBranch_hh();
@@ -137,9 +142,9 @@ trait StoreDataFromPurchaseCartTrait
            $stockProcessLaterQty   = $overStock;
         }
 
-        $sellType = $this->purchaseCreateFormData['purchase_type'];
+        $purchaseType = $this->purchaseCreateFormRequestData['purchase_type'];
         //if purchase_type==1, then reduce stock from product stocks table 
-        if($sellType  == 1 && $instantlyProcessedQty > 0)
+        if($purchaseType  == 1 && $instantlyProcessedQty > 0)
         {
             $this->stock_id_FSCT = $stockId;
             $this->product_id_FSCT = $cart['product_id'];
@@ -171,7 +176,7 @@ trait StoreDataFromPurchaseCartTrait
     }
 
 
-    private function insertDataInTheSellProduct($purchaseInvoice,$cart)
+    private function insertDataInThePurchaseProduct($purchaseInvoice,$cart)
     {
         $productStock = new SellProduct();
         $productStock->branch_id = authBranch_hh();
@@ -221,17 +226,24 @@ trait StoreDataFromPurchaseCartTrait
         return $productStock;
     }
 
+    //insert purchase invoice table 
     private function insertDataInThePurchaseInvoiceTable($purchaseInvoiceSummeryCart)
     {  
         $shippingCart = [];
         $shippingCart = session()->has(purchaseCreateCartShippingCostSessionName_hh()) ? session()->get(purchaseCreateCartShippingCostSessionName_hh())  : [];
 
-        //return $purchaseInvoiceSummeryCart;
-        $purchaseInvoice = new SellInvoice();
+        $purchaseInvoice = new PurchaseInvoice();
         $purchaseInvoice->branch_id = authBranch_hh();
         $rand = rand(01,99);
         $makeInvoice = date("iHsymd").$rand;
         $purchaseInvoice->invoice_no = $makeInvoice;
+        $purchaseInvoice->chalan_no = $this->purchaseCreateFormRequestData['chalan_no'];
+        $purchaseInvoice->reference_no = $this->purchaseCreateFormRequestData['reference_no'];
+
+        $purchaseInvoice->shipping_note = $shippingCart['shipping_note'];
+        $purchaseInvoice->receiver_details = $shippingCart['receiver_details'];
+        $purchaseInvoice->purchase_note = $shippingCart['purchase_note'];
+        
         $purchaseInvoice->total_item = $purchaseInvoiceSummeryCart['totalItem'];
         $purchaseInvoice->total_quantity = $purchaseInvoiceSummeryCart['totalQuantity'];
         $purchaseInvoice->subtotal = $purchaseInvoiceSummeryCart['lineInvoiceSubTotal'];
@@ -257,33 +269,19 @@ trait StoreDataFromPurchaseCartTrait
         $purchaseInvoice->round_type = $sign;
         $purchaseInvoice->total_payable_amount = $purchaseInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'];
         
-        $purchaseInvoice->purchase_type = $this->purchaseCreateFormData['purchase_type'];
+        $purchaseInvoice->purchase_type = $this->purchaseCreateFormRequestData['purchase_type'];
 
-        $customerId = $purchaseInvoiceSummeryCart['invoice_customer_id'];
-        if(count($shippingCart) > 0)
+        $supplierId = $purchaseInvoiceSummeryCart['invoice_supplier_id'];
+        $supplier = Supplier::select('supplier_type_id')->where('id',$supplierId)->first();
+        if($supplier)
         {
-            $purchaseInvoice->customer_id = $shippingCart['customer_id'];
-            $customerId = $shippingCart['customer_id'];
-            $purchaseInvoice->reference_id = $shippingCart['reference_id'];
-            $purchaseInvoice->shipping_id = $shippingCart['customer_shipping_address_id'];
-            $purchaseInvoice->shipping_note = $shippingCart['shipping_note'];
-            $purchaseInvoice->sell_note = $shippingCart['sell_note'];
-            $purchaseInvoice->receiver_details = $shippingCart['receiver_details'];
+            $purchaseInvoice->supplier_type_id = $supplier->supplier_type_id;  
         }else{
-            $purchaseInvoice->customer_id = $purchaseInvoiceSummeryCart['invoice_customer_id'];
-            $purchaseInvoice->reference_id = $purchaseInvoiceSummeryCart['invoice_reference_id'];
+            $purchaseInvoice->supplier_type_id = 2;  //reseller 
         }
-
-        $customer = Customer::select('customer_type_id')->where('id',$customerId)->first();
-        if($customer)
+        if( $this->purchaseCreateFormRequestData['purchase_type'] == 1) 
         {
-            $purchaseInvoice->customer_type_id = $customer->customer_type_id;  
-        }else{
-            $purchaseInvoice->customer_type_id = 2;  //temporary
-        }
-        if( $this->purchaseCreateFormData['purchase_type'] == 1) 
-        {
-            $purchaseInvoice->sell_date = date('Y-m-d h:i:s');
+            $purchaseInvoice->purchase_date = date('Y-m-d h:i:s');
         }
         $purchaseInvoice->status = 1;
         $purchaseInvoice->delivery_status = 1;
@@ -291,20 +289,47 @@ trait StoreDataFromPurchaseCartTrait
 
         $purchaseInvoice->save();
 
-        if( $this->purchaseCreateFormData['purchase_type'] == 2) 
+        if(isset($this->purchaseCreateFormRequestData['attach_file']))
+        {
+            if ($this->purchaseCreateFormRequestData['attach_file']) {
+                $ext1 = strtolower($this->purchaseCreateFormRequestData['attach_file']->getClientOriginalExtension());
+               if ($ext1 != "jpg" && $ext1 != "jpeg" && $ext1 != "png" && $ext1 != "gif"  && $ext1 != "pdf") {
+                    $ext1 = "";
+                } else {
+                   $insertedId = $purchaseInvoice->id;
+                   $destinationPath = "backend/purchase"; 
+                   $imgsave =  $this->purchaseCreateFormRequestData['attach_file']->move($destinationPath,"{$insertedId}.{$ext1}");
+                    if($imgsave)
+                    {
+                        $purchaseInvoice->attach_file = $ext1;
+                        $purchaseInvoice->save();
+                    }
+                }
+            }
+             
+            /* $this->destination  = 'backend/purchase';  //its mandatory;
+            $this->imageWidth   = 400;  //its mandatory
+            $this->imageHeight  = 400;  //its nullable
+            $this->requestFile  = $this->purchaseCreateFormRequestData['attach_file'];  //its mandatory
+            $this->id   = $purchaseInvoice->id;
+            $purchaseInvoice->attach_file = $this->storeImage();
+            $purchaseInvoice->save(); */
+        }
+
+        /* if( $this->purchaseCreateFormRequestData['purchase_type'] == 2) 
         {
             $quotation =  new SellQuotation();
             $quotation->sell_invoice_id  = $purchaseInvoice->id;
             $quotation->invoice_no       = $purchaseInvoice->invoice_no;
-            $quotation->customer_name    = $this->purchaseCreateFormData['customer_name'];
-            $quotation->phone            = $this->purchaseCreateFormData['phone'];
-            $quotation->quotation_no     = $this->purchaseCreateFormData['quotation_no'];
-            $quotation->validate_date    = $this->purchaseCreateFormData['validate_date'];
-            $quotation->quotation_note   = $this->purchaseCreateFormData['quotation_note'];
-            $quotation->sell_date        = $this->purchaseCreateFormData['sale_date'];
+            $quotation->customer_name    = $this->purchaseCreateFormRequestData['customer_name'];
+            $quotation->phone            = $this->purchaseCreateFormRequestData['phone'];
+            $quotation->quotation_no     = $this->purchaseCreateFormRequestData['quotation_no'];
+            $quotation->validate_date    = $this->purchaseCreateFormRequestData['validate_date'];
+            $quotation->quotation_note   = $this->purchaseCreateFormRequestData['quotation_note'];
+            $quotation->sell_date        = $this->purchaseCreateFormRequestData['sale_date'];
             $quotation->created_by       = authId_hh();
             $quotation->save(); 
-        }
+        } */
 
         return $purchaseInvoice;
         return $purchaseInvoiceSummeryCart;

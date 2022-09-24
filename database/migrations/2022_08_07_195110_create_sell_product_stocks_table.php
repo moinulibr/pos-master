@@ -33,6 +33,9 @@ class CreateSellProductStocksTable extends Migration
                 $table->decimal('total_purchase_price',20,2)->default(0);
                 $table->decimal('total_profit',20,2)->default(0);
 
+                $table->decimal('ict_total_delivered_qty',20,3)->default(0)->comment('invoice creating time');
+                $table->decimal('ict_remaining_delivery_qty',20,3)->default(0)->comment('invoice creating time');
+                
                 $table->decimal('remaining_delivery_qty',20,3)->default(0);
                 $table->decimal('total_delivered_qty',20,3)->default(0);
 
@@ -47,6 +50,18 @@ class CreateSellProductStocksTable extends Migration
                 $table->string('stock_process_later_date')->nullable();
                 $table->decimal('total_stock_remaining_process_qty',20,3)->default(0)->comment('stock processe latter quantity');
                 $table->decimal('total_stock_processed_qty',20,3)->default(0)->comment('stock processe latter quantity');
+
+                //have to check
+                $table->text('ict_stock_process_cart')->nullable()->comment('json: (invoice creating time) ict_stock_process_instantly_qty,ict_stock_process_instantly_qty_reduced,ict_stock_process_later_qty,ict_stock_process_later_date,ict_total_stock_remaining_process_qty,ict_total_stock_processed_qty');
+                /* $table->decimal('ict_stock_process_instantly_qty',20,3)->default(0)->comment('(invoice creating time) stock processed instantly quantity');
+                $table->decimal('ict_stock_process_instantly_qty_reduced',20,3)->default(0)->default(0)->comment('(invoice creating time) stock_process_instantly_qty_reduce_status :- this field depend on reduced_base_stock_remaining_delivery field of product_stocks table.');
+                
+                $table->decimal('ict_stock_process_later_qty',20,3)->default(0)->comment('(invoice creating time) stock processe latter quantity');
+                $table->string('ict_stock_process_later_date')->nullable();
+                $table->decimal('ict_total_stock_remaining_process_qty',20,3)->default(0)->comment('(invoice creating time) stock processe latter quantity');
+                $table->decimal('ict_total_stock_processed_qty',20,3)->default(0)->comment('(invoice creating time) stock processe latter quantity'); */
+                //have to check
+
 
                 $table->integer('created_by')->nullable();
 
