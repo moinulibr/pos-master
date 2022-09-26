@@ -8,8 +8,10 @@ use App\Models\Backend\Sell\SellPackage;
 use App\Models\Backend\Sell\SellProduct;
 use App\Models\Backend\Customer\Customer;
 use App\Models\Backend\Purchase\PurchaseProduct;
+use App\Models\Backend\Purchase\PurchaseProductStock;
 use App\Models\Backend\Sell\SellQuotation;
 use App\Models\Backend\Sell\SellProductStock;
+use App\Models\Backend\Stock\ProductStock;
 use App\Models\Backend\Supplier\Supplier;
 use App\Traits\Backend\Stock\Logical\StockChangingTrait;
 use App\Traits\Backend\FileUpload\FileUploadTrait;
@@ -59,55 +61,49 @@ trait StoreDataFromPurchaseCartTrait
         $this->totalPurchasePriceOfAllQuantityOfThisInvoice = 0;
         foreach($purchaseSessionCarts as $purchaseSessionCart)
         {
-           $sellProduct =  $this->insertDataInThePurchaseProduct($purchaseInvoice,$purchaseSessionCart);
-
-            /* if($purchaseSessionCart['more_quantity_from_others_product_stock'] == 1)
-            {
-                foreach($purchaseSessionCart['from_others_product_stocks'] as $ostock)
-                {
-                   foreach($ostock['others_product_stock_ids'] as $key => $stock)
-                   {
-                        //$ids[] = $stock;
-                        $qty = $ostock['others_product_stock_qtys'][$key];
-                        $purchase_price = $ostock['others_product_stock_purchase_prices'][$key];
-                        $process_duration = $ostock['over_stock_quantity_process_duration'][$key];
-                        $this->insertDataInThePurchaseProductStockTable($purchaseSessionCart,$purchaseInvoice,$sellProduct,$stock,$qty,$purchase_price,$process_duration);
-                   }//end foreach
-                }//end foreach
-            }else{
-               $this->insertDataInThePurchaseProductStockTable($purchaseSessionCart,$purchaseInvoice,$sellProduct,$purchaseSessionCart['selling_main_product_stock_id'],$purchaseSessionCart['total_qty_of_main_product_stock'],$purchaseSessionCart['purchase_price'],1);
-            } */
+            $purchaseProduct =  $this->insertDataInThePurchaseProduct($purchaseInvoice,$purchaseSessionCart);
+            
+            $this->insertDataInThePurchaseProductStockTable($purchaseSessionCart,$purchaseInvoice,$purchaseProduct,$purchaseSessionCart['stock_id'],$purchaseSessionCart['purchase_qty'],$purchaseSessionCart['purchase_price'],$purchaseSessionCart['mrp_price'],$purchaseSessionCart['instantly_receiving_qty']);
         }//end foreach
         
-        //$purchaseInvoice->subtotal = $this->totalPurchasePriceOfAllQuantityOfThisInvoice;
+        $purchaseInvoice->total_purchase_amount = $this->totalPurchasePriceOfAllQuantityOfThisInvoice;
         $purchaseInvoice->save();
         return $purchaseSessionCarts;
     }
 
 
-    
-    private function insertDataInThePurchaseProductStockTable($cart,$purchaseInvoice,$sellProduct,$product_stock_id,$qty,$purchase_price,$process_duration)
+    //purchase product stock
+    private function insertDataInThePurchaseProductStockTable($cart,$purchaseInvoice,$purchaseProduct,$stock_id,$qty,$purchase_price,$mrp_price,$receiving_qty)
     {
-        $productStock = new SellProductStock();
+        $productStock = new PurchaseProductStock();
         $productStock->branch_id = authBranch_hh();
-        $productStock->sell_invoice_id = $purchaseInvoice->id;
-        $productStock->sell_product_id = $sellProduct->id;
-        $productStock->product_stock_id = $product_stock_id;
+        $productStock->purchase_invoice_id = $purchaseInvoice->id;
+        $productStock->purchase_product_id = $purchaseProduct->id;
+
+        $pstock =    ProductStock::select('id','product_id','stock_id')->where('product_id',$cart['product_id'])->where('stock_id',$stock_id)->first();
+        $productStock->product_stock_id = $pstock ? $pstock ->id : NULL;
 
         $productStock->product_id = $cart['product_id'];
+        $productStock->stock_id = $stock_id;
         
         $productStock->total_quantity = $qty;
 
-        $productStock->mrp_price = $cart['mrp_price'];
-        $productStock->regular_sell_price = $cart['sell_price'];
-        $productStock->sold_price = $cart['final_sell_price'];
-        $productStock->total_sold_price = $cart['selling_final_amount'];
-        $productStock->purchase_price = $cart['purchase_price'];
-        $productStock->total_purchase_price = $cart['total_purchase_price_of_all_quantity'];
-        $productStock->total_profit = $cart['selling_final_amount'] - $cart['total_purchase_price_of_all_quantity'];
-
+        $productStock->mrp_price = $mrp_price;
+        //$productStock->regular_sell_price = $cart['sell_price'];
+        //$productStock->whole_sell_price = $cart['sell_price'];
+        $productStock->purchase_price = $purchase_price;
+        $productStock->total_purchase_price = 0;
         
-        $pStock = productStockByProductStockId_hh($product_stock_id);
+        if($purchaseInvoice->purchase_type == 1)
+        {
+            $productStock->ict_total_receive_qty = $receiving_qty;
+            $productStock->ict_remaining_receive_qty = $qty - $receiving_qty;
+            $productStock->total_delivered_qty = $receiving_qty;
+            $productStock->remaining_delivery_qty = $qty - $receiving_qty;;
+        }
+        //purchase_price_carts
+        
+        /* $pStock = productStockByProductStockId_hh($product_stock_id);
         $stockId = regularStockId_hh();
         if($pStock)
         {
@@ -167,7 +163,7 @@ trait StoreDataFromPurchaseCartTrait
         $productStock->stock_process_later_qty = $stockProcessLaterQty;
         $productStock->stock_process_later_date = $stockProcessLaterDate;
         $productStock->total_stock_remaining_process_qty = $stockProcessLaterQty;
-        $productStock->total_stock_processed_qty = $instantlyProcessedQty;
+        $productStock->total_stock_processed_qty = $instantlyProcessedQty; */
 
         $productStock->status =1;
         $productStock->delivery_status =1;
