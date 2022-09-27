@@ -29,17 +29,17 @@ class CreatePurchaseProductStocksTable extends Migration
                 $table->decimal('purchase_price',20,2)->default(0);
                 $table->decimal('total_purchase_price',20,2)->default(0);
 
-                $table->decimal('ict_total_receive_qty',20,3)->default(0)->comment('invoice creating time');
-                $table->decimal('ict_remaining_receive_qty',20,3)->default(0)->comment('invoice creating time');
+                $table->decimal('ict_total_delivered_qty',20,3)->default(0)->comment('invoice creating time: deliverd mean: company delivered and we receive product');
+                $table->decimal('ict_remaining_delivery_qty',20,3)->default(0)->comment('invoice creating time : deliverd mean: company delivered and we receive product : reamingin');
                 
-                $table->decimal('total_delivered_qty',20,3)->default(0);
-                $table->decimal('remaining_delivery_qty',20,3)->default(0);
+                $table->decimal('total_delivered_qty',20,3)->default(0)->comment('deliverd mean: company delivered and we receive product');
+                $table->decimal('remaining_delivery_qty',20,3)->default(0)->comment('deliverd mean: company delivered and we receive product : reamingin');
 
                 $table->tinyInteger('status')->nullable();
                 $table->tinyInteger('delivery_status')->nullable();
                 $table->integer('created_by')->nullable();
 
-                $table->text('purchase_price_carts')->nullable()->comment('json: purchase prices all field');
+                $table->text('purchase_price_carts')->nullable()->comment('json: purchase prices all field only');
 
                 $table->softDeletes();
                 $table->timestamps();

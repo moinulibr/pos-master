@@ -33,7 +33,11 @@ class CreatePurchaseProductsTable extends Migration
 
                 $table->decimal('total_purchase_price',20,2)->nullable();
 
-                $table->text('carts')->nullable()->comment('json:p.name,custom_code,unit_name,wharehouse_id,warehouse_rack_id,sold_price');
+                $table->text('carts')->nullable()->comment('json:p.name,custom_code,unit_name,purchase_price,whole_sell_price,regular_price,others');
+                
+                $table->text('stock_id_carts')->nullable()->comment('json: all stocks id here');
+                $table->text('price_id_carts')->nullable()->comment('json: all prices id here');
+                $table->text('product_purchase_prices_carts')->nullable()->comment('json:all product price (when purchase and change prices or not) here of a single products');
 
                 $table->tinyInteger('status')->nullable();
                 $table->tinyInteger('delivery_status')->nullable();

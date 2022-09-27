@@ -80,8 +80,9 @@ trait StoreDataFromPurchaseCartTrait
         $productStock->purchase_invoice_id = $purchaseInvoice->id;
         $productStock->purchase_product_id = $purchaseProduct->id;
 
-        $pstock =    ProductStock::select('id','product_id','stock_id')->where('product_id',$cart['product_id'])->where('stock_id',$stock_id)->first();
-        $productStock->product_stock_id = $pstock ? $pstock ->id : NULL;
+        $pstock =    ProductStock::select('id','product_id','stock_id','available_base_stock')->where('product_id',$cart['product_id'])->where('stock_id',$stock_id)->first();
+        $product_stock_id = $pstock ? $pstock ->id : NULL;
+        $productStock->product_stock_id = $product_stock_id;
 
         $productStock->product_id = $cart['product_id'];
         $productStock->stock_id = $stock_id;
@@ -96,8 +97,8 @@ trait StoreDataFromPurchaseCartTrait
         
         if($purchaseInvoice->purchase_type == 1)
         {
-            $productStock->ict_total_receive_qty = $receiving_qty;
-            $productStock->ict_remaining_receive_qty = $qty - $receiving_qty;
+            $productStock->ict_total_delivered_qty = $receiving_qty;
+            $productStock->ict_remaining_delivery_qty = $qty - $receiving_qty;
             $productStock->total_delivered_qty = $receiving_qty;
             $productStock->remaining_delivery_qty = $qty - $receiving_qty;;
         }
