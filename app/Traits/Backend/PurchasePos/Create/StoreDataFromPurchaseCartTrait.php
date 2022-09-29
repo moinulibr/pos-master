@@ -1,23 +1,24 @@
 <?php
 namespace App\Traits\Backend\PurchasePos\Create;
 
-use App\Models\Backend\Purchase\PurchaseInvoice;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Backend\Sell\SellInvoice;
 use App\Models\Backend\Sell\SellPackage;
 use App\Models\Backend\Sell\SellProduct;
 use App\Models\Backend\Customer\Customer;
-use App\Models\Backend\Purchase\PurchaseProduct;
-use App\Models\Backend\Purchase\PurchaseProductStock;
-use App\Models\Backend\Sell\SellQuotation;
-use App\Models\Backend\Sell\SellProductStock;
-use App\Models\Backend\Stock\ProductStock;
 use App\Models\Backend\Supplier\Supplier;
-use App\Traits\Backend\Stock\Logical\StockChangingTrait;
-use App\Traits\Backend\FileUpload\FileUploadTrait;
+use App\Models\Backend\Sell\SellQuotation;
+use App\Models\Backend\Stock\ProductStock;
+use App\Models\Backend\Sell\SellProductStock;
 use App\Setting\Backend\Product\ProductSetting;
+use App\Models\Backend\Purchase\PurchaseInvoice;
+use App\Models\Backend\Purchase\PurchaseProduct;
+use App\Traits\Backend\FileUpload\FileUploadTrait;
+use App\Models\Backend\Purchase\PurchaseProductStock;
+use App\Traits\Backend\Stock\Logical\StockChangingTrait;
 /**
- * pricing trait
+ * store data trait
  * 
  */
 trait StoreDataFromPurchaseCartTrait
@@ -26,19 +27,11 @@ trait StoreDataFromPurchaseCartTrait
     use StockChangingTrait;
     use ProductSetting;
 
-
     protected $purchaseCreateFormRequestData;
-
-    protected $cartName;
-    protected $product_id;
-
-    protected $totalSellingQuantity;
-    protected $otherProductStockQuantityPurchasePrice;
-    protected $mainProductStockQuantityPurchasePrice;
     protected $totalPurchasePriceOfAllQuantityOfThisInvoice;
 
 
-
+    //store session data from purchase cart
     protected function storeSessionDataFromPurchaseCart()
     {   
         $purchaseCartName = purchaseCreateCartSessionName_hh();
@@ -49,15 +42,9 @@ trait StoreDataFromPurchaseCartTrait
         $purchaseInvoiceSummeryCart = [];
         $purchaseInvoiceSummeryCart = session()->has($purchaseInvoiceSummeryCartName) ? session()->get($purchaseInvoiceSummeryCartName)  : [];
         
-       /*  echo "<pre>";
-        print_r($purchaseSessionCarts);
-        echo "</pre>";
-        //return 0; */
+
         $purchaseInvoice =  $this->insertDataInThePurchaseInvoiceTable($purchaseInvoiceSummeryCart);
-       
-        $this->totalSellingQuantity = 0;
-        $this->otherProductStockQuantityPurchasePrice = 0;
-        $this->mainProductStockQuantityPurchasePrice = 0;
+
         $this->totalPurchasePriceOfAllQuantityOfThisInvoice = 0;
         foreach($purchaseSessionCarts as $purchaseSessionCart)
         {
@@ -80,94 +67,53 @@ trait StoreDataFromPurchaseCartTrait
         $productStock->purchase_invoice_id = $purchaseInvoice->id;
         $productStock->purchase_product_id = $purchaseProduct->id;
 
-        $pstock =    ProductStock::select('id','product_id','stock_id','available_base_stock')->where('product_id',$cart['product_id'])->where('stock_id',$stock_id)->first();
-        $product_stock_id = $pstock ? $pstock ->id : NULL;
-        $productStock->product_stock_id = $product_stock_id;
-
         $productStock->product_id = $cart['product_id'];
         $productStock->stock_id = $stock_id;
         
         $productStock->total_quantity = $qty;
 
         $productStock->mrp_price = $mrp_price;
-        //$productStock->regular_sell_price = $cart['sell_price'];
-        //$productStock->whole_sell_price = $cart['sell_price'];
+        $productStock->regular_sell_price = $cart['product_prices'][$stock_id][retailSellPriceId_hh()];
         $productStock->purchase_price = $purchase_price;
-        $productStock->total_purchase_price = 0;
+        $productStock->total_purchase_price = $cart['purchase_line_subtotal'];
         
+        // purchase_price_carts product all price of a single product when purchase (price change or not)
+        $prices = [];
+        foreach($cart['prices'] as $price_id)
+        {
+            $prices[$price_id] = $cart['product_prices'][$stock_id][$price_id];
+        }
+        $productStock->purchase_price_carts = json_encode([$prices]);
+        // purchase_price_carts product all price of a single product when purchase (price change or not)
+
+        //product stock
+        $pstock =    ProductStock::select('id','product_id','stock_id','available_base_stock')->where('product_id',$cart['product_id'])->where('stock_id',$stock_id)->first();
+        $productStock->product_stock_id = $pstock ? $pstock->id : NULL;
+        //product stock
+
+
         if($purchaseInvoice->purchase_type == 1)
         {
             $productStock->ict_total_delivered_qty = $receiving_qty;
             $productStock->ict_remaining_delivery_qty = $qty - $receiving_qty;
             $productStock->total_delivered_qty = $receiving_qty;
-            $productStock->remaining_delivery_qty = $qty - $receiving_qty;;
-        }
-        //purchase_price_carts
-        
-        /* $pStock = productStockByProductStockId_hh($product_stock_id);
-        $stockId = regularStockId_hh();
-        if($pStock)
-        {
-            $availableBaseStock = $pStock->available_base_stock;
-            $stockId = $pStock->stock_id;
-        }else{
-            $availableBaseStock = 0;
-        }
-        //stock id 
-        $productStock->stock_id = $stockId;
-
-        if($availableBaseStock > $qty)
-        {
-            //instantly processed all qty
-            $instantlyProcessedQty = $qty;
-            $stockProcessLaterDate = ""; 
-            $stockProcessLaterQty  = 0;
-        }
-        else if($availableBaseStock == $qty)
-        {
-            //instantly processed all qty
-            $instantlyProcessedQty = $qty;
-            $stockProcessLaterDate = ""; 
-            $stockProcessLaterQty  = 0;
-        }
-        else 
-        {   
-            //instantly processed qty
-           $overStock = $qty - $availableBaseStock;
-           $instantlyProcessedQty = $qty - $overStock;
-           $stockProcessLaterDate = date('Y-m-d',strtotime('+'.$process_duration.' day')); 
-           $stockProcessLaterQty   = $overStock;
+            $productStock->remaining_delivery_qty = $qty - $receiving_qty;
         }
 
-        $purchaseType = $this->purchaseCreateFormRequestData['purchase_type'];
-        //if purchase_type==1, then reduce stock from product stocks table 
-        if($purchaseType  == 1 && $instantlyProcessedQty > 0)
+        //stock changes
+        if($purchaseInvoice->purchase_type == 1 && $receiving_qty > 0)
         {
-            $this->stock_id_FSCT = $stockId;
+            $this->stock_id_FSCT = $stock_id;
             $this->product_id_FSCT = $cart['product_id'];
-            $this->stock_quantity_FSCT = $instantlyProcessedQty;
+            $this->stock_quantity_FSCT = $receiving_qty;
             $this->unit_id_FSCT = $cart['unit_id'];
-            $this->sellingFromPossStockTypeDecrement();
-
-            if($pStock)
-            {
-                $pStock->reduced_base_stock_remaining_delivery = $instantlyProcessedQty;
-                $pStock->save();
-            }
+            $this->purchaseRegularStockTypeIncrement();
         }
-        //delivery quantity
-        $totalDeliverdQty = 0;
-        $productStock->total_delivered_qty = $totalDeliverdQty;
-        $productStock->remaining_delivery_qty = $qty - $totalDeliverdQty;
+        //stock changes
 
-        $productStock->stock_process_instantly_qty = $instantlyProcessedQty;
-        $productStock->stock_process_later_qty = $stockProcessLaterQty;
-        $productStock->stock_process_later_date = $stockProcessLaterDate;
-        $productStock->total_stock_remaining_process_qty = $stockProcessLaterQty;
-        $productStock->total_stock_processed_qty = $instantlyProcessedQty; */
-
-        $productStock->status =1;
-        $productStock->delivery_status =1;
+        $productStock->status = 1;
+        $productStock->delivery_status = 1;
+        $productStock->created_by = authId_hh();
         $productStock->save();
         return $productStock;
     }
@@ -186,32 +132,34 @@ trait StoreDataFromPurchaseCartTrait
         $productStock->custom_code = $cart['custom_code'];
         $productStock->quantity = $cart['purchase_qty'];
         
-        $productStock->discount_amount = 0;//$cart['discount_amount'];
-        $productStock->discount_type = 'fixed';//$cart['discount_type'];
+        $productStock->discount_amount = NULL;//$cart['discount_amount'];
+        $productStock->discount_type = NULL;//'fixed';//$cart['discount_type'];
         $productStock->total_discount = 0;//$cart['total_discount_amount'];
        
-       
         $productStock->total_purchase_price = $cart['purchase_line_subtotal'];
-        //$productStock->stock_id = $cart['stock_id'];
 
         $this->totalPurchasePriceOfAllQuantityOfThisInvoice += $cart['purchase_line_subtotal'];
 
         $productStock->carts  = json_encode([
             'productName' => $cart['product_name'],
-            "productId" =>$cart['product_id'],
-            'mrpPrice' =>$cart['mrp_price'] ,
-            'purchasePrice' =>$cart['purchase_price'] ,
-            'totalPurchaseQuantity' =>$cart['purchase_qty'] ,
-            'stockId' =>$cart['stock_id'] ,
-            'instantlyReceivingQty' =>$cart['instantly_receiving_qty'] ,
-            'remainingQty' =>$cart['remaining_qty'],
+            "productId" => $cart['product_id'],
+            'mrpPrice' => $cart['mrp_price'] ,
+            'purchasePrice' => $cart['purchase_price'] ,
+            'totalPurchaseQuantity' => $cart['purchase_qty'] ,
+            'stockId' => $cart['stock_id'] ,
+            'instantlyReceivingQty' => $cart['instantly_receiving_qty'] ,
+            'remainingQty' => $cart['remaining_qty'],
             'unitName' => $cart['unit_name'],
-            'unitId' =>$cart['unit_id'],
-            'customCode' =>$cart['custom_code'],
+            'unitId' => $cart['unit_id'],
+            'customCode' => $cart['custom_code'],
 
-            'stocks' =>$cart['stocks'],
-            'prices' =>$cart['prices'],
+            'stocks' => $cart['stocks'],
+            'prices' => $cart['prices'],
         ]);
+        $productStock->stock_id_carts = json_encode($cart['stocks']);
+        $productStock->price_id_carts = json_encode($cart['prices']);
+
+        $productStock->product_purchase_prices_carts = json_encode($cart['product_prices']);
 
         $productStock->status =1;
         $productStock->delivery_status =1;
@@ -282,7 +230,7 @@ trait StoreDataFromPurchaseCartTrait
         $purchaseInvoice->created_by = authId_hh();
 
         $purchaseInvoice->save();
-
+        
         if(isset($this->purchaseCreateFormRequestData['attach_file']))
         {
             if ($this->purchaseCreateFormRequestData['attach_file']) {
@@ -290,47 +238,25 @@ trait StoreDataFromPurchaseCartTrait
                if ($ext1 != "jpg" && $ext1 != "jpeg" && $ext1 != "png" && $ext1 != "gif"  && $ext1 != "pdf") {
                     $ext1 = "";
                 } else {
-                   $insertedId = $purchaseInvoice->id;
-                   $destinationPath = "backend/purchase"; 
-                   $imgsave =  $this->purchaseCreateFormRequestData['attach_file']->move($destinationPath,"{$insertedId}.{$ext1}");
-                    if($imgsave)
+                    $insertedId = $purchaseInvoice->id;
+                    $destinationPath = "backend/purchase"; 
+                  
+                    $fileName = $insertedId .".". $ext1;
+                 
+                   $path = Storage::disk('public')->put($destinationPath.'/'.$fileName, file_get_contents($this->purchaseCreateFormRequestData['attach_file']));
+                    //$path = Storage::disk('public')->url($path);
+                    if($path)
                     {
                         $purchaseInvoice->attach_file = $ext1;
                         $purchaseInvoice->save();
                     }
                 }
             }
-             
-            /* $this->destination  = 'backend/purchase';  //its mandatory;
-            $this->imageWidth   = 400;  //its mandatory
-            $this->imageHeight  = 400;  //its nullable
-            $this->requestFile  = $this->purchaseCreateFormRequestData['attach_file'];  //its mandatory
-            $this->id   = $purchaseInvoice->id;
-            $purchaseInvoice->attach_file = $this->storeImage();
-            $purchaseInvoice->save(); */
         }
-
-        /* if( $this->purchaseCreateFormRequestData['purchase_type'] == 2) 
-        {
-            $quotation =  new SellQuotation();
-            $quotation->sell_invoice_id  = $purchaseInvoice->id;
-            $quotation->invoice_no       = $purchaseInvoice->invoice_no;
-            $quotation->customer_name    = $this->purchaseCreateFormRequestData['customer_name'];
-            $quotation->phone            = $this->purchaseCreateFormRequestData['phone'];
-            $quotation->quotation_no     = $this->purchaseCreateFormRequestData['quotation_no'];
-            $quotation->validate_date    = $this->purchaseCreateFormRequestData['validate_date'];
-            $quotation->quotation_note   = $this->purchaseCreateFormRequestData['quotation_note'];
-            $quotation->sell_date        = $this->purchaseCreateFormRequestData['sale_date'];
-            $quotation->created_by       = authId_hh();
-            $quotation->save(); 
-        } */
 
         return $purchaseInvoice;
         return $purchaseInvoiceSummeryCart;
     }
-
-
-
 
 
  

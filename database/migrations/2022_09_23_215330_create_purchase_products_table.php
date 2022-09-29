@@ -37,7 +37,7 @@ class CreatePurchaseProductsTable extends Migration
                 
                 $table->text('stock_id_carts')->nullable()->comment('json: all stocks id here');
                 $table->text('price_id_carts')->nullable()->comment('json: all prices id here');
-                $table->text('product_purchase_prices_carts')->nullable()->comment('json:all product price (when purchase and change prices or not) here of a single products');
+                $table->text('product_purchase_prices_carts')->nullable()->comment('json:all product price (when purchase and change prices or not) here of a single products.format:- {"1":{"4":"120","4=price_id":"120=Price"},{"1=stock_id":{"price"}}}');
 
                 $table->tinyInteger('status')->nullable();
                 $table->tinyInteger('delivery_status')->nullable();
