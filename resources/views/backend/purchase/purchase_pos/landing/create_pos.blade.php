@@ -319,14 +319,14 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <a  class="paymentQuotationButtonWhenCartItemZero btn btn-dark btnFullWidth white" style="margin-top: 1%; cursor: pointer;">
                                                 Quotation
                                             </a>
-                                            <a href="#" class="paymentQuotationButtonWhenCartItemMoreThenZero btn btn-dark btnFullWidth white" style="margin-top: 1%; display:none; cursor: pointer;" data-toggle="modal" data-target="#quotation-popup">
+                                            <a href="#" class="paymentQuotationButtonWhenCartItemMoreThenZero btn btn-dark btnFullWidth white" style="margin-top: 1%; display:none; cursor: pointer;"><!--- data-toggle="modal" data-target="#quotation-popup"-->
                                                 Quotation
                                             </a>
 
                                             <a class="paymentQuotationButtonWhenCartItemZero btn btn-success btnFullWidth white" style="margin-top: 1%; cursor: pointer;">
                                                 Payment
                                             </a>
-                                            <a href="#" class="paymentModalOpen paymentQuotationButtonWhenCartItemMoreThenZero btn btn-success btnFullWidth white" style="margin-top: 1%; display:none; cursor: pointer;" data-toggle="modal" data-target="#payment-popup">
+                                            <a href="#" class="paymentModalOpen paymentQuotationButtonWhenCartItemMoreThenZero btn btn-success btnFullWidth white" style="margin-top: 1%; display:none; cursor: pointer;"> <!--- data-toggle="modal" data-target="#payment-popup"-->
                                                 Payment
                                             </a>
                                             <input type="hidden" class="paymentModalOpenUrl" value="{{route('admin.purchase.regular.pos.purchase.payment.modal.open')}}">

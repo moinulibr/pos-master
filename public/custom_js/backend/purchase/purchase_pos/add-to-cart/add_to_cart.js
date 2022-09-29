@@ -651,7 +651,20 @@
     */
     
 
+    /*
+    |-----------------------------------------------
+    |payment modal 
+    |----------------------------------------------
+    */
     jQuery(document).on('click','.paymentModalOpen',function(){
+        var supplier_id = jQuery('.supplier_id option:selected').val();
+        if(!supplier_id){
+            jQuery('#payment-popup').modal('hide');
+            jQuery.notify("Please select one supplier", 'error');
+            return 0;
+        }else{
+            jQuery('#payment-popup').modal('show');
+        }
         var url = jQuery('.paymentModalOpenUrl').val();
        jQuery.ajax({
            url:url,
@@ -671,8 +684,13 @@
            },
        });
     });
+    /*
+    |-----------------------------------------------
+    |payment modal 
+    |----------------------------------------------
+    */
 
-
+    
     /*
     |-----------------------------------------------
     | finally submit Purchase (final Purchase and quotation)

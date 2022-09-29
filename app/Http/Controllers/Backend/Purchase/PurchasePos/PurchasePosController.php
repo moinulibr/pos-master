@@ -199,7 +199,7 @@ class PurchasePosController extends Controller
         ]);
     }
 
-
+    
     public function changeQuantity(Request $request)
     {
         $this->requestAllCartData = $request;
@@ -217,7 +217,7 @@ class PurchasePosController extends Controller
 
 
     /*======================================================= */
-    //customer shipping address from sell cart (pos)
+    //purchase shipping cost and other (pos)
     public function purchaseShippingCostAndOther(Request $request)
     {
         //return $request; 
@@ -228,8 +228,9 @@ class PurchasePosController extends Controller
             'status'    => true,
         ]);
     }
+    //purchase shipping cost and other  (pos)
 
-    //customer shipping address from sell cart (pos)
+    //payment modal open
     public function paymentModalOpen(Request $request)
     {
         $purchaseInvoiceSummeryCartName = purchaseCreateCartInvoiceSummerySessionName_hh();
@@ -242,14 +243,12 @@ class PurchasePosController extends Controller
             'list'     => $list,
         ]);
     }
+    //payment modal open
 
     /*======================================================= */
     // store Purchase and quotation data from Purchase cart (pos)
     public function storeDataFromPurchaseCart(Request $request)
     {   
-        $this->purchaseCreateFormRequestData = $request;
-       return $this->storeSessionDataFromPurchaseCart();  
-        return 0;
         DB::beginTransaction();
 
         try {
