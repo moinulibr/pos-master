@@ -80,7 +80,6 @@ class ProductPriceController extends Controller
                 $podctPrice = ProductPrice::where('stock_id',$stockId)   
                     ->where('product_id',$request->product_id)
                     ->where('price_id',$priceId)
-                    ->where('stock_id',$stockId)
                     ->where('branch_id',authBranch_hh()) 
                     ->where('status',1)
                     ->first();

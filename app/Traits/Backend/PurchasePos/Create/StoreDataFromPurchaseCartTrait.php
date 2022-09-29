@@ -8,6 +8,7 @@ use App\Models\Backend\Sell\SellPackage;
 use App\Models\Backend\Sell\SellProduct;
 use App\Models\Backend\Customer\Customer;
 use App\Models\Backend\Supplier\Supplier;
+use App\Models\Backend\Price\ProductPrice;
 use App\Models\Backend\Sell\SellQuotation;
 use App\Models\Backend\Stock\ProductStock;
 use App\Models\Backend\Sell\SellProductStock;
@@ -42,15 +43,20 @@ trait StoreDataFromPurchaseCartTrait
         $purchaseInvoiceSummeryCart = [];
         $purchaseInvoiceSummeryCart = session()->has($purchaseInvoiceSummeryCartName) ? session()->get($purchaseInvoiceSummeryCartName)  : [];
         
-
+        // purchase invoice table 
         $purchaseInvoice =  $this->insertDataInThePurchaseInvoiceTable($purchaseInvoiceSummeryCart);
 
         $this->totalPurchasePriceOfAllQuantityOfThisInvoice = 0;
         foreach($purchaseSessionCarts as $purchaseSessionCart)
         {
+            //purchase product table 
             $purchaseProduct =  $this->insertDataInThePurchaseProduct($purchaseInvoice,$purchaseSessionCart);
             
+            //purchase product stock table
             $this->insertDataInThePurchaseProductStockTable($purchaseSessionCart,$purchaseInvoice,$purchaseProduct,$purchaseSessionCart['stock_id'],$purchaseSessionCart['purchase_qty'],$purchaseSessionCart['purchase_price'],$purchaseSessionCart['mrp_price'],$purchaseSessionCart['instantly_receiving_qty']);
+            
+            //product price update
+            $this->productPriceUpdateInTheProductPriceTable($purchaseSessionCart);
         }//end foreach
         
         $purchaseInvoice->total_purchase_amount = $this->totalPurchasePriceOfAllQuantityOfThisInvoice;
@@ -259,5 +265,70 @@ trait StoreDataFromPurchaseCartTrait
     }
 
 
+    //product price udate when complete purchase... new purchase price is enable in the product list and others
+    private function productPriceUpdateInTheProductPriceTable($purchaseSessionCart)
+    {
+        foreach($purchaseSessionCart['product_prices'] as $stockId => $pricesByStock)
+        {
+            foreach($pricesByStock as $priceId => $price)
+            {
+                //check product stock is exist or not,
+                    //if not exist, then add in the product stock table 
+                $podctStock = ProductStock::where('stock_id',$stockId)   
+                    ->where('product_id',$purchaseSessionCart['product_id'])
+                    ->where('branch_id',authBranch_hh()) 
+                    ->where('status',1)
+                    ->first();
+
+                $exitProuctStockId = NULL;
+                if($podctStock)
+                {
+                    $exitProuctStockId = $podctStock->id;
+                }
+                $newProductStockId = NULL;
+                if(!$podctStock)
+                {
+                    $nps = new ProductStock();
+                    $nps->product_id        = $purchaseSessionCart['product_id'];
+                    $nps->branch_id         = authBranch_hh();
+                    $nps->stock_id          = $stockId;
+                    $nps->status            = 1;
+                    $nps->available_base_stock = 0;
+                    $nps->used_stock        = 0;
+                    $nps->used_base_stock   = 0;
+                    $nps->used_base_stock   = 0;
+                    $nps->save();
+                    $newProductStockId = $nps->id;
+                } 
+
+                $podctPrice = ProductPrice::where('stock_id',$stockId)   
+                    ->where('product_id',$purchaseSessionCart['product_id'])
+                    ->where('price_id',$priceId)
+                    ->where('branch_id',authBranch_hh()) 
+                    ->where('status',1)
+                    ->first();
+                if($podctPrice)
+                {   
+                    //updatePriceHistory( $previousPrice = $podctPrice->price, $newPrice = $price)
+                    //if we track price update history, then make a function, and call the function from here
+                    $podctPrice->price = $price;
+                    $podctPrice->save();
+                }
+                else{
+                    $npp = new ProductPrice();
+                    $npp->product_id    = $purchaseSessionCart['product_id'];
+                    $npp->branch_id     = authBranch_hh();
+                    $npp->price_id      = $priceId;
+                    $npp->stock_id      = $stockId;
+                    $npp->product_stock_id = $exitProuctStockId ? $exitProuctStockId : $newProductStockId;
+                    $npp->price         = $price;
+                    $npp->status        = 1;
+                    $npp->save();
+                }
+                
+            }//end foreach
+        }//end foreach
+    }
  
+
 }
