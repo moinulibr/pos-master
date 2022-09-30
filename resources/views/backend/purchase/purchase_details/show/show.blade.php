@@ -13,7 +13,7 @@
     <div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title" id="exampleModalLabel">
-                <strong style="mergin-right:20px;">Sell Details (Invoice No.: {{$data->invoice_no}})</strong>
+                <strong style="mergin-right:20px;">Purchase Details (Invoice No.: {{$data->invoice_no}})</strong>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -49,6 +49,10 @@
                         </div>  --}}
                         <div class="mb-2">
                             <label>
+                                <strong>Reference No: </strong> <span style="font-size:14px;"> {{$data->reference_no}}</span>
+                            </label>
+                            <br/>
+                            <label>
                                 <strong>Payment Status: </strong>
                                     {{-- @if($data->totalPaidAmount() > 0)
                                         <span>
@@ -75,34 +79,32 @@
                     <div class="col-md-4">
                         <div class="mb-2">
                             <label>
-                                <strong>Customer Name : </strong> <span style="font-size:14px;"> {{$data->customer ? $data->customer->name  :NULL}}</span>
+                                <strong>Supplier Name : </strong> <span style="font-size:14px;"> {{$data->supplier ? $data->supplier->name  :NULL}}</span>
                             </label>
                         </div>
                         <div class="mb-2">
                             <label>
                                 <strong>Address : </strong>
-                                {{$data->customer ? $data->customer->address  :NULL}}
+                                {{$data->supplier ? $data->supplier->address  :NULL}}
                             </label>
                             <br/>
                             <label>
                                 <strong>Mobile : </strong>
-                                {{$data->customer ? $data->customer->phone  :NULL}}
+                                {{$data->supplier ? $data->supplier->phone  :NULL}}
                             </label>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="mb-2">
                             <label>
-                                <strong>Shipping :</strong>
-                                {{ $data->shipping_id ? $data->shipping? $data->shipping->address : NUll : NULL }}
-                                {{ $data->shipping_id ? $data->shipping ? " (". $data->shipping->phone .")" : NUll : NULL }}
+                                <strong>Shipping Note:</strong>
+                                {{$data->shipping_note}}
                             </label>
                         </div>
                         <div class="mb-2">
                             <label>
-                                <strong>Reference By: </strong>
-                                {{$data->referenceBy ? $data->referenceBy->name:NULL}}
-                                {{$data->referenceBy ? " (". $data->referenceBy->phone .")" :NULL}}
+                                <strong>Purchase Note: </strong>
+                                {{$data->purchase_note}}
                             </label>
                         </div>
                         <div class="mb-2">
@@ -125,50 +127,49 @@
                                     <tr>
                                         <th>AS Code</th>
                                         <th style="width:40%;">Product</th>
-                                        <th>Delivery Status</th>
                                         <th>Quantity</th>
-                                        <th>Sell Price</th>
-                                        <th>Qty Price</th>
-                                        <th>Less Amount</th>
+                                        <th><small>Receiving Qty & Status</small></th>
+                                        <th>Purchase Price</th>
+                                        <th>MRP Price</th>
                                         <th  style="text-align:right;">SubTotal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($data->sellProducts ? $data->sellProducts : NULL  as $item)
+                                    @foreach ($data->purchaseProducts ? $data->purchaseProducts : NULL  as $item)
                                     <tr>
                                         @php
-                                            $cats = json_decode($item->cart,true);
+                                            $cat = json_decode($item->carts,true);
                                         @endphp
                                         <td> {{$item->custom_code}}</td>
                                         <td>
-                                            @if (array_key_exists('productName',$cats))
-                                                {{$cats['productName']}}
+                                            @if (array_key_exists('productName',$cat))
+                                                {{$cat['productName']}}
                                                 @else
                                                 NULL
                                             @endif
                                         </td>
-                                        <td>
-
-                                        </td>
+                                        
                                         <td style="text-align: center">
                                             {{$item->quantity}}
-                                            {{-- @if (array_key_exists('unitName',$cats))
-                                                <small>{{$cats['unitName']}}</small>
-                                                @else
-                                                NULL
-                                            @endif --}}
+                                        </td>
+                                        @foreach ($item->purchaseProductStocks ? $item->purchaseProductStocks : NULL  as $ppsitem)
+                                        <td>
+                                            {{ number_format(($ppsitem->total_delivered_qty ),2,'.', '')}}
+                                            @if ($ppsitem->total_delivered_qty == $ppsitem->total_quantity)
+                                                <span class="badge badge-info">Received All</span>
+                                                @else 
+                                                <span class="badge badge-danger">Partial Received</span>
+                                            @endif
                                         </td>
                                         <td style="text-align: center;">
-                                            {{$item->sold_price}}
+                                            {{ number_format(($ppsitem->purchase_price),2,'.', '')}}
                                         </td>
                                         <td style="text-align: center;">
-                                            {{ number_format(($item->sold_price * $item->quantity),2,'.', '')}}
+                                            {{ number_format(($ppsitem->mrp_price),2,'.', '')}}
                                         </td>
-                                        <td style="text-align: center;">
-                                            {{$item->total_discount}}
-                                        </td>
+                                        @endforeach
                                         <td style="text-align: right;">
-                                            {{$item->total_sold_price}}   
+                                            {{ number_format(($item->total_purchase_price ),2,'.', '')}}   
                                         </td>
                                     </tr>
                                     @endforeach
@@ -319,7 +320,7 @@
 
         </div>
         <div class="modal-footer">
-            <a class="btn btn-primary print" target="_blank" href="{{route('admin.sell.regular.normal.print.from.sell.list',$data->id)}}" style="cursor: pointer">Print</a>
+            <a class="btn btn-primary print" target="_blank" href="{{route('admin.purchase.regular.normal.print.from.purchase.list',$data->id)}}" style="cursor: pointer">Print</a>
             <button type="button" class="btn btn-secondary btn-danger" data-dismiss="modal">Cancel</button>
         </div>
     </div>

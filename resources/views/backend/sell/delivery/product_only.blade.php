@@ -62,10 +62,6 @@
                                     <small>
                                         {{ $pstock->stock ? $pstock->stock->label : NULL}}
                                     </small>
-                                    <br/>
-                                    <small>
-                                        {{ ($pstock->productStock ? $pstock->productStock->available_base_stock : 0) + ($pstock->productStock ? $pstock->productStock->reduced_base_stock_remaining_delivery : 0) }}
-                                    </small>
                                 </td>
                               
                                 <td style="width:5%;text-align: center">{{$pstock->total_quantity}}</td>

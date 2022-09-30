@@ -538,14 +538,14 @@ Route::group(['middleware' => ['auth']], function ()
     | Purchase list, print  and others
     |-----------------------------------
     */
-        Route::group(['prefix'=>'admin/purchase/regular','as'=> 'admin.purchase.regular.purchase.', 'namespace'=>'Backend\Sell\Details'],function(){
-            Route::get('sell/list','SellController@index')->name('index');//->middleware(['permissions:unit|index']);
-            Route::get('sell/list/by/ajr','SellController@sellListByAjaxResponse')->name('list.ajaxresponse');//->middleware(['permissions:unit|index']);
-            Route::get('sell/single/view','SellController@singleView')->name('single.view');//->middleware(['permissions:unit|index']);
-            Route::get('sell/single/invoice/profit/loss','SellController@viewSingleInvoiceProfitLoss')->name('view.single.invoice.profit.loss');
+        Route::group(['as'=> 'admin.purchase.regular.purchase.','prefix'=>'admin/purchase/regular', 'namespace'=>'Backend\Purchase\Details'],function(){
+            Route::get('purchase/list','PurchaseController@index')->name('index');//->middleware(['permissions:unit|index']);
+            Route::get('purchase/list/by/ajr','PurchaseController@purchaseListByAjaxResponse')->name('list.ajaxresponse');//->middleware(['permissions:unit|index']);
+            Route::get('purchase/single/view','PurchaseController@singleView')->name('single.view');//->middleware(['permissions:unit|index']);
         });
+
         //quotation
-        Route::group(['prefix'=>'admin/purchase/regular','as'=> 'admin.purchase.regular.quotation.', 'namespace'=>'Backend\Sell\Details'],function(){
+        Route::group(['prefix'=>'admin/purchase/regular','as'=> 'admin.purchase.regular.quotation.', 'namespace'=>'Backend\Purchase\Details'],function(){
             Route::get('quotation/list','QuotationController@index')->name('index');//->middleware(['permissions:unit|index']);
             Route::get('quotation/list/by/ajr','QuotationController@quotationListByAjaxResponse')->name('list.ajaxresponse');//->middleware(['permissions:unit|index']);
             Route::get('quotation/single/view','QuotationController@singleView')->name('single.view');//->middleware(['permissions:unit|index']);
@@ -562,7 +562,26 @@ Route::group(['middleware' => ['auth']], function ()
     | Purchase list, print  and others
     |-----------------------------------
     */
-    
+
+    /*
+    |-----------------------------------
+    | Purchase product receive/delivery
+    |-----------------------------------
+    */
+        Route::group(['as'=> 'admin.purchase.product.receive.','prefix'=>'admin/purchase/product/receive', 'namespace'=>'Backend\Purchase\Receive'],function(){
+            Route::get('by/purchase/invoice','PurchaseProductReceiveController@index')->name('invoice.wise.list.index');//->middleware(['permissions:unit|index']);
+            Route::post('by/purchase/invoice/store','PurchaseProductReceiveController@store')->name('invoice.wise.quantity.store');//->middleware(['permissions:unit|index']);
+            
+            Route::get('print/purchase/product/delivered/invoice/wise/product/list/{invoiceId}','PurchaseProductReceiveController@printPurchaseProductReceivedInvoiceWiseReceivedProductList')->name('print.product.received.invoice.wise.received.list');//->middleware(['permissions:unit|index']);
+            //Route::get('invoice/wise/list','PurchaseProductReceiveController@index')->name('list.index');//->middleware(['permissions:unit|index']);
+            //Route::get('list/by/ajr','PurchaseProductReceiveController@sellListByAjaxResponse')->name('sell.list.ajaxresponse');//->middleware(['permissions:unit|index']);
+            //Route::get('single/view','PurchaseProductReceiveController@singleView')->name('sell.single.view');//->middleware(['permissions:unit|index']);
+        });
+    /*
+    |-----------------------------------
+    | Purchase product receive/delivery
+    |-----------------------------------
+    */
 
 
 

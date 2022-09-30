@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Backend\Sell\Details;
+namespace App\Http\Controllers\Backend\Purchase\Details;
 
 use App\Http\Controllers\Controller;
 use App\Models\Backend\Sell\SellInvoice;
 use Illuminate\Http\Request;
+use App\Models\Backend\Purchase\PurchaseInvoice;
 
-class SellController extends Controller
+class PurchaseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,25 +16,27 @@ class SellController extends Controller
      */
     public function index()
     {
-        $data['datas'] = SellInvoice::where('sell_type',1)
+        $data['datas'] = PurchaseInvoice::where('purchase_type',1)
                         ->where('branch_id',authBranch_hh())
                         ->whereNull('deleted_at')
                         //->orderBy('custom_serial','ASC')
                         ->paginate(50);
-        return view('backend.sell.sell_details.index',$data);
+        return view('backend.purchase.purchase_details.index',$data);
     }
 
-    public function sellListByAjaxResponse(Request $request)
+    public function purchaseListByAjaxResponse(Request $request)
     {
-        $sell  = SellInvoice::query();
+        $purchase  = PurchaseInvoice::query();
         if($request->ajax())
         {
             if($request->search)
             {
-                $sell->where('invoice_no','like','%'.$request->search.'%');
+                $purchase->where('invoice_no','like','%'.$request->search.'%')
+                ->orWhere('reference_no','like','%'.$request->search.'%')
+                ->orWhere('chalan_no','like','%'.$request->search.'%');
             }
-            $data['datas']  =  $sell->where('sell_type',1)->latest()->paginate(50);
-            $html = view('backend.sell.sell_details.ajax.list_ajax_response',$data)->render();
+            $data['datas']  =  $purchase->where('purchase_type',1)->latest()->paginate(50);
+            $html = view('backend.purchase.purchase_details.ajax.list_ajax_response',$data)->render();
             return response()->json([
                 'status' => true,
                 'html' => $html
@@ -44,8 +47,8 @@ class SellController extends Controller
 
     public function singleView(Request $request)
     {
-        $data['data']  =  SellInvoice::where('id',$request->id)->first();
-        $html = view('backend.sell.sell_details.show.show',$data)->render();
+        $data['data']  =  PurchaseInvoice::where('id',$request->id)->first();
+        $html = view('backend.purchase.purchase_details.show.show',$data)->render();
         return response()->json([
             'status' => true,
             'html' => $html
@@ -53,10 +56,10 @@ class SellController extends Controller
     }
 
 
-    public function viewSingleInvoiceProfitLoss(Request $request)
+    public function viewSingleInvoiceWiseProductReceive(Request $request)
     {
-        $data['data']  =  SellInvoice::where('id',$request->id)->first();
-        $html = view('backend.sell.sell_details.show.profit_lost',$data)->render();
+        $data['data']  =  PurchaseInvoice::where('id',$request->id)->first();
+        $html = view('backend.purchase.purchase_details.show.receive_product',$data)->render();
         return response()->json([
             'status' => true,
             'html' => $html

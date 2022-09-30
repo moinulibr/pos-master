@@ -1,1 +1,1 @@
-@include('backend.sell.sell_details.partial.list')
+@include('backend.purchase.purchase_details.partial.list')

@@ -68,7 +68,7 @@
                 </a>
                 <ul class="sidenav-menu">
                     <li class="sidenav-item">
-                        <a href="index.html" class="sidenav-link">
+                        <a href="{{route('admin.purchase.regular.purchase.index')}}" class="sidenav-link">
                             <div>Purchase List</div>
                         </a>
                     </li>

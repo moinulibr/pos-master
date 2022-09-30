@@ -1,4 +1,5 @@
-    /*
+
+   /*
     |--------------------------------------------------------
     | input field protected .. only for numeric
     |--------------------------------------------------------
@@ -9,9 +10,9 @@
 
 
 //-----------------------------------------------------------------------
-    $(document).on('click','.singleSellInvoiceWiseDelivery',function(e){
+    $(document).on('click','.singlePurchaseInvoiceWiseReceiveProduct',function(e){
         e.preventDefault();
-        var url = $('.sellProductDeliveryInvoiceWiseModalRoute').val();
+        var url = $('.purchaseProductReceiveInvoiceWiseModalRoute').val();
         var id = $(this).data('id');
         $.ajax({
             url:url,
@@ -19,7 +20,7 @@
             success:function(response){
                 if(response.status == true)
                 {
-                    $('#sellProductDeliveryModal').html(response.html).modal('show');
+                    $('#purchaseProductReceiveInvoiceWiseModal').html(response.html).modal('show');
                     $('.product_related_response_here').html(response.product);
                 }
             }
@@ -147,7 +148,6 @@
 
     function checkAndUncheckItemQuantity(id)
     {
-        var processedQty = parseFloat($('.total_processed_qty_'+id).val());
         var remainingDeliveryQty = parseFloat($('.total_remaining_delivery_qty_'+id).val());
         var totalStockQtyWRBND = parseFloat($('.total_base_available_stock_WRBND_qty_'+id).val());
         
@@ -181,7 +181,7 @@
 
 
 
-    jQuery(document).on("submit",'.storeDeliveryDataFromDeliveryOption',function(e){
+    jQuery(document).on("submit",'.storeReceivingDataFromPurchaseProductReceiveOption',function(e){
         e.preventDefault();
         $('.alert_success_message_div').hide();
         $('.success_message_text').text('');

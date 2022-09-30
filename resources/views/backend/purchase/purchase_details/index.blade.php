@@ -1,5 +1,5 @@
 @extends('layouts.backend.app')
-@section('page_title') Sell @endsection
+@section('page_title') Purchase @endsection
 @push('css')
 <style>
 
@@ -20,18 +20,18 @@
     <!---page_title_of_content-->    
     @push('page_title_of_content')
         <div class="breadcrumbs layout-navbar-fixed">
-            <h4 class="font-weight-bold py-3 mb-0">Sell  </h4>
+            <h4 class="font-weight-bold py-3 mb-0">Purchase  </h4>
             <div class="text-muted small mt-0 mb-4 d-block breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="#"><i class="feather icon-home"></i></a>
                     </li>
-                    <li class="breadcrumb-item">Sell</li>
-                    <li class="breadcrumb-item active">All Sells</li>
+                    <li class="breadcrumb-item">Purchase</li>
+                    <li class="breadcrumb-item active">All Purchase</li>
                 </ol>
             </div>
             <div class="products">
-                <a href="{{route('admin.sell.regular.pos.create')}}" target="_blank" class="addSellModal">Add Sell</a>
+                <a href="{{route('admin.purchase.regular.pos.create')}}" target="_blank" class="addPurchaseModal">Add Purchase</a>
             </div>
         </div>
     @endpush
@@ -73,30 +73,26 @@
             </div>
             
             <!-------responsive table------> 
-            <div class="sellListAjaxResponseResult">
+            <div class="purchaseListAjaxResponseResult">
 
-                @include('backend.sell.sell_details.partial.list')
+                @include('backend.purchase.purchase_details.partial.list')
 
             </div>
             <!-------responsive table------> 
 
             
 
-            <!-------single sell view Modal------> 
+            <!-------single purchase view Modal------> 
             <div class="modal fade " id="singleModalView"  aria-modal="true"></div>
-            <input type="hidden" class="singleViewModalRoute" value="{{ route('admin.sell.regular.sell.single.view') }}">
-            <!-------single sell view Modal------> 
-            
-             <!-------single sell invoice profit loss view Modal------> 
-            <div class="modal fade " id="singleSellInvoiceProftLossModalView"  aria-modal="true"></div>
-            <input type="hidden" class="singleSellInvoiceProftLossModalRoute" value="{{ route('admin.sell.regular.sell.view.single.invoice.profit.loss') }}">
-            <!-------single sell invoice profit loss view Modal------> 
+            <input type="hidden" class="singleViewModalRoute" value="{{ route('admin.purchase.regular.purchase.single.view') }}">
+            <!-------single purchase view Modal------> 
+           
             
 
-            <!-------Sell product delivery Modal------> 
-            <div class="modal fade " id="sellProductDeliveryModal"  aria-modal="true"></div>
-            <input type="hidden" class="sellProductDeliveryInvoiceWiseModalRoute" value="{{route('admin.sell.product.delivery.invoice.wise.list.index')}}">
-            <!-------Sell product delivery Modal------> 
+            <!-------purchase product receive Modal------> 
+            <div class="modal fade " id="purchaseProductReceiveInvoiceWiseModal"  aria-modal="true"></div>
+            <input type="hidden" class="purchaseProductReceiveInvoiceWiseModalRoute" value="{{route('admin.purchase.product.receive.invoice.wise.list.index')}}">
+            <!-------purchase product receive Modal------> 
 
 
            {{--  <!-------delete Customer Modal------> 
@@ -125,17 +121,17 @@
     <!--#################################################################################-->
 
 
-    {{--sell list url --}}
-    <input type="hidden" class="sellListUrl" value="{{route('admin.sell.regular.sell.list.ajaxresponse')}}">
-    {{--sell list url --}}
+    {{--purchase list url --}}
+    <input type="hidden" class="purchaseListUrl" value="{{route('admin.purchase.regular.purchase.list.ajaxresponse')}}">
+    {{--purchase list url --}}
     
 
 
 <!--=================js=================-->
 @push('js')
 <!--=================js=================-->
-<script src="{{asset('custom_js/backend')}}/sell/sell_details/index.js?v=1"></script>
-<script src="{{asset('custom_js/backend')}}/sell/delivery/index.js?v=1"></script>
+<script src="{{asset('custom_js/backend')}}/purchase/purchase_details/index.js?v=1"></script>
+<script src="{{asset('custom_js/backend')}}/purchase/receive/index.js?v=1"></script>
 
 
 

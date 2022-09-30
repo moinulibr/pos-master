@@ -13,13 +13,13 @@
     <div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title" id="exampleModalLabel">
-                <strong style="mergin-right:20px;">Sell Details (Invoice No.: {{$data->invoice_no}})</strong>
+                <strong style="mergin-right:20px;">Purchase Details (Invoice No.: {{$data->invoice_no}})</strong>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </h4>
         </div>
-        <form method="POST" action="{{route('admin.sell.product.delivery.invoice.wise.quantity.store')}}" class="storeDeliveryDataFromDeliveryOption">
+        <form method="POST" action="{{route('admin.purchase.product.receive.invoice.wise.quantity.store')}}" class="storeReceivingDataFromPurchaseProductReceiveOption">
             @csrf
             <div class="modal-body">
 
@@ -46,18 +46,22 @@
                             </div>  --}}
                             <div class="mb-2">
                                 <label>
+                                    <strong>Reference No: </strong> <span style="font-size:14px;"> {{$data->reference_no}}</span>
+                                </label>
+                                <br/>
+                                <label>
                                     <strong>Payment Status: </strong>
                                         {{-- @if($data->totalPaidAmount() > 0)
                                             <span>
                                                 @if($data->totalSaleAmount() == $data->totalPaidAmount())
                                                     <span class="badge badge-primary"> Paid </span>
-
+    
                                                 @elseif($data->totalSaleAmount() > 0 && $data->totalSaleAmount()  < $data->totalPaidAmount())
                                                     <small class="badge badge-warning"> Over</small><span class="badge badge-primary"> Paid </span>
-
+    
                                                 @elseif($data->totalSaleAmount() > 0 && $data->totalSaleAmount()  > $data->totalPaidAmount())
                                                     <span class="badge badge-danger">Due</span>
-
+    
                                                 @elseif($data->totalSaleAmount() < 0)
                                                     <span class="badge badge-defalut" style="backgrounc-color:#06061f;color:red;">Invalid </span>
                                                 @endif
@@ -72,34 +76,32 @@
                         <div class="col-md-4">
                             <div class="mb-2">
                                 <label>
-                                    <strong>Customer Name : </strong> <span style="font-size:14px;"> {{$data->customer ? $data->customer->name  :NULL}}</span>
+                                    <strong>Supplier Name : </strong> <span style="font-size:14px;"> {{$data->supplier ? $data->supplier->name  :NULL}}</span>
                                 </label>
                             </div>
                             <div class="mb-2">
                                 <label>
                                     <strong>Address : </strong>
-                                    {{$data->customer ? $data->customer->address  :NULL}}
+                                    {{$data->supplier ? $data->supplier->address  :NULL}}
                                 </label>
                                 <br/>
                                 <label>
                                     <strong>Mobile : </strong>
-                                    {{$data->customer ? $data->customer->phone  :NULL}}
+                                    {{$data->supplier ? $data->supplier->phone  :NULL}}
                                 </label>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="mb-2">
                                 <label>
-                                    <strong>Shipping :</strong>
-                                    {{ $data->shipping_id ? $data->shipping? $data->shipping->address : NUll : NULL }}
-                                    {{ $data->shipping_id ? $data->shipping ? " (". $data->shipping->phone .")" : NUll : NULL }}
+                                    <strong>Shipping Note:</strong>
+                                    {{$data->shipping_note}}
                                 </label>
                             </div>
                             <div class="mb-2">
                                 <label>
-                                    <strong>Reference By: </strong>
-                                    {{$data->referenceBy ? $data->referenceBy->name:NULL}}
-                                    {{$data->referenceBy ? " (". $data->referenceBy->phone .")" :NULL}}
+                                    <strong>Purchase Note: </strong>
+                                    {{$data->purchase_note}}
                                 </label>
                             </div>
                             <div class="mb-2">
@@ -110,6 +112,7 @@
                             </div>
                         </div>
                     </div>
+    
                     
                     <div class="row">
                         <div class="col-md-3"></div>

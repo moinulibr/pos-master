@@ -1,17 +1,17 @@
     
     $(document).ready(function(){
-        sellList();
+        purchaseList();
     });
 
-    function sellList()
+    function purchaseList()
     {
-        var url = $('.sellListUrl').val();
+        var url = $('.purchaseListUrl').val();
         $.ajax({
             url:url,
             success:function(response){
                 if(response.status == true)
                 {
-                    $('.sellListAjaxResponseResult').html(response.html);
+                    $('.purchaseListAjaxResponseResult').html(response.html);
                 }
             }
         });
@@ -26,7 +26,7 @@
     });
 
     function getPagination(pageNumber){
-        var createUrl = $('.sellListUrl').val();
+        var createUrl = $('.purchaseListUrl').val();
         var url =  createUrl+"?page="+pageNumber;
         $.ajax({
             url: url,
@@ -35,7 +35,7 @@
             success: function(response){
                 if(response.status == true)
                 {
-                    $('.sellListAjaxResponseResult').html(response.html);
+                    $('.purchaseListAjaxResponseResult').html(response.html);
                 }
             },
         });
@@ -57,7 +57,7 @@
         if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = true;
         if (ctrlDown && (e.keyCode == vKey || e.keyCode == cKey || e.keyCode == xKey)) return false;
         var search = $(this).val();
-        var url = $('.sellListUrl').val();
+        var url = $('.purchaseListUrl').val();
         $.ajax({
             url: url,
             data:{search:search},
@@ -66,7 +66,7 @@
             success: function(response){
                 if(response.status == true)
                 {
-                    $('.sellListAjaxResponseResult').html(response.html);
+                    $('.purchaseListAjaxResponseResult').html(response.html);
                 }
             },
         });
@@ -75,7 +75,7 @@
 
 
 //-----------------------------------------------------------------------
-    $(document).on('click','.singleSellView',function(e){
+    $(document).on('click','.singlePurchaseView',function(e){
         e.preventDefault();
         var url = $('.singleViewModalRoute').val();
         var id = $(this).data('id');
@@ -86,24 +86,6 @@
                 if(response.status == true)
                 {
                     $('#singleModalView').html(response.html).modal('show');
-                }
-            }
-        });
-    });
-//-----------------------------------------------------------------------
-
-//-----------------------------------------------------------------------
-    $(document).on('click','.singleSellInvoiceProfitLossView',function(e){
-        e.preventDefault();
-        var url = $('.singleSellInvoiceProftLossModalRoute').val();
-        var id = $(this).data('id');
-        $.ajax({
-            url:url,
-            data:{id:id},
-            success:function(response){
-                if(response.status == true)
-                {
-                    $('#singleSellInvoiceProftLossModalView').html(response.html).modal('show');
                 }
             }
         });
@@ -133,7 +115,7 @@ $(document).on('click','.deletingCustomerButton',function(e){
             $('.deletingCustomerId').val('');
             $.notify(response.message, response.type);
             setTimeout(function(){
-                sellList();
+                purchaseList();
                 $('#deleteConfirmationModal').modal('hide');//hide modal
             },1000);
         }
