@@ -13,13 +13,13 @@
     <div class="modal-content">
         <div class="modal-header">
             <h4 class="modal-title" id="exampleModalLabel">
-                <strong style="mergin-right:20px;">Purchase Details (Invoice No.: {{$data->invoice_no}})</strong>
+                <strong style="mergin-right:20px;">Sell Details (Invoice No.: {{$data->invoice_no}})</strong>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </h4>
         </div>
-        <form method="POST" action="{{route('admin.purchase.product.receive.invoice.wise.quantity.store')}}" class="storeReceivingDataFromPurchaseProductReceiveOption">
+        <form method="POST" action="{{route('admin.sell.product.delivery.invoice.wise.quantity.store')}}" class="storeDeliveryDataFromDeliveryOption">
             @csrf
             <div class="modal-body">
 
@@ -46,22 +46,18 @@
                             </div>  --}}
                             <div class="mb-2">
                                 <label>
-                                    <strong>Reference No: </strong> <span style="font-size:14px;"> {{$data->reference_no}}</span>
-                                </label>
-                                <br/>
-                                <label>
                                     <strong>Payment Status: </strong>
                                         {{-- @if($data->totalPaidAmount() > 0)
                                             <span>
                                                 @if($data->totalSaleAmount() == $data->totalPaidAmount())
                                                     <span class="badge badge-primary"> Paid </span>
-    
+
                                                 @elseif($data->totalSaleAmount() > 0 && $data->totalSaleAmount()  < $data->totalPaidAmount())
                                                     <small class="badge badge-warning"> Over</small><span class="badge badge-primary"> Paid </span>
-    
+
                                                 @elseif($data->totalSaleAmount() > 0 && $data->totalSaleAmount()  > $data->totalPaidAmount())
                                                     <span class="badge badge-danger">Due</span>
-    
+
                                                 @elseif($data->totalSaleAmount() < 0)
                                                     <span class="badge badge-defalut" style="backgrounc-color:#06061f;color:red;">Invalid </span>
                                                 @endif
@@ -76,32 +72,34 @@
                         <div class="col-md-4">
                             <div class="mb-2">
                                 <label>
-                                    <strong>Supplier Name : </strong> <span style="font-size:14px;"> {{$data->supplier ? $data->supplier->name  :NULL}}</span>
+                                    <strong>Customer Name : </strong> <span style="font-size:14px;"> {{$data->customer ? $data->customer->name  :NULL}}</span>
                                 </label>
                             </div>
                             <div class="mb-2">
                                 <label>
                                     <strong>Address : </strong>
-                                    {{$data->supplier ? $data->supplier->address  :NULL}}
+                                    {{$data->customer ? $data->customer->address  :NULL}}
                                 </label>
                                 <br/>
                                 <label>
                                     <strong>Mobile : </strong>
-                                    {{$data->supplier ? $data->supplier->phone  :NULL}}
+                                    {{$data->customer ? $data->customer->phone  :NULL}}
                                 </label>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="mb-2">
                                 <label>
-                                    <strong>Shipping Note:</strong>
-                                    {{$data->shipping_note}}
+                                    <strong>Shipping :</strong>
+                                    {{ $data->shipping_id ? $data->shipping? $data->shipping->address : NUll : NULL }}
+                                    {{ $data->shipping_id ? $data->shipping ? " (". $data->shipping->phone .")" : NUll : NULL }}
                                 </label>
                             </div>
                             <div class="mb-2">
                                 <label>
-                                    <strong>Purchase Note: </strong>
-                                    {{$data->purchase_note}}
+                                    <strong>Reference By: </strong>
+                                    {{$data->referenceBy ? $data->referenceBy->name:NULL}}
+                                    {{$data->referenceBy ? " (". $data->referenceBy->phone .")" :NULL}}
                                 </label>
                             </div>
                             <div class="mb-2">
@@ -112,7 +110,6 @@
                             </div>
                         </div>
                     </div>
-    
                     
                     <div class="row">
                         <div class="col-md-3"></div>
@@ -127,35 +124,25 @@
                         <div class="col-md-3"></div>
                     </div>
                     <br/>
-
                     <!-----Receive From and Received related information--->
                     <div class="row" style="margin-top:5px;padding-bottom:20px;">
                         <div class="col-md-12" style="padding-bottom:20px;">
-                                <h3 style="text-align: center;">
-                                    <strong style="border-bottom: 1px solid gray;padding-bottom: 3px;">    
-                                    Purchase Product Receive
-                                    </strong>
-                                </h3>
+                            <h3 style="text-align: center;">
+                                <strong style="border-bottom: 1px solid gray;padding-bottom: 3px;">    
+                                Sell Return 
+                                </strong>
+                            </h3>
                         </div>
-                        <div class="col-md-4">
-                            <label for="">Received From</label>
-                            <input type="text" class="form-control" name="received_from">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="">Received Invoice/Chalan/Reference No</label>
-                            <input type="text" class="form-control" name="received_invo_cln_ref_no">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="">Received Note</label>
+                        <div class="col-md-6">
+                            <label for="">Receive Note</label>
                             <textarea name="receive_note"  class="form-control" cols="10" rows="1"></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="">Return Note</label>
+                            <textarea name="return_note"  class="form-control" cols="10" rows="1"></textarea>
                         </div>
                     </div>
                     <!-----Receive From and Received related information--->
-                    <br/>
-                    <input type="hidden" name="purchase_invoice_no" value=" {{$data->invoice_no}}">
-                    <input type="hidden" name="purchase_chalan_no" value=" {{$data->chalan_no}}">
-                    <input type="hidden" name="purchase_reference_no" value=" {{$data->reference_no}}">
-                    <input type="hidden" name="supplier_id" value=" {{$data->supplier_id}}">
                     <!-----Start of Products--->
                     <div class="row">
                         <div class="col-md-12">
@@ -166,7 +153,87 @@
                         </div>
                     </div>
                     <!-----End of Products--->
+                   
+                    <div class="table-responsive">
+                        <table id="example1" class="table">
+                            <tr>
+                                <td style="width: 86%;text-align:right;border: none;">Subtotal</td>
+                                <th style="width: 10%;text-align: center;background-color:#f3f3f3;color:#666565;">
+                                    <strong>00.00</strong>
+                                </th>
+                                <td style="width:4%;border:none;background-color:#f3f3f3;color:#666565;"></td>
+                            </tr>
+                        </table>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="">Discount Type</label>
+                                    <select name="" id="" class="form-control">
+                                        <option value="">None</option>
+                                        <option value="percentage">Percentage</option>
+                                        <option value="fixed">Fixed</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="">Discount Value</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="">Discount Amount</label>
+                                    <input type="text" disabled class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="table-responsive">
+                                <table id="example1" class="table">
+                                    <tr>
+                                        <td style="width:30%;text-align:right;border: none;">Total Amount</td>
+                                        <th colspan="2" style="text-align: center;background-color:#f3f3f3;color:#666565;border: none;">
+                                            <strong style="padding-left:40px;font-size:18px;">00.00</strong>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td  colspan="3" style="text-align: right;border: none;">
+                                            <small><i>(Total return amount after discount/less amount)</i></small>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!------Start of Payment Info --->
+                    {{-- <div class="row">
+                        <div class="col-md-12"> <h4>Payment Info: </h4> </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table id="example1" class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Reference No</th>
+                                            <th>Amount</th>
+                                            <th>Credit/Debit</th>
+                                            <th>Payment Method</th>
+                                            <th>Payment Note</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div> --}}
+                    <!------Start of Payment Info --->
+
+                   
                 </div>
 
 

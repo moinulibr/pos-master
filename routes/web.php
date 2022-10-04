@@ -421,25 +421,25 @@ Route::group(['middleware' => ['auth']], function ()
         | Sell list, print  and others
         |-----------------------------------
         */
-        Route::group(['prefix'=>'admin/sell/regular','as'=> 'admin.sell.regular.sell.', 'namespace'=>'Backend\Sell\Details'],function(){
-            Route::get('sell/list','SellController@index')->name('index');//->middleware(['permissions:unit|index']);
-            Route::get('sell/list/by/ajr','SellController@sellListByAjaxResponse')->name('list.ajaxresponse');//->middleware(['permissions:unit|index']);
-            Route::get('sell/single/view','SellController@singleView')->name('single.view');//->middleware(['permissions:unit|index']);
-            Route::get('sell/single/invoice/profit/loss','SellController@viewSingleInvoiceProfitLoss')->name('view.single.invoice.profit.loss');
-        });
-        //quotation
-        Route::group(['prefix'=>'admin/sell/regular','as'=> 'admin.sell.regular.quotation.', 'namespace'=>'Backend\Sell\Details'],function(){
-            Route::get('quotation/list','QuotationController@index')->name('index');//->middleware(['permissions:unit|index']);
-            Route::get('quotation/list/by/ajr','QuotationController@quotationListByAjaxResponse')->name('list.ajaxresponse');//->middleware(['permissions:unit|index']);
-            Route::get('quotation/single/view','QuotationController@singleView')->name('single.view');//->middleware(['permissions:unit|index']);
-            Route::get('quotation/single/invoice/profit/loss','QuotationController@viewSingleInvoiceProfitLoss')->name('view.single.invoice.profit.loss');
-        });
+            Route::group(['prefix'=>'admin/sell/regular','as'=> 'admin.sell.regular.sell.', 'namespace'=>'Backend\Sell\Details'],function(){
+                Route::get('sell/list','SellController@index')->name('index');//->middleware(['permissions:unit|index']);
+                Route::get('sell/list/by/ajr','SellController@sellListByAjaxResponse')->name('list.ajaxresponse');//->middleware(['permissions:unit|index']);
+                Route::get('sell/single/view','SellController@singleView')->name('single.view');//->middleware(['permissions:unit|index']);
+                Route::get('sell/single/invoice/profit/loss','SellController@viewSingleInvoiceProfitLoss')->name('view.single.invoice.profit.loss');
+            });
+            //quotation
+            Route::group(['prefix'=>'admin/sell/regular','as'=> 'admin.sell.regular.quotation.', 'namespace'=>'Backend\Sell\Details'],function(){
+                Route::get('quotation/list','QuotationController@index')->name('index');//->middleware(['permissions:unit|index']);
+                Route::get('quotation/list/by/ajr','QuotationController@quotationListByAjaxResponse')->name('list.ajaxresponse');//->middleware(['permissions:unit|index']);
+                Route::get('quotation/single/view','QuotationController@singleView')->name('single.view');//->middleware(['permissions:unit|index']);
+                Route::get('quotation/single/invoice/profit/loss','QuotationController@viewSingleInvoiceProfitLoss')->name('view.single.invoice.profit.loss');
+            });
 
-        Route::group(['prefix'=>'admin/sell/regular','as'=> 'admin.sell.regular.','namespace'=>'Backend\Sell\Prints'],function(){
-            //print sell invoice :- pos print
-            Route::get('pos/print/from/sell/list/by/{invoiceId}','InvoicePrintController@posPrintFromSellList')->name('pos.print.from.sell.list');
-            Route::get('normal/print/from/sell/list/by/{invoiceId}','InvoicePrintController@normalPrintFromSellList')->name('normal.print.from.sell.list');
-        });
+            Route::group(['prefix'=>'admin/sell/regular','as'=> 'admin.sell.regular.','namespace'=>'Backend\Sell\Prints'],function(){
+                //print sell invoice :- pos print
+                Route::get('pos/print/from/sell/list/by/{invoiceId}','InvoicePrintController@posPrintFromSellList')->name('pos.print.from.sell.list');
+                Route::get('normal/print/from/sell/list/by/{invoiceId}','InvoicePrintController@normalPrintFromSellList')->name('normal.print.from.sell.list');
+            });
         /*
         |-----------------------------------
         | Sell list, print  and others
@@ -452,20 +452,41 @@ Route::group(['middleware' => ['auth']], function ()
         | Sell product delivery
         |-----------------------------------
         */
-        Route::group(['prefix'=>'admin/sell/product/delivery','as'=> 'admin.sell.product.delivery.', 'namespace'=>'Backend\Sell\Delivery'],function(){
-            Route::get('by/sell/invoice','SellProductDeliveryController@index')->name('invoice.wise.list.index');//->middleware(['permissions:unit|index']);
-            Route::post('by/sell/invoice/store','SellProductDeliveryController@store')->name('invoice.wise.quantity.store');//->middleware(['permissions:unit|index']);
-            
-            Route::get('print/sell/product/delivered/invoice/wise/product/list/{invoiceId}','SellProductDeliveryController@printSellProductDeliveredInvoiceWiseDeliveredProductList')->name('print.product.delivered.invoice.wise.delivered.list');//->middleware(['permissions:unit|index']);
-            //Route::get('invoice/wise/list','SellProductDeliveryController@index')->name('list.index');//->middleware(['permissions:unit|index']);
-            //Route::get('list/by/ajr','SellProductDeliveryController@sellListByAjaxResponse')->name('sell.list.ajaxresponse');//->middleware(['permissions:unit|index']);
-            //Route::get('single/view','SellProductDeliveryController@singleView')->name('sell.single.view');//->middleware(['permissions:unit|index']);
-        });
+            Route::group(['prefix'=>'admin/sell/product/delivery','as'=> 'admin.sell.product.delivery.', 'namespace'=>'Backend\Sell\Delivery'],function(){
+                Route::get('by/sell/invoice','SellProductDeliveryController@index')->name('invoice.wise.list.index');//->middleware(['permissions:unit|index']);
+                Route::post('by/sell/invoice/store','SellProductDeliveryController@store')->name('invoice.wise.quantity.store');//->middleware(['permissions:unit|index']);
+                
+                Route::get('print/sell/product/delivered/invoice/wise/product/list/{invoiceId}','SellProductDeliveryController@printSellProductDeliveredInvoiceWiseDeliveredProductList')->name('print.product.delivered.invoice.wise.delivered.list');//->middleware(['permissions:unit|index']);
+                //Route::get('invoice/wise/list','SellProductDeliveryController@index')->name('list.index');//->middleware(['permissions:unit|index']);
+                //Route::get('list/by/ajr','SellProductDeliveryController@sellListByAjaxResponse')->name('sell.list.ajaxresponse');//->middleware(['permissions:unit|index']);
+                //Route::get('single/view','SellProductDeliveryController@singleView')->name('sell.single.view');//->middleware(['permissions:unit|index']);
+            });
         /*
         |-----------------------------------
         | Sell product delivery
         |-----------------------------------
         */
+
+        /*
+        |-----------------------------------
+        | Sell product return 
+        |-----------------------------------
+        */
+            Route::group(['prefix'=>'admin/sell/product/return','as'=> 'admin.sell.product.return.', 'namespace'=>'Backend\Sell\SellReturn'],function(){
+                Route::get('by/sell/invoice','SellProductReturnController@index')->name('invoice.wise.list.index');//->middleware(['permissions:unit|index']);
+                Route::post('by/sell/invoice/store','SellProductReturnController@store')->name('invoice.wise.quantity.store');//->middleware(['permissions:unit|index']);
+                
+                Route::get('print/sell/product/return/invoice/wise/product/list/{invoiceId}','SellProductReturnController@printSellProductDeliveredInvoiceWiseDeliveredProductList')->name('print.product.delivered.invoice.wise.delivered.list');//->middleware(['permissions:unit|index']);
+                //Route::get('invoice/wise/list','SellProductReturnController@index')->name('list.index');//->middleware(['permissions:unit|index']);
+                //Route::get('list/by/ajr','SellProductReturnController@sellListByAjaxResponse')->name('sell.list.ajaxresponse');//->middleware(['permissions:unit|index']);
+                //Route::get('single/view','SellProductReturnController@singleView')->name('sell.single.view');//->middleware(['permissions:unit|index']);
+            });
+        /*
+        |-----------------------------------
+        | Sell product return 
+        |-----------------------------------
+        */
+
     /*
     |----------------------------------------
     |   Sell  middleware(['permissions:unit|index','auth_only:auth|yes'])
@@ -549,7 +570,6 @@ Route::group(['middleware' => ['auth']], function ()
             Route::get('quotation/list','QuotationController@index')->name('index');//->middleware(['permissions:unit|index']);
             Route::get('quotation/list/by/ajr','QuotationController@quotationListByAjaxResponse')->name('list.ajaxresponse');//->middleware(['permissions:unit|index']);
             Route::get('quotation/single/view','QuotationController@singleView')->name('single.view');//->middleware(['permissions:unit|index']);
-            Route::get('quotation/single/invoice/profit/loss','QuotationController@viewSingleInvoiceProfitLoss')->name('view.single.invoice.profit.loss');
         });
 
         Route::group(['prefix'=>'admin/purchase/regular','as'=> 'admin.purchase.regular.','namespace'=>'Backend\Sell\Prints'],function(){

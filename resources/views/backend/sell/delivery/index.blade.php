@@ -131,48 +131,9 @@
                             <div class="product_related_response_here">
                             
                             </div>
-                            <div class="table-responsive">
-                                <table id="example1" class="table">
-                                    <tr>
-                                        <th colspan="4"></th>
-                                        <th style="text-align: right">
-                                            <input type="submit" value="Submit" class="btn btn-success">
-                                        </th>
-                                    </tr>
-                                </table>
-                            </div>
                         </div>
                     </div>
                     <!-----End of Products--->
-
-                        <br/><br/>
-
-                    <!------Start of Payment Info --->
-                    {{-- <div class="row">
-                        <div class="col-md-12"> <h4>Payment Info: </h4> </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="table-responsive">
-                                <table id="example1" class="table table-bordered table-striped table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Reference No</th>
-                                            <th>Amount</th>
-                                            <th>Credit/Debit</th>
-                                            <th>Payment Method</th>
-                                            <th>Payment Note</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div> --}}
-                    <!------Start of Payment Info --->
 
                 </div>
 
@@ -180,6 +141,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-danger" data-dismiss="modal">Cancel</button>
+                <input type="submit" value="Submit" class="btn btn-success">
             </div>
         </form>
     </div>
