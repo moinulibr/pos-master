@@ -61,16 +61,23 @@ class PurchaseProductReceiveController extends Controller
             {
                 $rand = rand(01,99);
                 $makeInvoice = 'PREL'.date("iHsymd").$rand;
+                $requestData['purchase_invoice_no'] = $request->purchase_invoice_no;
+                $requestData['purchase_chalan_no'] = $request->purchase_chalan_no;
+                $requestData['purchase_reference_no'] = $request->purchase_reference_no;
+                $requestData['supplier_id'] = $request->supplier_id;
+                $requestData['received_from'] = $request->received_from;
+                $requestData['received_invo_cln_ref_no'] = $request->received_invo_cln_ref_no;
+                $requestData['receive_note'] = $request->receive_note;
                 $invoiceData  =  PurchaseInvoice::where('id',$request->purchase_invoice_id)->first();
                 foreach($request->checked_id as $purchase_product_stock_id)
                 {
-                    $this->purchaseProductStockProcessing($makeInvoice,$invoiceData, $purchase_product_stock_id, $request->input('deliverying_qty_'.$purchase_product_stock_id));
+                    $this->purchaseProductStockProcessing($makeInvoice,$invoiceData, $purchase_product_stock_id, $request->input('deliverying_qty_'.$purchase_product_stock_id),$requestData);
                 }
                 DB::commit();
             }else{
                 return response()->json([
                     'status'    => false,
-                    'message'   => "Please, checked minimum quantity of a item for delivery",
+                    'message'   => "Please, checked minimum quantity of a item for receive",
                     'type'      => 'error'
                 ]);
             }
@@ -97,7 +104,7 @@ class PurchaseProductReceiveController extends Controller
         }
     }
 
-    private function purchaseProductStockProcessing($makeInvoice,$invoiceData,$purchase_product_stock_id, $receiving_quantity)
+    private function purchaseProductStockProcessing($makeInvoice,$invoiceData,$purchase_product_stock_id, $receiving_quantity,$requestData)
     {
         $purchaseProductStockDetails = PurchaseProductStock::where('id',$purchase_product_stock_id)
                 ->select('id','purchase_product_id','product_id','stock_id','product_stock_id','total_quantity',
@@ -148,12 +155,12 @@ class PurchaseProductReceiveController extends Controller
         }
         //reduce stock from product stock
 
-       return $this->purchaseProductReceiveProcess($makeInvoice,$invoiceData,$purchaseProductStockDetails,$receiving_quantity);
+       return $this->purchaseProductReceiveProcess($makeInvoice,$invoiceData,$purchaseProductStockDetails,$receiving_quantity,$requestData);
     }
 
 
     //purchase product receive history
-    private function purchaseProductReceiveProcess($makeInvoice,$purchaseInvoice,$purchaseProductStockDetails,$receiving_quantity)
+    private function purchaseProductReceiveProcess($makeInvoice,$purchaseInvoice,$purchaseProductStockDetails,$receiving_quantity,$requestData)
     {
         $delivery = new PurchaseProductReceive();
         $delivery->branch_id = authBranch_hh();
@@ -166,6 +173,14 @@ class PurchaseProductReceiveController extends Controller
         $delivery->product_stock_id = $purchaseProductStockDetails->product_stock_id;
         $delivery->quantity = $receiving_quantity;
         $delivery->delivery_status = 1;
+        $delivery->purchase_invoice_no = $requestData['purchase_invoice_no'];
+        $delivery->purchase_chalan_no = $requestData['purchase_chalan_no'];
+        $delivery->purchase_reference_no = $requestData['purchase_reference_no'];
+        $delivery->supplier_id = $requestData['supplier_id'];
+        $delivery->received_from = $requestData['received_from'];
+        $delivery->received_invo_cln_ref_no = $requestData['received_invo_cln_ref_no'];
+        $delivery->receive_note = $requestData['receive_note'];
+        $delivery->received_at = date('Y-m-d h:i:s');
         $delivery->created_by = authId_hh();
         $delivery->save();
         return $makeInvoice;
@@ -177,7 +192,7 @@ class PurchaseProductReceiveController extends Controller
     public function printPurchaseProductReceivedInvoiceWiseReceivedProductList($invoiceId)
     {
         $data['delivery_invoice'] = $invoiceId;
-        $data['sellProductDelivery']  =  PurchaseProductReceive::where('invoice_no',$invoiceId)->first();
+        $data['purchaseProductDelivery']  =  PurchaseProductReceive::where('invoice_no',$invoiceId)->first();
         $data['data']  =  PurchaseProductReceive::where('invoice_no',$invoiceId)->get();
         return view('backend.purchase.receive.received_print',$data);
     }

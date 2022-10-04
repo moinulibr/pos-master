@@ -14,13 +14,13 @@
                                     <small>Purchase Qty</small>
                                 </td>
                                 <td  style="width:15%;">
-                                    <small>Delivered Qty</small>
+                                    <small>Received Qty</small>
                                 </td>
                                 <td  style="width:15%;">
-                                    <small>Remaining Del. Qty</small>
+                                    <small>Remaining Rec. Qty</small>
                                 </td>
                                 <td  style="width:25%;">
-                                    <small>Deliverying Qty</small>
+                                    <small>Receiving Qty</small>
                                 </td>
                                 <td  style="width:10%;text-align: center">
                                     <input class="check_all_class form-control" type="checkbox" value="all" name="check_all" style="box-shadow:none;">

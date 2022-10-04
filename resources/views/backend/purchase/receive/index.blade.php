@@ -32,7 +32,7 @@
                             </label>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="border-bottom: 1px solid #cdc7c7;">
                         <div class="col-md-4">
                             <div class="mb-2">
                                 <label>
@@ -127,6 +127,28 @@
                         <div class="col-md-3"></div>
                     </div>
                     <br/>
+
+                    <!-----Receive From and Received related information--->
+                    <div class="row" style="margin-top:5px;padding-bottom:20px;">
+                        <div class="col-md-4">
+                            <label for="">Received From</label>
+                            <input type="text" class="form-control" name="received_from">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="">Received Invoice/Chalan/Reference No</label>
+                            <input type="text" class="form-control" name="received_invo_cln_ref_no">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="">Received Note</label>
+                            <input type="text" class="form-control" name="receive_note">
+                        </div>
+                    </div>
+                    <!-----Receive From and Received related information--->
+                    <br/>
+                    <input type="hidden" name="purchase_invoice_no" value=" {{$data->invoice_no}}">
+                    <input type="hidden" name="purchase_chalan_no" value=" {{$data->chalan_no}}">
+                    <input type="hidden" name="purchase_reference_no" value=" {{$data->reference_no}}">
+                    <input type="hidden" name="supplier_id" value=" {{$data->supplier_id}}">
                     <!-----Start of Products--->
                     <div class="row">
                         <div class="col-md-12">

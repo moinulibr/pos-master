@@ -28,7 +28,17 @@ class CreatePurchaseProductReceivesTable extends Migration
                 $table->integer('stock_id')->nullable();
                 $table->integer('product_stock_id')->nullable()->comment('product stock id');
                 $table->decimal('quantity',20,3)->default(0);
+
+                $table->string('purchase_invoice_no',50)->nullable();
+                $table->string('purchase_chalan_no',50)->nullable();
+                $table->string('purchase_reference_no',50)->nullable();
+                $table->integer('supplier_id')->nullable();
+                $table->string('received_from',150)->nullable();
+                $table->string('received_invo_cln_ref_no',150)->nullable();
+                $table->text('receive_note')->nullable();
+                
                 $table->tinyInteger('delivery_status')->nullable()->comment('receive status');
+                $table->string('received_at',30)->nullable();
                 
                 $table->integer('created_by')->nullable();
                 $table->softDeletes();
