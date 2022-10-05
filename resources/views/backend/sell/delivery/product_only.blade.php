@@ -23,7 +23,7 @@
                                     <small>Deliverying Qty</small>
                                 </td>
                                 <td  style="width:10%;text-align: center">
-                                    <input class="check_all_class form-control" type="checkbox" value="all" name="check_all" style="box-shadow:none;">
+                                    <input class="check_all_class_for_delivery form-control" type="checkbox" value="all" name="check_all" style="box-shadow:none;">
                                 </td>
                             </tr>
                         </table>
@@ -114,7 +114,7 @@
                                     <input type="hidden" class="total_base_available_stock_WRBND_qty total_base_available_stock_WRBND_qty_{{$pstock->id}}" value="{{$totalAvailableStockWithReducedStockButNotDelivered}}">
                                     @if ($deliveryingQtyNow > 0)
                                     <input type="hidden" value="{{$data->id}}" name="sell_invoice_id">
-                                    <input class="check_single_class form-control check_single_class_{{$pstock->id}}" type="checkbox"  name="checked_id[]" value="{{ $pstock->id }}" id="{{$pstock->id}}" style="box-shadow:none;">
+                                    <input class="check_single_class_for_delivery form-control check_single_class_for_delivery_{{$pstock->id}}" type="checkbox"  name="checked_id[]" value="{{ $pstock->id }}" id="{{$pstock->id}}" style="box-shadow:none;">
                                         @else
                                         <input class="form-control" type="checkbox" disabled style="box-shadow:none;" >
                                     @endif

@@ -12,10 +12,10 @@
     $(document).on('click','.singleSellInvoiceWiseDelivery',function(e){
         e.preventDefault();
         var url = $('.sellProductDeliveryInvoiceWiseModalRoute').val();
-        var id = $(this).data('id');
+        var dID = $(this).data('id');
         $.ajax({
             url:url,
-            data:{id:id},
+            data:{id:dID},
             success:function(response){
                 if(response.status == true)
                 {
@@ -29,11 +29,9 @@
 
 
     $(document).on('keyup','.deliverying_qty',function(){
-        var id = $(this).data('id');
+        var did = $(this).data('id');
         var pressingVal = $(this).val();
-        
-        var deliveryingQtyNow = checkAndUncheckItemQuantity(id);
-
+        var deliveryingQtyNow = checkAndUncheckItemQuantityForDelivery(did);
         var finalDeliveryQty = 0;
         if(deliveryingQtyNow >= pressingVal)
         {
@@ -41,44 +39,44 @@
         }else{
             finalDeliveryQty = deliveryingQtyNow;
         }
-        $('.deliverying_qty_'+id).val(finalDeliveryQty);
+        $('.deliverying_qty_'+did).val(finalDeliveryQty);
 
         if(finalDeliveryQty == 0)
         {
-            $('.check_single_class_'+id).prop('checked', false).change();
-            $('.check_single_class_'+id).val('').change();
+            $('.check_single_class_for_delivery_'+did).prop('checked', false).change();
+            $('.check_single_class_for_delivery_'+did).val('').change();
         }else{
-            $('.check_single_class_'+id).prop("checked", true).change();
-            $('.check_single_class_'+id).val(id).change();
+            $('.check_single_class_for_delivery_'+did).prop("checked", true).change();
+            $('.check_single_class_for_delivery_'+did).val(did).change();
         }
 
     });
 
 
     // checked all order list 
-    $(document).on('click','.check_all_class',function()
+    $(document).on('click','.check_all_class_for_delivery',function()
     {
         if (this.checked == false)
         {   
-            $('.check_single_class').prop('checked', false).change();
-            $(".check_single_class").each(function ()
+            $('.check_single_class_for_delivery').prop('checked', false).change();
+            $(".check_single_class_for_delivery").each(function ()
             {
-                var id = $(this).attr('id');
+                var did = $(this).attr('id');
                 $(this).val('').change();
-                $('.deliverying_qty_'+id).val(0);
+                $('.deliverying_qty_'+did).val(0);
             });
         }
         else
         {
-            $('.check_single_class').prop("checked", true).change();
+            $('.check_single_class_for_delivery').prop("checked", true).change();
 
-            $(".check_single_class").each(function ()
+            $(".check_single_class_for_delivery").each(function ()
             {
-                var id = $(this).attr('id');
-                //$(this).val(id).change();
+                var did = $(this).attr('id');
+                //$(this).val(did).change();
 
-                var deliveryingQtyNow = checkAndUncheckItemQuantity(id);
-                $('.deliverying_qty_'+id).val(deliveryingQtyNow);
+                var deliveryingQtyNow = checkAndUncheckItemQuantityForDelivery(did);
+                $('.deliverying_qty_'+did).val(deliveryingQtyNow);
 
                 if(deliveryingQtyNow == 0)
                 {
@@ -86,15 +84,15 @@
                     $(this).val('').change();
                 }else{
                     $(this).prop("checked", true).change();
-                    $(this).val(id).change();
+                    $(this).val(did).change();
                 }
 
             });
 
-           /*  $(".check_single_class").each(function ()
+           /*  $(".check_single_class_for_delivery").each(function ()
             {
-                var id = $(this).attr('id');
-                $(this).val(id).change();
+                var did = $(this).attr('id');
+                $(this).val(did).change();
             }); */
         }
     });
@@ -102,54 +100,53 @@
 
     
     //check single order list
-        $(document).on('click','.check_single_class',function()
+        $(document).on('click','.check_single_class_for_delivery',function()
         {
-            var $b = $('input[type=checkbox]');
-            if($b.filter(':checked').length <= 0)
+            var $db = $('input[type=checkbox]');
+            if($db.filter(':checked').length <= 0)
             {
-                $('.check_all_class').prop('checked', false).change();
+                $('.check_all_class_for_delivery').prop('checked', false).change();
                 $('.deliverying_qty').val(0);
             }
 
-            var id = $(this).attr('id');
+            var did = $(this).attr('id');
             if (this.checked == false)
             {
                 $(this).prop('checked', false).change();
                 $(this).val('').change();
-                $('.deliverying_qty_'+id).val(0);
+                $('.deliverying_qty_'+did).val(0);
             }else{
-                var deliveryingQtyNow = checkAndUncheckItemQuantity(id);
-                $('.deliverying_qty_'+id).val(deliveryingQtyNow);
-                
+                var deliveryingQtyNow = checkAndUncheckItemQuantityForDelivery(did);
+                $('.deliverying_qty_'+did).val(deliveryingQtyNow);
                 if(deliveryingQtyNow == 0)
                 {
                     $(this).prop('checked', false).change();
                     $(this).val('').change();
                 }else{
                     $(this).prop("checked", true).change();
-                    $(this).val(id).change();
+                    $(this).val(did).change();
                 }
             }
             
-            var ids = [];
-            $('input.check_single_class[type=checkbox]').each(function () {
+            var dids = [];
+            $('input.check_single_class_for_delivery[type=checkbox]').each(function () {
                 if(this.checked){
-                    var v = $(this).val();
-                    ids.push(v);
+                    var dv = $(this).val();
+                    dids.push(dv);
                 }
             });
-            if(ids.length <= 0)
+            if(dids.length <= 0)
             {
-                $('.check_all_class').prop('checked', false).change();
+                $('.check_all_class_for_delivery').prop('checked', false).change();
             }
         });
     //check single order list
 
-    function checkAndUncheckItemQuantity(id)
+    function checkAndUncheckItemQuantityForDelivery(did)
     {
-        var processedQty = parseFloat($('.total_processed_qty_'+id).val());
-        var remainingDeliveryQty = parseFloat($('.total_remaining_delivery_qty_'+id).val());
-        var totalStockQtyWRBND = parseFloat($('.total_base_available_stock_WRBND_qty_'+id).val());
+        var processedQty = parseFloat($('.total_processed_qty_'+did).val());
+        var remainingDeliveryQty = parseFloat($('.total_remaining_delivery_qty_'+did).val());
+        var totalStockQtyWRBND = parseFloat($('.total_base_available_stock_WRBND_qty_'+did).val());
         
         var deliveryingQtyNow = 0;
         if((totalStockQtyWRBND > remainingDeliveryQty) 
@@ -228,7 +225,7 @@
         //$(document).on('click', '.publishedAllProduct', function (){
         $(document).on('click', '.published-button', function (){
             var ids = [];
-            $('input.check_single_class[type=checkbox]').each(function () {
+            $('input.check_single_class_for_delivery[type=checkbox]').each(function () {
                 if(this.checked){
                     var v = $(this).val();
                     ids.push(v);

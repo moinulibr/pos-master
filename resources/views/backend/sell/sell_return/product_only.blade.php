@@ -13,18 +13,12 @@
                                 <td>Sell Unit</td>
                                 <td>Sell Price</td>
                                 <td>Sell Qty</td>
-                                {{-- <td  style="width:15%;">
-                                    <small>Delivered Qty</small>
-                                </td>
-                                <td  style="width:15%;">
-                                    <small>Remaining Del. Qty</small>
-                                </td> --}}
                                 <td  style="width:25%;">
                                     Return Qty
                                 </td>
                                 <td><small>Return Subtotal</small></td>
                                 <td  style="width:10%;text-align: center">
-                                    <input class="check_all_class form-control" type="checkbox" value="all" name="check_all" style="box-shadow:none;">
+                                    <input class="check_all_class_for_return form-control" type="checkbox" value="all" name="check_all" style="box-shadow:none;">
                                 </td>
                             </tr>
                         </table>
@@ -66,61 +60,35 @@
                                         NULL
                                     @endif
                                 </td>
-                                <td style="width:10%;text-align: center">{{$pstock->sold_price}}</td>
+                                <td style="width:10%;text-align: center">
+                                    {{$pstock->sold_price}}
+                                    <input type="hidden" class="sold_price_for_return sold_price_for_return_{{$pstock->id}}" value="{{$pstock->sold_price}}">
+                                </td>
                                 <td style="width:8%;text-align: center">{{$pstock->total_quantity}}</td>
-                                {{-- <td style="width:15%;text-align: center">{{$pstock->total_delivered_qty}}</td> --}}
-                                {{-- <td style="width:15%;text-align: center">{{$pstock->remaining_delivery_qty}}</td> --}}
                                 <td style="width:15%;text-align: center">
                                     @php
-                                        $totalAvailableStockWithReducedStockButNotDelivered = ($pstock->productStock ? $pstock->productStock->available_base_stock : 0) + ($pstock->productStock ? $pstock->productStock->reduced_base_stock_remaining_delivery : 0);
-                                        $totalAvailableStock = ($pstock->productStock ? $pstock->productStock->available_base_stock : 0);
-                                        $totalProcessedQty = $pstock->total_stock_processed_qty;
-                                        $totalRemainingDeliveryQty = $pstock->remaining_delivery_qty;
-                                        $deliveryingQtyNow = 0;
-                                        if(($totalAvailableStockWithReducedStockButNotDelivered > $totalRemainingDeliveryQty) 
-                                                && ($totalRemainingDeliveryQty > 0) 
-                                        )
+                                        if($pstock->total_quantity > 0) 
                                         {
-                                            $deliveryingQtyNow = $totalRemainingDeliveryQty; 
-                                          
+                                            $returningQtyNow = $pstock->total_quantity; 
                                         }
-                                        else if(($totalAvailableStockWithReducedStockButNotDelivered == $totalRemainingDeliveryQty) 
-                                        && ($totalRemainingDeliveryQty > 0) 
-                                        )
-                                        {
-                                            $deliveryingQtyNow = $totalRemainingDeliveryQty; 
-                                        }
-                                        else if(($totalAvailableStockWithReducedStockButNotDelivered < $totalRemainingDeliveryQty)
-                                            && ($totalRemainingDeliveryQty > 0) 
-                                        )
-                                        {
-                                            $deliveryingQtyNow = $totalAvailableStockWithReducedStockButNotDelivered; 
-                                        }
-                                        else if($totalRemainingDeliveryQty == 0) 
-                                        {
-                                            $deliveryingQtyNow = 0; 
-                                        }else{
-                                            $deliveryingQtyNow = 0; 
+                                        else{
+                                            $returningQtyNow = 0; 
                                         }
                                     @endphp
-                                    @if ($deliveryingQtyNow > 0 && $totalRemainingDeliveryQty > 0)
-                                     <input type="text" name="deliverying_qty_{{$pstock->id}}" value="{{$deliveryingQtyNow}}" class="form-control deliverying_qty deliverying_qty_{{$pstock->id}} inputFieldValidatedOnlyNumeric" data-id="{{$pstock->id}}">
-                                        @elseif ($deliveryingQtyNow == 0 && $totalRemainingDeliveryQty == 0)
-                                        <input type="text" disabled value="{{$deliveryingQtyNow}}" class="form-control" style="background-color: green;color:#ffff;">
-                                        @elseif ($deliveryingQtyNow == 0 && $totalRemainingDeliveryQty > 0)
-                                        <input type="text" disabled value="{{$deliveryingQtyNow}}" class="form-control" style="background-color: red;color:#ffff;">
-                                     @endif
+                                    @if ($returningQtyNow > 0)
+                                        <input type="text" name="returning_qty_{{$pstock->id}}" value="{{$returningQtyNow}}" class="form-control returning_qty returning_qty_{{$pstock->id}} inputFieldValidatedOnlyNumeric" data-id="{{$pstock->id}}">
+                                        @elseif ($returningQtyNow == 0)
+                                        <input type="text" disabled value="{{$returningQtyNow}}" class="form-control" style="background-color: red;color:#ffff;">
+                                    @endif
+                                    <input type="hidden" value="{{$pstock->total_quantity}}" class="total_quantity total_quantity_{{$pstock->id}}">
                                 </td>
                                 <td style="width:15%;text-align: center">
-                                    <input type="text" class="form-control" disabled>
+                                    <input type="text" class="line_subtotal_for_return line_subtotal_for_return_{{$pstock->id}} form-control" disabled>
                                 </td>
                                 <td style="width:5%;text-align: center">
-                                    <input type="hidden" class="total_processed_qty total_processed_qty_{{$pstock->id}}" value="{{$pstock->total_stock_processed_qty}}">
-                                    <input type="hidden" class="total_remaining_delivery_qty total_remaining_delivery_qty_{{$pstock->id}}" value="{{$pstock->remaining_delivery_qty}}">
-                                    <input type="hidden" class="total_base_available_stock_WRBND_qty total_base_available_stock_WRBND_qty_{{$pstock->id}}" value="{{$totalAvailableStockWithReducedStockButNotDelivered}}">
-                                    @if ($deliveryingQtyNow > 0)
+                                    @if ($returningQtyNow > 0)
                                     <input type="hidden" value="{{$data->id}}" name="sell_invoice_id">
-                                    <input class="check_single_class form-control check_single_class_{{$pstock->id}}" type="checkbox"  name="checked_id[]" value="{{ $pstock->id }}" id="{{$pstock->id}}" style="box-shadow:none;">
+                                    <input class="check_single_class_for_return form-control check_single_class_for_return_{{$pstock->id}}" type="checkbox"  name="checked_id[]" value="{{ $pstock->id }}" id="{{$pstock->id}}" style="box-shadow:none;">
                                         @else
                                         <input class="form-control" type="checkbox" disabled style="box-shadow:none;" >
                                     @endif

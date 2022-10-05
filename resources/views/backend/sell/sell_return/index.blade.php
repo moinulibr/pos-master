@@ -19,7 +19,7 @@
                 </button>
             </h4>
         </div>
-        <form method="POST" action="{{route('admin.sell.product.delivery.invoice.wise.quantity.store')}}" class="storeDeliveryDataFromDeliveryOption">
+        <form method="POST" action="{{route('admin.sell.product.return.invoice.wise.quantity.store')}}" class="storeReturnDataFromReturnOption">
             @csrf
             <div class="modal-body">
 
@@ -159,7 +159,8 @@
                             <tr>
                                 <td style="width: 86%;text-align:right;border: none;">Subtotal</td>
                                 <th style="width: 10%;text-align: center;background-color:#f3f3f3;color:#666565;">
-                                    <strong>00.00</strong>
+                                    <strong class="subtotal_before_discount_for_return">00.00</strong>
+                                    <input type="hidden" name="return_invoice_subtotal_before_discount" class="subtotal_before_discount_for_return_val">
                                 </th>
                                 <td style="width:4%;border:none;background-color:#f3f3f3;color:#666565;"></td>
                             </tr>
@@ -171,7 +172,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <label for="">Discount Type</label>
-                                    <select name="" id="" class="form-control">
+                                    <select class="form-control return_invoice_discount_type" name="return_invoice_discount_type">
                                         <option value="">None</option>
                                         <option value="percentage">Percentage</option>
                                         <option value="fixed">Fixed</option>
@@ -179,11 +180,12 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label for="">Discount Value</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control return_invoice_discount_amount" name="return_invoice_discount_amount">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="">Discount Amount</label>
-                                    <input type="text" disabled class="form-control">
+                                    <input type="text" disabled class="form-control return_invoice_total_discount_amount">
+                                    <input type="hidden" name="return_invoice_total_discount_amount" class="return_invoice_total_discount_amount_val">
                                 </div>
                             </div>
                         </div>
@@ -193,7 +195,8 @@
                                     <tr>
                                         <td style="width:30%;text-align:right;border: none;">Total Amount</td>
                                         <th colspan="2" style="text-align: center;background-color:#f3f3f3;color:#666565;border: none;">
-                                            <strong style="padding-left:40px;font-size:18px;">00.00</strong>
+                                            <strong style="padding-left:40px;font-size:18px;" class="total_return_amount_after_discount">00.00</strong>
+                                            <input type="hidden" name="return_invoice_total_amount_after_discount" class="total_return_amount_after_discount_val">
                                         </th>
                                     </tr>
                                     <tr>

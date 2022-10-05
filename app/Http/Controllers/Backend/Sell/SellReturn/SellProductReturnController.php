@@ -16,6 +16,17 @@ class SellProductReturnController extends Controller
 {
     use StockChangingTrait;
 
+    private $invoiceTotalQuantity;
+    private $invoiceTotalPayableAmount;
+    private $invoiceSubtotal;
+    private $invoiceTotalPurchaseAmount;
+    private $invoiceTotalProfit;
+
+    private $sellProductTotalQuantity;
+    private $sellProductTotalSoldPrice;
+    private $sellProductTotalPurchasePrice;
+    private $sellProductTotalProfitPrice;
+
     /**
      * Display a listing of the resource.
      *
@@ -55,30 +66,37 @@ class SellProductReturnController extends Controller
         try {
             if((isset($request->checked_id)) && (count($request->checked_id) > 0))
             {
+                $dataRequest['return_note'] = $request->return_note;
+                $dataRequest['receive_note'] = $request->receive_note;
+                $dataRequest['discount_amount'] = $request->return_invoice_discount_amount;
+                $dataRequest['discount_type'] = $request->return_invoice_discount_type;
+                $dataRequest['subtotal_before_discount'] = $request->return_invoice_subtotal_before_discount;
+                $dataRequest['total_amount_after_discount'] = $request->return_invoice_total_amount_after_discount;
+                $dataRequest['total_discount_amount'] = $request->return_invoice_total_discount_amount;
                 $rand = rand(01,99);
-                $makeInvoice = 'SDEL'.date("iHsymd").$rand;
+                $makeInvoice = 'SREL'.date("iHsymd").$rand;
                 $invoiceData  =  SellInvoice::where('id',$request->sell_invoice_id)->first();
                 foreach($request->checked_id as $sell_product_stock_id)
                 {
-                    $this->sellProductStockProcessing($makeInvoice,$invoiceData, $sell_product_stock_id, $request->input('deliverying_qty_'.$sell_product_stock_id));
+                    $this->returnProductStockProcessing($makeInvoice,$invoiceData, $sell_product_stock_id, $request->input('returning_qty_'.$sell_product_stock_id),$dataRequest);
                 }
                 DB::commit();
             }else{
                 return response()->json([
                     'status'    => false,
-                    'message'   => "Please, checked minimum quantity of a item for delivery",
+                    'message'   => "Please, checked minimum quantity of a item for return",
                     'type'      => 'error'
                 ]);
             }
             $data['data']  = SellInvoice::where('id',$request->sell_invoice_id)->first();
-            $product = view('backend.sell.delivery.product_only',$data)->render();
-            $printRoute = route('admin.sell.product.delivery.print.product.delivered.invoice.wise.delivered.list',$makeInvoice);
+            $product = view('backend.sell.sell_return.product_only',$data)->render();
+            $printRoute = route('admin.sell.product.return.print.product.returned.invoice.wise.returned.list',$makeInvoice);
             $printRouteHtml = '<a href="'.$printRoute.'" class="print" target="_blank">Print</a>';
             return response()->json([
                 'status'    => true,
                 'product' => $product,
                 'print' => $printRouteHtml,
-                'message'   => "Delivery submited successfully!",
+                'message'   => "Return submited successfully!",
                 'type'      => 'success'
             ]);
         } catch (\Exception $e) {
@@ -92,79 +110,56 @@ class SellProductReturnController extends Controller
         }
     }
 
-    private function sellProductStockProcessing($makeInvoice,$invoiceData,$sell_product_stock_id, $deliverying_quantity)
+    private function returnProductStockProcessing($makeInvoice,$invoiceData,$sell_product_stock_id, $returningQty,$dataRequest)
     {
         $sellProductStockDetails = SellProductStock::where('id',$sell_product_stock_id)
                 ->select('id','sell_product_id','product_id','stock_id','product_stock_id','total_quantity','stock_process_instantly_qty',
                     'stock_process_instantly_qty_reduced','total_stock_processed_qty','remaining_delivery_qty','total_delivered_qty','total_stock_remaining_process_qty'
+                    ,'total_return_qty'
                 )
                 ->first();
 
         $sellProduct =  SellProduct::select('id','unit_id')->where('id',$sellProductStockDetails->sell_product_id)->first();
 
        
-        $remainingStockProcessInstantlyQty = $sellProductStockDetails->stock_process_instantly_qty - $sellProductStockDetails->stock_process_instantly_qty_reduced;
-        
-        $stockReduceFromMainBaseStock = 0;
-        $stockReduceFromRemainingDelivery = 0;
-        if($remainingStockProcessInstantlyQty > 0)
+        $totalSoldQty = $sellProductStockDetails->total_quantity;
+        if($totalSoldQty > 0)
         {
-            if($deliverying_quantity > $remainingStockProcessInstantlyQty)
+            if($returningQty > $totalSoldQty)
             {
-                $stockReduceFromMainBaseStock = $deliverying_quantity - $remainingStockProcessInstantlyQty;
-                $stockReduceFromRemainingDelivery = $remainingStockProcessInstantlyQty;
+                $returningQty = $totalSoldQty;
             }
-            else if($deliverying_quantity == $remainingStockProcessInstantlyQty)
+            else if($returningQty == $totalSoldQty)
             {
-                $stockReduceFromMainBaseStock = $deliverying_quantity - $remainingStockProcessInstantlyQty;
-                $stockReduceFromRemainingDelivery = $remainingStockProcessInstantlyQty;
+                $returningQty = $totalSoldQty;
             }
-            else if($deliverying_quantity < $remainingStockProcessInstantlyQty)
+            else if($returningQty < $totalSoldQty)
             {
-                $stockReduceFromMainBaseStock = 0;
-                $stockReduceFromRemainingDelivery = $deliverying_quantity;
+                $returningQty = $returningQty;
             }else{
-                $stockReduceFromMainBaseStock = $deliverying_quantity;
-                $stockReduceFromRemainingDelivery = 0;
+                $returningQty = 0;
             }
         }else{
-            $stockReduceFromMainBaseStock = $deliverying_quantity;
-            $stockReduceFromRemainingDelivery = 0;
+            $returningQty = 0;
         }
-      
-        $totalDeliveredQty = (($sellProductStockDetails->total_delivered_qty) + $deliverying_quantity);
+        $sellProductStockDetails->total_quantity = $sellProductStockDetails->total_quantity - $returningQty;
+        $sellProductStockDetails->total_return_qty = $sellProductStockDetails->total_return_qty + $returningQty;
 
-        $sellProductStockDetails->total_delivered_qty = $totalDeliveredQty; 
-        $sellProductStockDetails->remaining_delivery_qty = $sellProductStockDetails->total_quantity - $totalDeliveredQty;
-       
-        $sellProductStockDetails->stock_process_instantly_qty_reduced += $stockReduceFromRemainingDelivery;
         $sellProductStockDetails->save();
 
-        $productStock = productStockByProductStockId_hh($sellProductStockDetails->product_stock_id);
-        if($productStock &&  $stockReduceFromRemainingDelivery)
-        {
-            $productStock->reduced_base_stock_remaining_delivery = (($productStock->reduced_base_stock_remaining_delivery) - $stockReduceFromRemainingDelivery);
-            $productStock->save();
-        }
-
-        /* if($productStock &&   $stockReduceFromMainBaseStock > 0)
-        {
-            $productStock->available_base_stock = (($productStock->available_base_stock) - $stockReduceFromMainBaseStock);
-            //$productStock->save();
-        } */
 
         //reduce stock from product stock
-        if($invoiceData->sell_type == 1 && $stockReduceFromMainBaseStock > 0)
+        if($invoiceData->sell_type == 1 && $returningQty > 0)
         {
             $this->stock_id_FSCT = $sellProductStockDetails->stock_id;
             $this->product_id_FSCT = $sellProductStockDetails->product_id;
-            $this->stock_quantity_FSCT = $stockReduceFromMainBaseStock;
+            $this->stock_quantity_FSCT = $returningQty;
             $this->unit_id_FSCT = $sellProduct ? $sellProduct->unit_id:0;
-            $this->sellingFromPossStockTypeDecrement();
+            $this->sellingReturnStockTypeIncrement();
         }
         //reduce stock from product stock
 
-       return $this->sellProductDeliveryProcess($makeInvoice,$invoiceData,$sellProductStockDetails,$deliverying_quantity);
+       //return $this->sellProductDeliveryProcess($makeInvoice,$invoiceData,$sellProductStockDetails,$deliverying_quantity);
     }
 
     private function sellProductDeliveryProcess($makeInvoice,$sellInvoice,$sellProductStockDetails,$deliverying_quantity)
@@ -186,12 +181,12 @@ class SellProductReturnController extends Controller
     }
 
     //print
-    public function printSellProductDeliveredInvoiceWiseDeliveredProductList($invoiceId)
+    public function printSellReturnProducInvoiceWisedProductList($invoiceId)
     {
         $data['delivery_invoice'] = $invoiceId;
         $data['sellProductDelivery']  =  SellProductDelivery::where('invoice_no',$invoiceId)->first();
         $data['data']  =  SellProductDelivery::where('invoice_no',$invoiceId)->get();
-        return view('backend.sell.delivery.delivered_print',$data);
+        return view('backend.sell.sell_return.print',$data);
     }
 
     /**

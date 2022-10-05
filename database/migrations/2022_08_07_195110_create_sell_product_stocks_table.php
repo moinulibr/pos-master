@@ -39,6 +39,8 @@ class CreateSellProductStocksTable extends Migration
                 $table->decimal('remaining_delivery_qty',20,3)->default(0);
                 $table->decimal('total_delivered_qty',20,3)->default(0);
 
+                $table->decimal('total_return_qty',20,3)->default(0);
+
                 $table->tinyInteger('status')->nullable();
                 $table->tinyInteger('delivery_status')->nullable();
                 

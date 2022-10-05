@@ -476,7 +476,7 @@ Route::group(['middleware' => ['auth']], function ()
                 Route::get('by/sell/invoice','SellProductReturnController@index')->name('invoice.wise.list.index');//->middleware(['permissions:unit|index']);
                 Route::post('by/sell/invoice/store','SellProductReturnController@store')->name('invoice.wise.quantity.store');//->middleware(['permissions:unit|index']);
                 
-                Route::get('print/sell/product/return/invoice/wise/product/list/{invoiceId}','SellProductReturnController@printSellProductDeliveredInvoiceWiseDeliveredProductList')->name('print.product.delivered.invoice.wise.delivered.list');//->middleware(['permissions:unit|index']);
+                Route::get('print/sell/product/return/invoice/wise/product/list/{invoiceId}','SellProductReturnController@printSellReturnProducInvoiceWisedProductList')->name('print.product.returned.invoice.wise.returned.list');//->middleware(['permissions:unit|index']);
                 //Route::get('invoice/wise/list','SellProductReturnController@index')->name('list.index');//->middleware(['permissions:unit|index']);
                 //Route::get('list/by/ajr','SellProductReturnController@sellListByAjaxResponse')->name('sell.list.ajaxresponse');//->middleware(['permissions:unit|index']);
                 //Route::get('single/view','SellProductReturnController@singleView')->name('sell.single.view');//->middleware(['permissions:unit|index']);

@@ -48,6 +48,7 @@ class CreateSellInvoicesTable extends Migration
                 $table->string('payment_type',20)->nullable();
                 
                 $table->integer('customer_id')->nullable();
+                $table->string('customer_phone',20)->nullable();
                 $table->integer('customer_type_id')->nullable()->comment('1=Permanent, 2=Temporary');
                 $table->integer('shipping_id')->nullable();
                 $table->text('shipping_note')->nullable();
