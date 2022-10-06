@@ -683,6 +683,47 @@
     */
     
 
+    
+    /*
+    |-----------------------------------------------
+    |payment modal 
+    |----------------------------------------------
+    */
+       /*  jQuery(document).on('click','.paymentModalOpen',function(){
+            var supplier_id = jQuery('.supplier_id option:selected').val();
+            if(!supplier_id){
+                jQuery('#payment-popup').modal('hide');
+                jQuery.notify("Please select one supplier", 'error');
+                return 0;
+            }else{
+                jQuery('#payment-popup').modal('show');
+            }
+            var url = jQuery('.paymentModalOpenUrl').val();
+        jQuery.ajax({
+            url:url,
+            //data:{},
+            beforeSend:function(){
+                jQuery('.processing').fadeIn();
+            },
+            success:function(response){
+                if(response.status == true)
+                {
+                    jQuery('.payment_data_response').html(response.list);
+                    //finalCalculationForThisInvoice();
+                }
+            },
+            complete:function(){
+                jQuery('.processing').fadeOut();
+            },
+        });
+        }); */
+    /*
+    |-----------------------------------------------
+    |payment modal 
+    |----------------------------------------------
+    */
+
+    
     /*
     |-----------------------------------------------
     | finally submit sell (final sell and quotation)

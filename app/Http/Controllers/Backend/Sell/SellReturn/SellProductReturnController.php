@@ -115,13 +115,12 @@ class SellProductReturnController extends Controller
         $sellProductStockDetails = SellProductStock::where('id',$sell_product_stock_id)
                 ->select('id','sell_product_id','product_id','stock_id','product_stock_id','total_quantity','stock_process_instantly_qty',
                     'stock_process_instantly_qty_reduced','total_stock_processed_qty','remaining_delivery_qty','total_delivered_qty','total_stock_remaining_process_qty'
-                    ,'total_return_qty'
+                    ,'total_return_qty','sold_price','purchase_price','total_sold_price','total_purchase_price','total_profit'
                 )
                 ->first();
 
-        $sellProduct =  SellProduct::select('id','unit_id')->where('id',$sellProductStockDetails->sell_product_id)->first();
+        $sellProduct =  SellProduct::select('id','unit_id','quantity','sold_price','total_sold_price','total_purchase_price','total_profit')->where('id',$sellProductStockDetails->sell_product_id)->first();
 
-       
         $totalSoldQty = $sellProductStockDetails->total_quantity;
         if($totalSoldQty > 0)
         {
@@ -142,10 +141,30 @@ class SellProductReturnController extends Controller
         }else{
             $returningQty = 0;
         }
-        $sellProductStockDetails->total_quantity = $sellProductStockDetails->total_quantity - $returningQty;
+        
+        //sell product stock table single single row wise data update
+        $currentTotalQuantity = $sellProductStockDetails->total_quantity - $returningQty;
+        $sellProductStockDetails->total_quantity = $currentTotalQuantity;
         $sellProductStockDetails->total_return_qty = $sellProductStockDetails->total_return_qty + $returningQty;
-
+            //sold price, total_sold_price, purchase_price, total_purchase_price,total_profit, 
+            $totalSoldPrice =  $sellProductStockDetails->sold_price * $currentTotalQuantity;
+            $totalPurchasePrice =  $sellProductStockDetails->purchase_price * $currentTotalQuantity;
+            $sellProductStockDetails->total_sold_price = $totalSoldPrice;
+            $sellProductStockDetails->total_purchase_price = $totalPurchasePrice;
+            $sellProductStockDetails->total_profit = $totalSoldPrice - $totalPurchasePrice;
+            //sold price, total_sold_price, purchase_price, total_purchase_price,total_profit, 
         $sellProductStockDetails->save();
+        //sell product stock table single single row wise data update
+
+
+        $invoiceData->total_quantity = $invoiceData->total_quantity - $returningQty;
+        $invoiceData->save();
+        
+
+        //sell product table
+        $sellProduct->quantity = $sellProduct->quantity - $returningQty;
+        $sellProduct->save();
+        //sell product table
 
 
         //reduce stock from product stock
