@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSellProductDeliveriesTable extends Migration
+class CreateSellReturnProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateSellProductDeliveriesTable extends Migration
      */
     public function up()
     {
-        if(!Schema::hasTable('sell_product_deliveries')){
-            Schema::create('sell_product_deliveries', function (Blueprint $table) {
+        if(!Schema::hasTable('sell_return_products')){
+            Schema::create('sell_return_products', function (Blueprint $table) {
                 $table->id();
                 $table->integer('branch_id')->nullable();
-
-                $table->string('invoice_no',50)->nullable();
-                
+                $table->integer('sell_return_product_invoice_id')->nullable();
                 $table->integer('sell_invoice_id')->nullable();
                 $table->integer('sell_product_id')->nullable()->comment('sell product wise');
                 $table->integer('sell_product_stock_id')->nullable()->comment('sell product stock wise');
@@ -28,6 +26,8 @@ class CreateSellProductDeliveriesTable extends Migration
                 $table->integer('stock_id')->nullable();
                 $table->integer('product_stock_id')->nullable()->comment('product stock id');
                 $table->decimal('quantity',20,3)->default(0);
+                $table->decimal('sell_price',20,2)->nullable()->comment('sell price is now purchase price');
+                $table->decimal('total_sell_price',20,2)->nullable()->comment('total sell price is now total purchase price');
                 $table->tinyInteger('delivery_status')->nullable();
                 
                 $table->integer('created_by')->nullable();
@@ -44,8 +44,8 @@ class CreateSellProductDeliveriesTable extends Migration
      */
     public function down()
     {
-        if(!Schema::hasTable('sell_product_deliveries')){
-            Schema::dropIfExists('sell_product_deliveries');
+        if(!Schema::hasTable('sell_return_products')){
+        Schema::dropIfExists('sell_return_products');
         }
     }
 }
