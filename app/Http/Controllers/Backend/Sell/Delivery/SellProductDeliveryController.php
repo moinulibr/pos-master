@@ -10,6 +10,7 @@ use App\Models\Backend\Sell\SellInvoice;
 use App\Models\Backend\Sell\SellProduct;
 use App\Models\Backend\Sell\SellProductStock;
 use App\Models\Backend\SellDelivery\SellProductDelivery;
+use App\Models\Backend\SellDelivery\SellProductDeliveryInvoice;
 use App\Traits\Backend\Stock\Logical\StockChangingTrait;
 
 class SellProductDeliveryController extends Controller
@@ -57,10 +58,15 @@ class SellProductDeliveryController extends Controller
             {
                 $rand = rand(01,99);
                 $makeInvoice = 'SDEL'.date("iHsymd").$rand;
+                
                 $invoiceData  =  SellInvoice::where('id',$request->sell_invoice_id)->first();
+                
+                $sellDelivery = $this->sellProductDeliveryInvoiceStore($makeInvoice,$invoiceData);
+
+
                 foreach($request->checked_id as $sell_product_stock_id)
                 {
-                    $this->sellProductStockProcessing($makeInvoice,$invoiceData, $sell_product_stock_id, $request->input('deliverying_qty_'.$sell_product_stock_id));
+                    $this->sellProductStockProcessing($sellDelivery,$invoiceData, $sell_product_stock_id, $request->input('deliverying_qty_'.$sell_product_stock_id));
                 }
                 DB::commit();
             }else{
@@ -92,7 +98,7 @@ class SellProductDeliveryController extends Controller
         }
     }
 
-    private function sellProductStockProcessing($makeInvoice,$invoiceData,$sell_product_stock_id, $deliverying_quantity)
+    private function sellProductStockProcessing($sellDelivery,$invoiceData,$sell_product_stock_id, $deliverying_quantity)
     {
         $sellProductStockDetails = SellProductStock::where('id',$sell_product_stock_id)
                 ->select('id','sell_product_id','product_id','stock_id','product_stock_id','total_quantity','stock_process_instantly_qty',
@@ -147,11 +153,6 @@ class SellProductDeliveryController extends Controller
             $productStock->save();
         }
 
-        /* if($productStock &&   $stockReduceFromMainBaseStock > 0)
-        {
-            $productStock->available_base_stock = (($productStock->available_base_stock) - $stockReduceFromMainBaseStock);
-            //$productStock->save();
-        } */
 
         //reduce stock from product stock
         if($invoiceData->sell_type == 1 && $stockReduceFromMainBaseStock > 0)
@@ -164,14 +165,16 @@ class SellProductDeliveryController extends Controller
         }
         //reduce stock from product stock
 
-       return $this->sellProductDeliveryProcess($makeInvoice,$invoiceData,$sellProductStockDetails,$deliverying_quantity);
+       return $this->sellProductDeliveryProcess($sellDelivery,$invoiceData,$sellProductStockDetails,$deliverying_quantity);
     }
 
-    private function sellProductDeliveryProcess($makeInvoice,$sellInvoice,$sellProductStockDetails,$deliverying_quantity)
+
+    //sell product delivery
+    private function sellProductDeliveryProcess($sellDelivery,$sellInvoice,$sellProductStockDetails,$deliverying_quantity)
     {
         $delivery = new SellProductDelivery();
         $delivery->branch_id = authBranch_hh();
-        $delivery->invoice_no = $makeInvoice; 
+        $delivery->sell_product_delivery_invoice_id = $sellDelivery->id; 
         $delivery->sell_invoice_id = $sellInvoice->id; 
         $delivery->sell_product_id = $sellProductStockDetails->sell_product_id;
         $delivery->sell_product_stock_id = $sellProductStockDetails->id;
@@ -182,8 +185,28 @@ class SellProductDeliveryController extends Controller
         $delivery->delivery_status = 1;
         $delivery->created_by = authId_hh();
         $delivery->save();
-        return $makeInvoice;
+        return $delivery;
     }
+
+
+    //sell product delivery invoice
+    private function sellProductDeliveryInvoiceStore($makeInvoice,$sellInvoice)
+    {
+        $sellDeliver = new SellProductDeliveryInvoice();
+        $sellDeliver->branch_id = authBranch_hh();
+        $sellDeliver->invoice_no = $makeInvoice; 
+        $sellDeliver->sell_invoice_no = $sellInvoice->invoice_no; 
+        $sellDeliver->sell_invoice_id = $sellInvoice->id; 
+        //$sellDeliver->delivery_note = ''; 
+        //$sellDeliver->quantity = 0;
+        $sellDeliver->delivery_status = 1;
+        $sellDeliver->created_by = authId_hh();
+        $sellDeliver->save();
+        return $sellDeliver;
+    }
+
+
+
 
     //print
     public function printSellProductDeliveredInvoiceWiseDeliveredProductList($invoiceId)

@@ -20,6 +20,7 @@ class CreatePurchaseProductReceiveInvoicesTable extends Migration
 
                 $table->string('invoice_no',50)->nullable();
                 $table->string('purchase_invoice_no',50)->nullable();
+                $table->integer('purchase_invoice_id',50)->nullable();
 
                 $table->decimal('quantity',20,3)->default(0);
 

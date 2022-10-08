@@ -10,6 +10,8 @@ use App\Models\Backend\Sell\SellInvoice;
 use App\Models\Backend\Sell\SellProduct;
 use App\Models\Backend\Sell\SellProductStock;
 use App\Models\Backend\SellDelivery\SellProductDelivery;
+use App\Models\Backend\SellReturn\SellReturnProduct;
+use App\Models\Backend\SellReturn\SellReturnProductInvoice;
 use App\Traits\Backend\Stock\Logical\StockChangingTrait;
 
 class SellProductReturnController extends Controller
@@ -75,10 +77,13 @@ class SellProductReturnController extends Controller
                 $dataRequest['total_discount_amount'] = $request->return_invoice_total_discount_amount;
                 $rand = rand(01,99);
                 $makeInvoice = 'SREL'.date("iHsymd").$rand;
-                $invoiceData  =  SellInvoice::where('id',$request->sell_invoice_id)->first();
+                $invoiceData = SellInvoice::where('id',$request->sell_invoice_id)->first();
+                
+                $returnInvoice  = $this->sellReturnProductInvoice($makeInvoice,$invoiceData,$dataRequest);
+
                 foreach($request->checked_id as $sell_product_stock_id)
                 {
-                    $this->returnProductStockProcessing($makeInvoice,$invoiceData, $sell_product_stock_id, $request->input('returning_qty_'.$sell_product_stock_id),$dataRequest);
+                    $this->returnProductStockProcessing($returnInvoice,$invoiceData, $sell_product_stock_id, $request->input('returning_qty_'.$sell_product_stock_id));
                 }
                 DB::commit();
             }else{
@@ -110,7 +115,7 @@ class SellProductReturnController extends Controller
         }
     }
 
-    private function returnProductStockProcessing($makeInvoice,$invoiceData,$sell_product_stock_id, $returningQty,$dataRequest)
+    private function returnProductStockProcessing($returnInvoice,$invoiceData,$sell_product_stock_id, $returningQty)
     {
         $sellProductStockDetails = SellProductStock::where('id',$sell_product_stock_id)
                 ->select('id','sell_product_id','product_id','stock_id','product_stock_id','total_quantity','stock_process_instantly_qty',
@@ -157,14 +162,18 @@ class SellProductReturnController extends Controller
         //sell product stock table single single row wise data update
 
 
-        $invoiceData->total_quantity = $invoiceData->total_quantity - $returningQty;
-        $invoiceData->save();
-        
-
         //sell product table
         $sellProduct->quantity = $sellProduct->quantity - $returningQty;
         $sellProduct->save();
         //sell product table
+
+        //sell invoice
+        $invoiceData->total_quantity = $invoiceData->total_quantity - $returningQty;
+        $invoiceData->save();
+        //sell invoice
+        
+        //amount
+
 
 
         //reduce stock from product stock
@@ -178,26 +187,57 @@ class SellProductReturnController extends Controller
         }
         //reduce stock from product stock
 
-       //return $this->sellProductDeliveryProcess($makeInvoice,$invoiceData,$sellProductStockDetails,$deliverying_quantity);
+        return $this->sellReturnProductStore($returnInvoice,$invoiceData,$sellProductStockDetails,$returningQty);
     }
 
-    private function sellProductDeliveryProcess($makeInvoice,$sellInvoice,$sellProductStockDetails,$deliverying_quantity)
+    //sell return product
+    private function sellReturnProductStore($returnInvoice,$sellInvoice,$sellProductStockDetails,$returningQty)
     {
-        $delivery = new SellProductDelivery();
-        $delivery->branch_id = authBranch_hh();
-        $delivery->invoice_no = $makeInvoice; 
-        $delivery->sell_invoice_id = $sellInvoice->id; 
-        $delivery->sell_product_id = $sellProductStockDetails->sell_product_id;
-        $delivery->sell_product_stock_id = $sellProductStockDetails->id;
-        $delivery->product_id = $sellProductStockDetails->product_id;
-        $delivery->stock_id = $sellProductStockDetails->stock_id;
-        $delivery->product_stock_id = $sellProductStockDetails->product_stock_id;
-        $delivery->quantity = $deliverying_quantity;
-        $delivery->delivery_status = 1;
-        $delivery->created_by = authId_hh();
-        $delivery->save();
-        return $makeInvoice;
+        $returnProduct = new SellReturnProduct();
+        $returnProduct->branch_id = authBranch_hh();
+        $returnProduct->sell_return_product_invoice_id = $returnInvoice->id; 
+        $returnProduct->sell_invoice_id = $sellInvoice->id; 
+        $returnProduct->sell_product_id = $sellProductStockDetails->sell_product_id;
+        $returnProduct->sell_product_stock_id = $sellProductStockDetails->id;
+        $returnProduct->product_id = $sellProductStockDetails->product_id;
+        $returnProduct->stock_id = $sellProductStockDetails->stock_id;
+        $returnProduct->product_stock_id = $sellProductStockDetails->product_stock_id;
+        $returnProduct->quantity = $returningQty;
+        $returnProduct->sell_price = $sellProductStockDetails->sold_price;
+        $returnProduct->total_sell_price = $sellProductStockDetails->sold_price * $returningQty;
+        $returnProduct->delivery_status = 1;
+        $returnProduct->created_by = authId_hh();
+        $returnProduct->save();
+        return $returnProduct;
     }
+
+
+    //sell return product invoice
+    private function sellReturnProductInvoice($makeInvoice,$sellInvoiceData,$dataRequest)
+    {
+        $returnInvoice = new SellReturnProductInvoice();
+        $returnInvoice->branch_id = authBranch_hh();
+        $returnInvoice->invoice_no = $makeInvoice;
+        $returnInvoice->sell_invoice_no = $sellInvoiceData->invoice_no;
+        $returnInvoice->sell_invoice_id = $sellInvoiceData->id;
+        //$returnInvoice->quantity = $makeInvoice;
+        $returnInvoice->subtotal_before_discount = $dataRequest['subtotal_before_discount'];
+        $returnInvoice->discount_amount = $dataRequest['discount_amount'];
+        $returnInvoice->discount_type = $dataRequest['discount_type'];
+        $returnInvoice->total_discount = $dataRequest['total_discount_amount'];
+        $returnInvoice->total_amount_after_discount = $dataRequest['total_amount_after_discount'];
+        $returnInvoice->total_payable_amount = $dataRequest['total_amount_after_discount'];
+        $returnInvoice->return_note = $dataRequest['return_note'];
+        $returnInvoice->receive_note = $dataRequest['receive_note'];
+        $returnInvoice->return_date = date('Y-m-d');
+        $returnInvoice->created_by = authId_hh();
+        $returnInvoice->save();
+        return $returnInvoice;
+    }
+
+
+   
+
 
     //print
     public function printSellReturnProducInvoiceWisedProductList($invoiceId)
