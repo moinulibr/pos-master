@@ -17,6 +17,7 @@ class SellProductDeliveryController extends Controller
 {
     use StockChangingTrait;
 
+    protected $sellDeliveryQuantity;
     /**
      * Display a listing of the resource.
      *
@@ -63,11 +64,15 @@ class SellProductDeliveryController extends Controller
                 
                 $sellDelivery = $this->sellProductDeliveryInvoiceStore($makeInvoice,$invoiceData);
 
-
                 foreach($request->checked_id as $sell_product_stock_id)
                 {
                     $this->sellProductStockProcessing($sellDelivery,$invoiceData, $sell_product_stock_id, $request->input('deliverying_qty_'.$sell_product_stock_id));
                 }
+
+                //update sell delivery invoice
+                $sellDelivery->quantity = $this->sellDeliveryQuantity;
+                $sellDelivery->save();
+
                 DB::commit();
             }else{
                 return response()->json([
@@ -98,6 +103,7 @@ class SellProductDeliveryController extends Controller
         }
     }
 
+    //sell product stock
     private function sellProductStockProcessing($sellDelivery,$invoiceData,$sell_product_stock_id, $deliverying_quantity)
     {
         $sellProductStockDetails = SellProductStock::where('id',$sell_product_stock_id)
@@ -164,10 +170,30 @@ class SellProductDeliveryController extends Controller
             $this->sellingFromPossStockTypeDecrement();
         }
         //reduce stock from product stock
+        $this->sellDeliveryQuantity += $stockReduceFromMainBaseStock;
 
-       return $this->sellProductDeliveryProcess($sellDelivery,$invoiceData,$sellProductStockDetails,$deliverying_quantity);
+       $this->sellProductDeliveryProcess($sellDelivery,$invoiceData,$sellProductStockDetails,$deliverying_quantity);
+        return true;
     }
 
+
+
+
+    //sell product delivery invoice
+    private function sellProductDeliveryInvoiceStore($makeInvoice,$sellInvoice)
+    {
+        $sellDeliver = new SellProductDeliveryInvoice();
+        $sellDeliver->branch_id = authBranch_hh();
+        $sellDeliver->invoice_no = $makeInvoice; 
+        $sellDeliver->sell_invoice_no = $sellInvoice->invoice_no; 
+        $sellDeliver->sell_invoice_id = $sellInvoice->id; 
+        //$sellDeliver->delivery_note = ''; 
+        //$sellDeliver->quantity = $this->sellDeliveryQuantity;
+        $sellDeliver->delivery_status = 1;
+        $sellDeliver->created_by = authId_hh();
+        $sellDeliver->save();
+        return $sellDeliver;
+    }
 
     //sell product delivery
     private function sellProductDeliveryProcess($sellDelivery,$sellInvoice,$sellProductStockDetails,$deliverying_quantity)
@@ -187,24 +213,6 @@ class SellProductDeliveryController extends Controller
         $delivery->save();
         return $delivery;
     }
-
-
-    //sell product delivery invoice
-    private function sellProductDeliveryInvoiceStore($makeInvoice,$sellInvoice)
-    {
-        $sellDeliver = new SellProductDeliveryInvoice();
-        $sellDeliver->branch_id = authBranch_hh();
-        $sellDeliver->invoice_no = $makeInvoice; 
-        $sellDeliver->sell_invoice_no = $sellInvoice->invoice_no; 
-        $sellDeliver->sell_invoice_id = $sellInvoice->id; 
-        //$sellDeliver->delivery_note = ''; 
-        //$sellDeliver->quantity = 0;
-        $sellDeliver->delivery_status = 1;
-        $sellDeliver->created_by = authId_hh();
-        $sellDeliver->save();
-        return $sellDeliver;
-    }
-
 
 
 

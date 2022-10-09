@@ -83,8 +83,9 @@ class SellProductReturnController extends Controller
 
                 foreach($request->checked_id as $sell_product_stock_id)
                 {
-                    $this->returnProductStockProcessing($returnInvoice,$invoiceData, $sell_product_stock_id, $request->input('returning_qty_'.$sell_product_stock_id));
+                    $this->sellProductStockChangesData($returnInvoice,$invoiceData, $sell_product_stock_id, $request->input('returning_qty_'.$sell_product_stock_id));
                 }
+                $this->updateSellInvoiceTable($invoiceData);
                 DB::commit();
             }else{
                 return response()->json([
@@ -115,7 +116,33 @@ class SellProductReturnController extends Controller
         }
     }
 
-    private function returnProductStockProcessing($returnInvoice,$invoiceData,$sell_product_stock_id, $returningQty)
+
+    //update some fields in the sell invoice table
+    private function updateSellInvoiceTable($invoiceData)
+    {
+        $subtotal = $invoiceData->sellProducts->sum('total_sold_price');
+        $totalPurchasePrice = $invoiceData->sellProducts->sum('total_purchase_price');
+        
+        $totalDiscountAmount = $this->getTotalDiscountAmount($subtotal,$invoiceData->discount_amount,$invoiceData->discount_type);
+        $payableAmount = ($subtotal - $totalDiscountAmount) + $invoiceData->total_vat +  $invoiceData->shipping_cost + $invoiceData->others_cost; 
+        
+        if($invoiceData->round_type == '+')
+        {
+            $payableAmount = $payableAmount + $invoiceData->round_amount;
+        }else{
+            $payableAmount = $payableAmount - $invoiceData->round_amount;
+        }
+        $invoiceData->subtotal = $subtotal;
+        $invoiceData->total_discount = $totalDiscountAmount;
+        $invoiceData->total_payable_amount = $payableAmount;
+        $invoiceData->total_purchase_amount = $totalPurchasePrice;
+        $invoiceData->total_invoice_profit = (($subtotal - $totalDiscountAmount) - $totalPurchasePrice);
+        $invoiceData->save();
+    }
+
+
+    //sell product stock table 
+    private function sellProductStockChangesData($returnInvoice,$invoiceData,$sell_product_stock_id, $returningQty)
     {
         $sellProductStockDetails = SellProductStock::where('id',$sell_product_stock_id)
                 ->select('id','sell_product_id','product_id','stock_id','product_stock_id','total_quantity','stock_process_instantly_qty',
@@ -162,18 +189,37 @@ class SellProductReturnController extends Controller
         //sell product stock table single single row wise data update
 
 
-        //sell product table
-        $sellProduct->quantity = $sellProduct->quantity - $returningQty;
-        $sellProduct->save();
-        //sell product table
+        //update some fields from sell product table 
+            //amount calculation (in the sell product table)
+            $currentQuantityOfSellProduct = $sellProduct->quantity - $returningQty;
+
+            $subtotalSoldPriceOfSellProduct = $sellProduct->sold_price * $currentQuantityOfSellProduct;
+
+            $totalDiscountAmountOfSellProduct = $this->getTotalDiscountAmount($subtotalSoldPriceOfSellProduct,$sellProduct->discount_amount,$sellProduct->discount_type);
+
+            $sellProduct->total_discount = $totalDiscountAmountOfSellProduct;
+            $totalSoldPriceOfSellProduct = $subtotalSoldPriceOfSellProduct - $totalDiscountAmountOfSellProduct;
+            $sellProduct->total_sold_price = $totalSoldPriceOfSellProduct;
+
+            $purchasePriceFromSellProductStock = $sellProductStockDetails->purchase_price;
+            $totalPurchasePriceFromSellProductStock = $purchasePriceFromSellProductStock * $currentQuantityOfSellProduct;
+
+            $sellProduct->total_purchase_price = $totalPurchasePriceFromSellProductStock;
+            $sellProduct->total_profit =  $totalSoldPriceOfSellProduct - $totalPurchasePriceFromSellProductStock;
+            //amount calculation
+
+            //sell product table
+            $sellProduct->quantity = $sellProduct->quantity - $returningQty;
+            $sellProduct->save();
+            //sell product table
+        //update some fields from sell product table 
+
 
         //sell invoice
+        //sell product table
         $invoiceData->total_quantity = $invoiceData->total_quantity - $returningQty;
         $invoiceData->save();
         //sell invoice
-        
-        //amount
-
 
 
         //reduce stock from product stock
@@ -190,26 +236,21 @@ class SellProductReturnController extends Controller
         return $this->sellReturnProductStore($returnInvoice,$invoiceData,$sellProductStockDetails,$returningQty);
     }
 
-    //sell return product
-    private function sellReturnProductStore($returnInvoice,$sellInvoice,$sellProductStockDetails,$returningQty)
+
+    //get Total Discount amount
+    private function getTotalDiscountAmount($totalAmount,$discount_amount,$discount_type)
     {
-        $returnProduct = new SellReturnProduct();
-        $returnProduct->branch_id = authBranch_hh();
-        $returnProduct->sell_return_product_invoice_id = $returnInvoice->id; 
-        $returnProduct->sell_invoice_id = $sellInvoice->id; 
-        $returnProduct->sell_product_id = $sellProductStockDetails->sell_product_id;
-        $returnProduct->sell_product_stock_id = $sellProductStockDetails->id;
-        $returnProduct->product_id = $sellProductStockDetails->product_id;
-        $returnProduct->stock_id = $sellProductStockDetails->stock_id;
-        $returnProduct->product_stock_id = $sellProductStockDetails->product_stock_id;
-        $returnProduct->quantity = $returningQty;
-        $returnProduct->sell_price = $sellProductStockDetails->sold_price;
-        $returnProduct->total_sell_price = $sellProductStockDetails->sold_price * $returningQty;
-        $returnProduct->delivery_status = 1;
-        $returnProduct->created_by = authId_hh();
-        $returnProduct->save();
-        return $returnProduct;
+        $discountAmount = 0;
+        if($discount_amount == 'fixed')
+        {
+            $discountAmount = $discount_amount;
+        }else{
+            $discountAmount = (($totalAmount * $discount_amount) / 100);
+        }
+        return  $discountAmount;
     }
+
+  
 
 
     //sell return product invoice
@@ -233,6 +274,27 @@ class SellProductReturnController extends Controller
         $returnInvoice->created_by = authId_hh();
         $returnInvoice->save();
         return $returnInvoice;
+    }
+
+    //sell return product
+    private function sellReturnProductStore($returnInvoice,$sellInvoice,$sellProductStockDetails,$returningQty)
+    {
+        $returnProduct = new SellReturnProduct();
+        $returnProduct->branch_id = authBranch_hh();
+        $returnProduct->sell_return_product_invoice_id = $returnInvoice->id; 
+        $returnProduct->sell_invoice_id = $sellInvoice->id; 
+        $returnProduct->sell_product_id = $sellProductStockDetails->sell_product_id;
+        $returnProduct->sell_product_stock_id = $sellProductStockDetails->id;
+        $returnProduct->product_id = $sellProductStockDetails->product_id;
+        $returnProduct->stock_id = $sellProductStockDetails->stock_id;
+        $returnProduct->product_stock_id = $sellProductStockDetails->product_stock_id;
+        $returnProduct->quantity = $returningQty;
+        $returnProduct->sell_price = $sellProductStockDetails->sold_price;
+        $returnProduct->total_sell_price = $sellProductStockDetails->sold_price * $returningQty;
+        $returnProduct->delivery_status = 1;
+        $returnProduct->created_by = authId_hh();
+        $returnProduct->save();
+        return $returnProduct;
     }
 
 

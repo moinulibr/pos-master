@@ -15,6 +15,7 @@ use App\Models\Backend\PurchaseReceive\PurchaseProductReceiveInvoice;
 class PurchaseProductReceiveController extends Controller
 {
     use StockChangingTrait;
+    protected $purchaseReceiveQuantity;
 
     /**
      * Display a listing of the resource.
@@ -73,6 +74,11 @@ class PurchaseProductReceiveController extends Controller
                 {
                     $this->purchaseProductStockProcessing($purchaseReceiveInvoice,$invoiceData, $purchase_product_stock_id, $request->input('deliverying_qty_'.$purchase_product_stock_id));
                 }
+                
+                //update sell delivery invoice
+                $purchaseReceiveInvoice->quantity = $this->purchaseReceiveQuantity;
+                $purchaseReceiveInvoice->save();
+
                 DB::commit();
             }else{
                 return response()->json([
@@ -156,7 +162,36 @@ class PurchaseProductReceiveController extends Controller
         }
         //reduce stock from product stock
 
-       return $this->purchaseProductReceiveProcess($purchaseReceiveInvoice,$invoiceData,$purchaseProductStockDetails,$receiving_quantity);
+        $this->purchaseReceiveQuantity += $stockIncrementQuantity;
+
+        $this->purchaseProductReceiveProcess($purchaseReceiveInvoice,$invoiceData,$purchaseProductStockDetails,$receiving_quantity);
+        return true;
+    }
+
+
+
+     
+    //Purchase product receive invoice
+    private function purchaseProductReceiveInvoiceStore($makeInvoice,$purchaseInvoiceData,$requestData)
+    {
+        $purchaseReceiveInvoice = new PurchaseProductReceiveInvoice();
+        $purchaseReceiveInvoice->branch_id = authBranch_hh();
+        $purchaseReceiveInvoice->invoice_no = $makeInvoice; 
+        $purchaseReceiveInvoice->purchase_invoice_no = $purchaseInvoiceData->invoice_no;
+        $purchaseReceiveInvoice->purchase_invoice_id = $purchaseInvoiceData->id; 
+        $purchaseReceiveInvoice->supplier_id = $purchaseInvoiceData->supplier_id; 
+        //$purchaseReceiveInvoice->quantity = 0;
+        $purchaseReceiveInvoice->delivery_status = 1;
+        $purchaseReceiveInvoice->purchase_chalan_no = $requestData['purchase_chalan_no'];
+        $purchaseReceiveInvoice->purchase_reference_no = $requestData['purchase_reference_no'];
+        $purchaseReceiveInvoice->supplier_id = $requestData['supplier_id'];
+        $purchaseReceiveInvoice->received_from = $requestData['received_from'];
+        $purchaseReceiveInvoice->received_invo_cln_ref_no = $requestData['received_invo_cln_ref_no'];
+        $purchaseReceiveInvoice->receive_note = $requestData['receive_note'];
+        $purchaseReceiveInvoice->received_at = date('Y-m-d h:i:s');
+        $purchaseReceiveInvoice->created_by = authId_hh();
+        $purchaseReceiveInvoice->save();
+        return $purchaseReceiveInvoice;
     }
 
 
@@ -183,31 +218,7 @@ class PurchaseProductReceiveController extends Controller
 
 
 
-    
-    //Purchase product receive invoice
-    private function purchaseProductReceiveInvoiceStore($makeInvoice,$purchaseInvoiceData,$requestData)
-    {
-        $purchaseReceiveInvoice = new PurchaseProductReceiveInvoice();
-        $purchaseReceiveInvoice->branch_id = authBranch_hh();
-        $purchaseReceiveInvoice->invoice_no = $makeInvoice; 
-        $purchaseReceiveInvoice->purchase_invoice_no = $purchaseInvoiceData->invoice_no;
-        $purchaseReceiveInvoice->purchase_invoice_id = $purchaseInvoiceData->id; 
-        $purchaseReceiveInvoice->supplier_id = $purchaseInvoiceData->supplier_id; 
-        //$purchaseReceiveInvoice->quantity = 0;
-        $purchaseReceiveInvoice->delivery_status = 1;
-        $purchaseReceiveInvoice->purchase_chalan_no = $requestData['purchase_chalan_no'];
-        $purchaseReceiveInvoice->purchase_reference_no = $requestData['purchase_reference_no'];
-        $purchaseReceiveInvoice->supplier_id = $requestData['supplier_id'];
-        $purchaseReceiveInvoice->received_from = $requestData['received_from'];
-        $purchaseReceiveInvoice->received_invo_cln_ref_no = $requestData['received_invo_cln_ref_no'];
-        $purchaseReceiveInvoice->receive_note = $requestData['receive_note'];
-        $purchaseReceiveInvoice->received_at = date('Y-m-d h:i:s');
-        $purchaseReceiveInvoice->created_by = authId_hh();
-        $purchaseReceiveInvoice->save();
-        return $purchaseReceiveInvoice;
-    }
-
-
+   
 
 
     //print
