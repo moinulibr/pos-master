@@ -77,7 +77,7 @@ trait StoreDataFromSellCartTrait
     }
 
 
-    
+    // sell product stock
     private function insertDataInTheSellProductStockTable($cart,$sellInvoice,$sellProduct,$product_stock_id,$qty,$purchase_price,$process_duration)
     {
         $productStock = new SellProductStock();
@@ -90,13 +90,15 @@ trait StoreDataFromSellCartTrait
         
         $productStock->total_quantity = $qty;
 
+        $totalPurchasePrice = $cart['purchase_price'] * $qty;
+        $totalSoldPrice = $cart['final_sell_price'] * $qty;
         $productStock->mrp_price = $cart['mrp_price'];
         $productStock->regular_sell_price = $cart['sell_price'];
         $productStock->sold_price = $cart['final_sell_price'];
-        $productStock->total_sold_price = $cart['selling_final_amount'];
+        $productStock->total_sold_price = $totalSoldPrice;//$cart['selling_final_amount'];
         $productStock->purchase_price = $cart['purchase_price'];
-        $productStock->total_purchase_price = $cart['total_purchase_price_of_all_quantity'];
-        $productStock->total_profit = $cart['selling_final_amount'] - $cart['total_purchase_price_of_all_quantity'];
+        $productStock->total_purchase_price = $totalPurchasePrice;//$cart['total_purchase_price_of_all_quantity'];
+        $productStock->total_profit = $totalSoldPrice - $totalPurchasePrice;
 
         
         $pStock = productStockByProductStockId_hh($product_stock_id);
@@ -167,7 +169,7 @@ trait StoreDataFromSellCartTrait
         return $productStock;
     }
 
-
+    //insert data in the sell products table
     private function insertDataInTheSellProduct($sellInvoice,$cart)
     {
         $productStock = new SellProduct();
@@ -218,6 +220,7 @@ trait StoreDataFromSellCartTrait
         return $productStock;
     }
 
+    //insert data in the sell invoices table
     private function insertDataInTheSellInvoiceTable($sellInvoiceSummeryCart)
     {  
         $shippingCart = [];

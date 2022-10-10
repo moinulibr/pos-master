@@ -71,11 +71,10 @@
                                     @php
                                         $totalAvailableStockWithReducedStockButNotDelivered = ($pstock->productStock ? $pstock->productStock->available_base_stock : 0) + ($pstock->productStock ? $pstock->productStock->reduced_base_stock_remaining_delivery : 0);
                                         $totalAvailableStock = ($pstock->productStock ? $pstock->productStock->available_base_stock : 0);
-                                        $totalProcessedQty = $pstock->total_stock_processed_qty;
                                         $totalRemainingDeliveryQty = $pstock->remaining_delivery_qty;
                                         $deliveryingQtyNow = 0;
                                         if(($totalAvailableStockWithReducedStockButNotDelivered > $totalRemainingDeliveryQty) 
-                                                && ($totalRemainingDeliveryQty > 0) 
+                                            && ($totalRemainingDeliveryQty > 0) 
                                         )
                                         {
                                             $deliveryingQtyNow = $totalRemainingDeliveryQty; 
@@ -106,7 +105,7 @@
                                         <input type="text" disabled value="{{$deliveryingQtyNow}}" class="form-control" style="background-color: green;color:#ffff;">
                                         @elseif ($deliveryingQtyNow == 0 && $totalRemainingDeliveryQty > 0)
                                         <input type="text" disabled value="{{$deliveryingQtyNow}}" class="form-control" style="background-color: red;color:#ffff;">
-                                     @endif
+                                    @endif
                                 </td>
                                 <td style="width:10%;text-align: center">
                                     <input type="hidden" class="total_processed_qty total_processed_qty_{{$pstock->id}}" value="{{$pstock->total_stock_processed_qty}}">

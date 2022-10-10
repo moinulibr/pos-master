@@ -176,6 +176,31 @@ class SellProductReturnController extends Controller
         
         //sell product stock table single single row wise data update
         $currentTotalQuantity = $sellProductStockDetails->total_quantity - $returningQty;
+
+        //delivery and remaining delivery based on current total quantity
+            $deliveredQty = 0;
+            $remainingDelivertQty = 0;
+            $previousDeliveredQty = $sellProductStockDetails->total_delivered_qty;
+            if($currentTotalQuantity < $previousDeliveredQty)
+            {
+                $deliveredQty = $currentTotalQuantity;
+                $remainingDelivertQty = 0;
+            }
+            else if($currentTotalQuantity == $previousDeliveredQty)
+            {
+                $deliveredQty = $currentTotalQuantity;
+                $remainingDelivertQty = 0;
+            }
+            else if($currentTotalQuantity > $previousDeliveredQty)
+            {
+                $deliveredQty = $previousDeliveredQty;
+                $remainingDelivertQty = $currentTotalQuantity - $previousDeliveredQty;
+            }
+            $sellProductStockDetails->total_delivered_qty = $deliveredQty;
+            $sellProductStockDetails->remaining_delivery_qty = $remainingDelivertQty;
+        //delivery and remaining delivery based on current total quantity
+
+
         $sellProductStockDetails->total_quantity = $currentTotalQuantity;
         $sellProductStockDetails->total_return_qty = $sellProductStockDetails->total_return_qty + $returningQty;
             //sold price, total_sold_price, purchase_price, total_purchase_price,total_profit, 
@@ -220,18 +245,37 @@ class SellProductReturnController extends Controller
         $invoiceData->total_quantity = $invoiceData->total_quantity - $returningQty;
         $invoiceData->save();
         //sell invoice
-
-
-        //reduce stock from product stock
-        if($invoiceData->sell_type == 1 && $returningQty > 0)
+        
+        //base stock increment quantity
+            $baseStockIncrementQuantity = 0;
+            if($deliveredQty == $returningQty && $deliveredQty > 0)
+            {
+                $baseStockIncrementQuantity = $returningQty;
+            }
+            else if($deliveredQty > $returningQty && $deliveredQty > 0)
+            {
+                $baseStockIncrementQuantity = $returningQty;
+            }
+            else if($deliveredQty < $returningQty && $deliveredQty > 0)
+            {
+                $baseStockIncrementQuantity = $deliveredQty;
+            }
+            else if($deliveredQty == 0)
+            {
+                $baseStockIncrementQuantity = 0;
+            }
+        //base stock increment quantity
+            
+        //increment stock from product stock
+        if($invoiceData->sell_type == 1 && $returningQty > 0 && $baseStockIncrementQuantity > 0)
         {
             $this->stock_id_FSCT = $sellProductStockDetails->stock_id;
             $this->product_id_FSCT = $sellProductStockDetails->product_id;
-            $this->stock_quantity_FSCT = $returningQty;
+            $this->stock_quantity_FSCT = $baseStockIncrementQuantity;
             $this->unit_id_FSCT = $sellProduct ? $sellProduct->unit_id:0;
             $this->sellingReturnStockTypeIncrement();
         }
-        //reduce stock from product stock
+        //increment stock from product stock
 
         return $this->sellReturnProductStore($returnInvoice,$invoiceData,$sellProductStockDetails,$returningQty);
     }
