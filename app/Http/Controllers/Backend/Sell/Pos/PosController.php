@@ -271,6 +271,26 @@ class PosController extends Controller
 
 
 
+    
+    //payment mmodal open with customer information and invoice information
+    public function paymentModalOpen(Request $request)
+    {
+        //$purchaseInvoiceSummeryCartName = purchaseCreateCartInvoiceSummerySessionName_hh();
+        //$purchaseInvoiceSummeryCart = [];
+        //$purchaseInvoiceSummeryCart = session()->has($purchaseInvoiceSummeryCartName) ? session()->get($purchaseInvoiceSummeryCartName)  : [];
+        
+        $list = view('backend.sell.pos.ajax-response.payment_quotation.payment_data')->render();
+        return response()->json([
+            'status'    => true,
+            'list'     => $list,
+        ]);
+    }
+
+    //payment mmodal open with customer information and invoice information
+    public function quotationModalOpen(Request $request)
+    {
+
+    }
 
 
 

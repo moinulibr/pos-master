@@ -402,6 +402,11 @@ Route::group(['middleware' => ['auth']], function ()
             //customer shipping address
             Route::post('customer/shipping/address','PosController@customerShippingAddress')->name('customer.shipping.address');
             
+            
+            //sell payment modal open 
+            Route::get('sell/payment/modal/open','PosController@paymentModalOpen')->name('sell.payment.modal.open');
+            Route::get('sell/quotation/modal/open','PosController@quotationModalOpen')->name('sell.quotation.modal.open');
+                   
         });
         
         //customer shipping address

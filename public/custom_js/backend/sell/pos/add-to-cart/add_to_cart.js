@@ -271,11 +271,11 @@
         
         if(totalQuantityFromCartList > 0)
         {
-            jQuery('.paymentQuotationButtonWhenCartItemZero').hide();
-            jQuery('.paymentQuotationButtonWhenCartItemMoreThenZero').show();
+            //jQuery('.paymentQuotationButtonWhenCartItemZero').hide();
+            //jQuery('.paymentQuotationButtonWhenCartItemMoreThenZero').show();
         }else{
-            jQuery('.paymentQuotationButtonWhenCartItemZero').show();
-            jQuery('.paymentQuotationButtonWhenCartItemMoreThenZero').hide();   
+            //jQuery('.paymentQuotationButtonWhenCartItemZero').show();
+            //jQuery('.paymentQuotationButtonWhenCartItemMoreThenZero').hide();   
         }
         return totalQuantityFromCartList;
     }
@@ -638,6 +638,7 @@
             }
         }); 
 
+        //submit customer shipping address
         jQuery(document).on("submit",'.submitCustomerShippingAddress',function(e){
             e.preventDefault();
             var form = jQuery(this);
@@ -684,44 +685,48 @@
     
 
     
+
     /*
     |-----------------------------------------------
     |payment modal 
     |----------------------------------------------
     */
-       /*  jQuery(document).on('click','.paymentModalOpen',function(){
-            var supplier_id = jQuery('.supplier_id option:selected').val();
-            if(!supplier_id){
+        //paymentModalOpenUrl
+        //quotationModalOpenUrl
+        jQuery(document).on('click','.paymentModalOpen',function(){
+            //var customer_id = jQuery('.customer_id option:selected').val();
+            var totalItem = nanCheck(parseFloat(jQuery('.totalItemFromSellCartList').text()));
+            if(!totalItem){
                 jQuery('#payment-popup').modal('hide');
-                jQuery.notify("Please select one supplier", 'error');
+                jQuery.notify("Please select a minimum item", 'error');
                 return 0;
             }else{
                 jQuery('#payment-popup').modal('show');
             }
             var url = jQuery('.paymentModalOpenUrl').val();
-        jQuery.ajax({
-            url:url,
-            //data:{},
-            beforeSend:function(){
-                jQuery('.processing').fadeIn();
-            },
-            success:function(response){
-                if(response.status == true)
-                {
-                    jQuery('.payment_data_response').html(response.list);
-                    //finalCalculationForThisInvoice();
-                }
-            },
-            complete:function(){
-                jQuery('.processing').fadeOut();
-            },
+            jQuery.ajax({
+                url:url,
+                //data:{},
+                beforeSend:function(){
+                    jQuery('.processing').fadeIn();
+                },
+                success:function(response){
+                    if(response.status == true)
+                    {
+                        jQuery('.payment_data_response').html(response.list);
+                    }
+                },
+                complete:function(){
+                    jQuery('.processing').fadeOut();
+                },
+            });
         });
-        }); */
     /*
     |-----------------------------------------------
     |payment modal 
     |----------------------------------------------
     */
+
 
     
     /*

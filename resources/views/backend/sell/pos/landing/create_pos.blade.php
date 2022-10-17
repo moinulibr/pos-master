@@ -370,20 +370,21 @@ License: You must have a valid license purchased only from themeforest(the above
                                             </a>
 
                                         
-                                            <a  class="paymentQuotationButtonWhenCartItemZero btn btn-dark btnFullWidth white" style="margin-top: 1%; cursor: pointer;">
+                                            {{-- <a  class="paymentQuotationButtonWhenCartItemZero btn btn-dark btnFullWidth white" style="margin-top: 1%; cursor: pointer;">
                                                 Quotation
-                                            </a>
-                                            <a href="#" class="paymentQuotationButtonWhenCartItemMoreThenZero btn btn-dark btnFullWidth white" style="margin-top: 1%; display:none; cursor: pointer;" data-toggle="modal" data-target="#quotation-popup">
+                                            </a> --}}
+                                            <a href="#" class=" btn btn-dark btnFullWidth white" style="margin-top: 1%; cursor: pointer;">{{---paymentQuotationButtonWhenCartItemMoreThenZero data-toggle="modal" data-target="#quotation-popup"--}}
                                                 Quotation
                                             </a>
 
-                                            <a class="paymentQuotationButtonWhenCartItemZero btn btn-success btnFullWidth white" style="margin-top: 1%; cursor: pointer;">
+                                            {{-- <a class="paymentQuotationButtonWhenCartItemZero btn btn-success btnFullWidth white" style="margin-top: 1%; cursor: pointer;">
+                                                Payment
+                                            </a> --}}
+                                            <a href="#" class="paymentModalOpen  btn btn-success btnFullWidth white" style="margin-top: 1%; cursor: pointer;">{{--paymentQuotationButtonWhenCartItemMoreThenZero data-toggle="modal" data-target="#payment-popup"--}}
                                                 Payment
                                             </a>
-                                            <a href="#" class="paymentQuotationButtonWhenCartItemMoreThenZero btn btn-success btnFullWidth white" style="margin-top: 1%; display:none; cursor: pointer;" data-toggle="modal" data-target="#payment-popup">
-                                                Payment
-                                            </a>
-
+                                            <input type="hidden" class="paymentModalOpenUrl" value="{{route('admin.sell.regular.pos.sell.payment.modal.open')}}">
+                                            <input type="hidden" class="quotationModalOpenUrl" value="{{route('admin.sell.regular.pos.sell.quotation.modal.open')}}">
 
                                             <a href="#" class="pos_print_direct_from_sell_cart btn btn-info btnFullWidth white" style="margin-top: 1%;" data-href="{{ route('admin.sell.regular.pos.normal.print.from.direct.sell.cart') }}">
                                                 Print

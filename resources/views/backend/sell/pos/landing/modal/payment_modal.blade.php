@@ -15,6 +15,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="payment_data_response"></div>
                     {{-- <table class="table right-table">
                         <tbody>
                             <tr class="d-flex align-items-center justify-content-between">
