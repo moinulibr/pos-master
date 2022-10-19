@@ -691,13 +691,15 @@
     |payment modal 
     |----------------------------------------------
     */
+        jQuery('#payment-popup').css('overflow-y', 'auto');
         //paymentModalOpenUrl
         //quotationModalOpenUrl
         jQuery(document).on('click','.paymentModalOpen',function(){
-            //var customer_id = jQuery('.customer_id option:selected').val();
+            var customer_id = jQuery('.customer_id option:selected').val();
             var totalItem = nanCheck(parseFloat(jQuery('.totalItemFromSellCartList').text()));
             if(!totalItem){
                 jQuery('#payment-popup').modal('hide');
+                alert('Please select a minimum item');
                 jQuery.notify("Please select a minimum item", 'error');
                 return 0;
             }else{
@@ -706,7 +708,7 @@
             var url = jQuery('.paymentModalOpenUrl').val();
             jQuery.ajax({
                 url:url,
-                //data:{},
+                data:{customer_id:customer_id},
                 beforeSend:function(){
                     jQuery('.processing').fadeIn();
                 },
