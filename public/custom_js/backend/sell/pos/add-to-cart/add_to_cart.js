@@ -688,12 +688,53 @@
 
     /*
     |-----------------------------------------------
+    |quotation modal 
+    |----------------------------------------------
+    */
+        jQuery('#quotation-popup').css('overflow-y', 'auto');
+        jQuery(document).on('click','.quotationModalOpen',function(){
+            var customer_id = jQuery('.customer_id option:selected').val();
+            var totalItem = nanCheck(parseFloat(jQuery('.totalItemFromSellCartList').text()));
+            if(!totalItem){
+                jQuery('#quotation-popup').modal('hide');
+                alert('Please select a minimum item');
+                jQuery.notify("Please select a minimum item", 'error');
+                return 0;
+            }else{
+                jQuery('#quotation-popup').modal('show');
+            }
+            var url = jQuery('.quotationModalOpenUrl').val();
+            jQuery.ajax({
+                url:url,
+                data:{customer_id:customer_id},
+                beforeSend:function(){
+                    jQuery('.processing').fadeIn();
+                },
+                success:function(response){
+                    if(response.status == true)
+                    {
+                        jQuery('.quotation_data_response').html(response.list);
+                    }
+                },
+                complete:function(){
+                    jQuery('.processing').fadeOut();
+                },
+            });
+        });
+    /*
+    |-----------------------------------------------
+    |quotation modal 
+    |----------------------------------------------
+    */
+
+
+
+    /*
+    |-----------------------------------------------
     |payment modal 
     |----------------------------------------------
     */
         jQuery('#payment-popup').css('overflow-y', 'auto');
-        //paymentModalOpenUrl
-        //quotationModalOpenUrl
         jQuery(document).on('click','.paymentModalOpen',function(){
             var customer_id = jQuery('.customer_id option:selected').val();
             var totalItem = nanCheck(parseFloat(jQuery('.totalItemFromSellCartList').text()));
@@ -728,6 +769,79 @@
     |payment modal 
     |----------------------------------------------
     */
+
+
+    jQuery(document).on('change','.paymentBy',function(){
+        var payment_id = jQuery('.paymentBy option:selected').val();
+        if(payment_id == 1) //only cash
+        {
+            advancePaymentingakeZeroWithHide();
+            bankingPaymentingakeZeroWithHide();
+            jQuery('.cash_payment_section').show(300);
+        }
+        else if(payment_id == 2) //Only Advance
+        {
+            cashPaymentMakingZeroWithHide();
+            bankingPaymentingakeZeroWithHide();
+            jQuery('.advance_payment_section').show(300);
+        }
+        else if(payment_id == 3) //Advance + Cash
+        {
+            bankingPaymentingakeZeroWithHide();
+            jQuery('.cash_payment_section').show(300);
+            jQuery('.advance_payment_section').show(300);
+        }
+        else if(payment_id == 4) //Only Banking
+        {
+            cashPaymentMakingZeroWithHide();
+            advancePaymentingakeZeroWithHide();
+            jQuery('.banking_payment_section').show(300);
+        }
+        else if(payment_id == 5) //Banking + Cash
+        {
+            advancePaymentingakeZeroWithHide();
+            jQuery('.banking_payment_section').show(300);
+            jQuery('.cash_payment_section').show(300);
+        }
+        else if(payment_id == 6) //Banking + Advance
+        {
+            cashPaymentMakingZeroWithHide();
+            jQuery('.banking_payment_section').show(300);
+            jQuery('.advance_payment_section').show(300);
+        }
+        else if(payment_id == 7) //Banking + Advance + Cash
+        {
+            jQuery('.cash_payment_section').show(300);
+            jQuery('.advance_payment_section').show(300);
+            jQuery('.banking_payment_section').show(300);
+        }
+        else{
+            jQuery('.cash_payment_section').hide(300);
+            jQuery('.advance_payment_section').hide(300);
+            jQuery('.banking_payment_section').hide(300);
+
+            jQuery('.cash_payment_making_zero').val(0);
+            jQuery('.advance_payment_making_zero').val(0);
+            jQuery('.banking_payment_making_zero').val(0);
+        }
+    });
+
+    function cashPaymentMakingZeroWithHide()
+    {
+        jQuery('.cash_payment_section').hide(300);
+        jQuery('.cash_payment_making_zero').val(0);
+    }
+    function advancePaymentingakeZeroWithHide()
+    {
+        jQuery('.advance_payment_section').hide(300);
+        jQuery('.advance_payment_making_zero').val(0);
+    }
+    function bankingPaymentingakeZeroWithHide()
+    {
+        jQuery('.banking_payment_section').hide(300);
+        jQuery('.banking_payment_making_zero').val(0);
+    }
+
 
 
     

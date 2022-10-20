@@ -274,10 +274,11 @@ trait StoreDataFromSellCartTrait
             $sellInvoice->reference_id = $sellInvoiceSummeryCart['invoice_reference_id'];
         }
 
-        $customer = Customer::select('customer_type_id')->where('id',$customerId)->first();
+        $customer = Customer::select('customer_type_id','phone')->where('id',$customerId)->first();
         if($customer)
         {
             $sellInvoice->customer_type_id = $customer->customer_type_id;  
+            $sellInvoice->customer_phone = $customer->phone;  
         }else{
             $sellInvoice->customer_type_id = 2;  //temporary
         }

@@ -369,17 +369,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 Cancel
                                             </a>
 
-                                        
-                                            {{-- <a  class="paymentQuotationButtonWhenCartItemZero btn btn-dark btnFullWidth white" style="margin-top: 1%; cursor: pointer;">
-                                                Quotation
-                                            </a> --}}
-                                            <a href="#" class=" btn btn-dark btnFullWidth white" style="margin-top: 1%; cursor: pointer;">{{---paymentQuotationButtonWhenCartItemMoreThenZero data-toggle="modal" data-target="#quotation-popup"--}}
+                                            <a href="#" class="quotationModalOpen btn btn-dark btnFullWidth white" style="margin-top: 1%; cursor: pointer;">{{---paymentQuotationButtonWhenCartItemMoreThenZero data-toggle="modal" data-target="#quotation-popup"--}}
                                                 Quotation
                                             </a>
 
-                                            {{-- <a class="paymentQuotationButtonWhenCartItemZero btn btn-success btnFullWidth white" style="margin-top: 1%; cursor: pointer;">
-                                                Payment
-                                            </a> --}}
                                             <a href="#" class="paymentModalOpen  btn btn-success btnFullWidth white" style="margin-top: 1%; cursor: pointer;">{{--paymentQuotationButtonWhenCartItemMoreThenZero data-toggle="modal" data-target="#payment-popup"--}}
                                                 Payment
                                             </a>

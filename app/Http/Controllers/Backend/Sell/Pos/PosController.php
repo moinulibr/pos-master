@@ -275,11 +275,15 @@ class PosController extends Controller
     //payment mmodal open with customer information and invoice information
     public function paymentModalOpen(Request $request)
     {
-        //$purchaseInvoiceSummeryCartName = purchaseCreateCartInvoiceSummerySessionName_hh();
-        //$purchaseInvoiceSummeryCart = [];
-        //$purchaseInvoiceSummeryCart = session()->has($purchaseInvoiceSummeryCartName) ? session()->get($purchaseInvoiceSummeryCartName)  : [];
+        //sellCreateCartSessionName_hh();
+        $sellInvoiceSummeryCartName = sellCreateCartInvoiceSummerySessionName_hh();
+        $sellInvoiceSummeryCart = [];
+        $sellInvoiceSummeryCart = session()->has($sellInvoiceSummeryCartName) ? session()->get($sellInvoiceSummeryCartName)  : [];
+        $data['totalPayableAmount'] = $sellInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'];
         
-        $list = view('backend.sell.pos.ajax-response.payment_quotation.payment_data')->render();
+        $data['customer'] = Customer::findOrFail($request->customer_id);
+        
+        $list = view('backend.sell.pos.ajax-response.payment_quotation.payment_data',$data)->render();
         return response()->json([
             'status'    => true,
             'list'     => $list,
@@ -289,7 +293,11 @@ class PosController extends Controller
     //payment mmodal open with customer information and invoice information
     public function quotationModalOpen(Request $request)
     {
-
+        $list = view('backend.sell.pos.ajax-response.payment_quotation.quotation_data')->render();
+        return response()->json([
+            'status'    => true,
+            'list'     => $list,
+        ]);
     }
 
 
