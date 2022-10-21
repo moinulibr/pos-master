@@ -757,6 +757,7 @@
                     if(response.status == true)
                     {
                         jQuery('.payment_data_response').html(response.list);
+                        paymentProcessKeepingDueAmountFullAndPayingAmountZero();
                     }
                 },
                 complete:function(){
@@ -771,8 +772,15 @@
     */
 
 
-    jQuery(document).on('change','.paymentBy',function(){
-        var payment_id = jQuery('.paymentBy option:selected').val();
+    jQuery(document).on('change','.payment_option',function(){
+        var payment_id = jQuery('.payment_option option:selected').val();
+        if(payment_id)
+        {
+            jQuery('.invoice_paying_amount').removeAttr('readonly');
+            jQuery('.invoice_paying_amount').focus();
+        }else{
+            paymentProcessKeepingDueAmountFullAndPayingAmountDisabledAndZero();
+        }
         if(payment_id == 1) //only cash
         {
             advancePaymentingakeZeroWithHide();
@@ -843,6 +851,40 @@
     }
 
 
+
+
+    jQuery(document).on('change','.invoice_continue_with',function()
+    {
+        var totalInvoicePayableAmount = nanCheck(parseFloat(jQuery('.total_invoice_payble_amount').text()));
+        var invoice_continue_type = jQuery('.invoice_continue_with option:selected').val();
+        if(invoice_continue_type == 1) //due
+        {
+            jQuery('.payment_option option[value=0]').prop('selected',true);
+            jQuery('.payment_option').attr('disabled',true);
+            //paymentProcessKeepingDueAmountFullAndPayingAmountZero();
+            paymentProcessKeepingDueAmountFullAndPayingAmountDisabledAndZero();
+            cashPaymentMakingZeroWithHide();
+            advancePaymentingakeZeroWithHide();
+            bankingPaymentingakeZeroWithHide();
+        }else{
+            jQuery('.payment_option').removeAttr('disabled');
+        }
+    });
+    
+    function paymentProcessKeepingDueAmountFullAndPayingAmountZero()
+    {
+        var totalInvoicePayableAmount = nanCheck(parseFloat(jQuery('.total_invoice_payble_amount').text()));
+        jQuery('.invoice_paying_amount').val(0);
+        jQuery('.invoice_due_amount').val(totalInvoicePayableAmount);
+    }
+
+    function paymentProcessKeepingDueAmountFullAndPayingAmountDisabledAndZero()
+    {
+        var totalInvoicePayableAmount = nanCheck(parseFloat(jQuery('.total_invoice_payble_amount').text()));
+        jQuery('.invoice_paying_amount').val(0);
+        jQuery('.invoice_due_amount').val(totalInvoicePayableAmount);
+        jQuery('.invoice_paying_amount').attr('readonly',true);
+    }
 
     
     /*
