@@ -255,7 +255,7 @@ class PosController extends Controller
         ]);
     }
 
-
+    //change quantity
     public function changeQuantity(Request $request)
     {
         $this->requestAllCartData = $request;
@@ -270,7 +270,16 @@ class PosController extends Controller
     }
 
 
-
+    
+    //quotation mmodal open with customer information and invoice information
+    public function quotationModalOpen(Request $request)
+    {
+        $list = view('backend.sell.pos.ajax-response.payment_quotation.quotation_data')->render();
+        return response()->json([
+            'status'    => true,
+            'list'     => $list,
+        ]);
+    }
     
     //payment mmodal open with customer information and invoice information
     public function paymentModalOpen(Request $request)
@@ -290,15 +299,19 @@ class PosController extends Controller
         ]);
     }
 
-    //payment mmodal open with customer information and invoice information
-    public function quotationModalOpen(Request $request)
+    //payment banking option
+    public function paymentBankingOption(Request $request)
     {
-        $list = view('backend.sell.pos.ajax-response.payment_quotation.quotation_data')->render();
+        $data['banking_option_id'] = $request->banking_option_id;
+        
+        $list = view('backend.sell.pos.ajax-response.payment_quotation.payment_banking_option',$data)->render();
         return response()->json([
             'status'    => true,
             'list'     => $list,
         ]);
     }
+
+   
 
 
 

@@ -24,7 +24,7 @@
                         </td>
                         <td style="width:1%">:</td>
                         <td style="width:18%;background-color:#b72323;color:#ffff;">
-                            <h5>111111</h5>
+                            <h5>{{$customer->total_due}}</h5>
                         </td>
                     <tr>
                         <td style="width:17%">Address</td>
@@ -36,7 +36,7 @@
                         </td>
                         <td style="width:1%;">:</td>
                         <td style="width:18%;background-color:green;color:#ffff;">
-                            <h5>111111</h5>
+                            <h5><strong class="total_advance_amount">{{$customer->total_advance}}</strong></h5>
                         </td>
                     </tr>
 
@@ -83,11 +83,11 @@
                         </td>
                         <td style="width:15%">
                             <label for="">Paying Amount</label>
-                            <input type="text" class="form-control invoice_paying_amount" readonly value="0"  style="background-color:green;color: #ffff;font-weight: bold;">
+                            <input type="text" class="form-control invoice_paying_amount" readonly value="0"  style="background-color:#4f6e4f;color: #ffff;;font-size:14px;font-weight:800;">
                         </td>
                         <td style="width:15%">
                             <label for="">Due Amount</label>
-                            <input type="text" class="form-control invoice_due_amount" readonly value="">
+                            <input type="text" class="form-control invoice_due_amount" readonly style="background-color:#f15454;color:#ffff;font-size:14px;font-weight:800;">
                         </td>
                     </tr>
                 </table>
@@ -102,7 +102,7 @@
                         <td style="width:50%;text-align:center;background-color:#efeaea;">--</td>
                         <td style="width:15%;text-align: right;background-color:#f8ebeb;"><small>Paying Amount</small></td>
                         <td style="width:15%">
-                            <input type="text" name="cash_payment_value" class="form-control cash_payment_value cash_payment_making_zero" style="background-color:green;color: #ffff;font-weight: bold;">
+                            <input type="text" name="cash_payment_value"  class="paying_different_method form-control cash_payment_value cash_payment_making_zero inputFieldValidatedOnlyNumeric" style="background-color:green;color: #ffff;font-weight: bold;">
                         </td>
                     </tr>
                     <tr style="display:none;" class="advance_payment_section">
@@ -110,7 +110,7 @@
                         <td style="width:50%;text-align:center;background-color:#f8ebeb;">--</td>
                         <td style="width:15%;text-align:right;background-color:#efeaea;"><small>Paying Amount</small></td>
                         <td style="width:15%">
-                            <input type="text" name="advance_payment_value" class="form-control advance_payment_value advance_payment_making_zero" style="background-color:green;color: #ffff;font-weight: bold;">
+                            <input type="text" name="advance_payment_value" class="paying_different_method form-control advance_payment_value advance_payment_making_zero inputFieldValidatedOnlyNumeric" style="background-color:green;color: #ffff;font-weight: bold;">
                         </td>
                     </tr>
                     <tr style="display:none;" class="banking_payment_section">
@@ -121,25 +121,40 @@
                                     <label style="padding-top: 5px;">Banking Option : </label>
                                 </div>
                                 <div class="col-8">
-                                    <select name="" id="" class="form-control">
-                                        <option value="">Select One</option>
-                                        <option value="">Mobile Banking</option>
-                                        <option value="">Bank</option>
-                                        <option value="">Card</option>
+                                    <select name="" id="" class="form-control banking_option_data">
+                                        <option value="0">Select One</option>
+                                        <option value="1">Mobile Banking</option>
+                                        <option value="2">Bank</option>
+                                        <option value="3">Card</option>
                                     </select>
                                 </div>
                             </div>
                         </td>
                         <td style="width:15%;text-align:right;background-color:#f8ebeb;"><small>Paying Amount</small></td>
                         <td style="width:15%">
-                            <input type="text" name="banking_payment_value" class="form-control banking_payment_value banking_payment_making_zero" style="background-color:green;color: #ffff;font-weight: bold;">
+                            <input type="text" name="banking_payment_value"  class="paying_different_method form-control banking_payment_value banking_payment_making_zero inputFieldValidatedOnlyNumeric" style="background-color:green;color: #ffff;font-weight: bold;">
                         </td>
                     </tr>
                 </table>
             </div>
         </div>
-        
-        <div class="payment_banking_option"></div>
+
+
+        <div class="col-md-12" style="display:none;" class="processing">
+            <div class="table">
+                <table class="table" style="border: none;">
+                    <tr>
+                        <td style="width:40%"></td>
+                        <td style="width:20%">
+                            <img src="{{asset('loading-img/loading1.gif')}}" alt="" style="display: block;margin-left: auto;margin-right:auto;height:40px;">
+                        </td>
+                        <td style="width:40%"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="rendering_payment_banking_option_data"  style="width:100%"></div>
 
     </div>
 
@@ -173,42 +188,5 @@
         </div>
     </div>
 
-   {{--  <div class="row">
-        <div class="col-md-3">
-            <label for="">Continue with</label>
-            <select name="" id="" class="form-control">
-                <option value="">Due Invoice</option>
-                <option value="">Payment Invoice</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <label for="">Payment By</label>
-            <select name="" id="" class="form-control">
-                <option value="">Select One</option>
-                <option value="">Only Cash</option>
-                <option value="">Only Advance</option>
-                <option value="">Advance + Cash</option>
-                <option value="">Only Banking</option>
-                <option value="">Banking + Cash</option>
-                <option value="">Banking + Advance</option>
-                <option value="">Banking + Advance + Cash</option>
-                <option value="">Advance + Cash + Banking + Others</option>
-            </select>
-        </div>
-        <div class="col-md-3">
-            <label for="">Invoice Paying Amount</label>
-            <input type="text" class="form-control">
-        </div>
-        <div class="col-md-3">
-            <label for="">Invoice Due Amount</label>
-            <input type="text" class="form-control">
-        </div>
-    </div>
-
- <br>
- <br>
- <br>
- <br>
- <br> --}}
- <br>
+   <br/>
 

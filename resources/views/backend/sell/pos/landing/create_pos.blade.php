@@ -377,6 +377,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 Payment
                                             </a>
                                             <input type="hidden" class="paymentModalOpenUrl" value="{{route('admin.sell.regular.pos.sell.payment.modal.open')}}">
+                                            <input type="hidden" class="paymentBankingOptionUrl" value="{{route('admin.sell.regular.pos.sell.payment.banking.option')}}">
                                             <input type="hidden" class="quotationModalOpenUrl" value="{{route('admin.sell.regular.pos.sell.quotation.modal.open')}}">
 
                                             <a href="#" class="pos_print_direct_from_sell_cart btn btn-info btnFullWidth white" style="margin-top: 1%;" data-href="{{ route('admin.sell.regular.pos.normal.print.from.direct.sell.cart') }}">

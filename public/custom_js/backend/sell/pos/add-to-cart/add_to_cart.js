@@ -757,7 +757,7 @@
                     if(response.status == true)
                     {
                         jQuery('.payment_data_response').html(response.list);
-                        paymentProcessKeepingDueAmountFullAndPayingAmountZero();
+                        paymentProcessingWithDueFullAmountAndPayingAmountZero();
                     }
                 },
                 complete:function(){
@@ -776,38 +776,44 @@
         var payment_id = jQuery('.payment_option option:selected').val();
         if(payment_id)
         {
-            jQuery('.invoice_paying_amount').removeAttr('readonly');
-            jQuery('.invoice_paying_amount').focus();
+            //
         }else{
-            paymentProcessKeepingDueAmountFullAndPayingAmountDisabledAndZero();
+            paymentProcessingWithDueFullAmountAndPayingAmountDisabledAndZero();
+            emptyAndHideBankingOptionAllData();
         }
         if(payment_id == 1) //only cash
         {
-            advancePaymentingakeZeroWithHide();
-            bankingPaymentingakeZeroWithHide();
+            advancePaymentMakingZeroWithHide();
+            bankingPaymentMakingZeroWithHide();
             jQuery('.cash_payment_section').show(300);
+
+            emptyAndHideBankingOptionAllData();
         }
         else if(payment_id == 2) //Only Advance
         {
             cashPaymentMakingZeroWithHide();
-            bankingPaymentingakeZeroWithHide();
+            bankingPaymentMakingZeroWithHide();
             jQuery('.advance_payment_section').show(300);
+            advanceDifferentPayingAmountOptionMakingDisabledWhenAdvancedZero();
+            emptyAndHideBankingOptionAllData();
         }
         else if(payment_id == 3) //Advance + Cash
         {
-            bankingPaymentingakeZeroWithHide();
+            bankingPaymentMakingZeroWithHide();
             jQuery('.cash_payment_section').show(300);
             jQuery('.advance_payment_section').show(300);
+            advanceDifferentPayingAmountOptionMakingDisabledWhenAdvancedZero();
+            emptyAndHideBankingOptionAllData();
         }
         else if(payment_id == 4) //Only Banking
         {
             cashPaymentMakingZeroWithHide();
-            advancePaymentingakeZeroWithHide();
+            advancePaymentMakingZeroWithHide();
             jQuery('.banking_payment_section').show(300);
         }
         else if(payment_id == 5) //Banking + Cash
         {
-            advancePaymentingakeZeroWithHide();
+            advancePaymentMakingZeroWithHide();
             jQuery('.banking_payment_section').show(300);
             jQuery('.cash_payment_section').show(300);
         }
@@ -816,77 +822,221 @@
             cashPaymentMakingZeroWithHide();
             jQuery('.banking_payment_section').show(300);
             jQuery('.advance_payment_section').show(300);
+            advanceDifferentPayingAmountOptionMakingDisabledWhenAdvancedZero();
         }
         else if(payment_id == 7) //Banking + Advance + Cash
         {
             jQuery('.cash_payment_section').show(300);
             jQuery('.advance_payment_section').show(300);
             jQuery('.banking_payment_section').show(300);
+            advanceDifferentPayingAmountOptionMakingDisabledWhenAdvancedZero();
         }
         else{
-            jQuery('.cash_payment_section').hide(300);
-            jQuery('.advance_payment_section').hide(300);
-            jQuery('.banking_payment_section').hide(300);
+            jQuery('.cash_payment_section').hide();
+            jQuery('.advance_payment_section').hide();
+            jQuery('.banking_payment_section').hide();
 
             jQuery('.cash_payment_making_zero').val(0);
             jQuery('.advance_payment_making_zero').val(0);
             jQuery('.banking_payment_making_zero').val(0);
+
+            emptyAndHideBankingOptionAllData();
         }
+        setTotalPayingAmountIsNotMoreThenInvoicePayableAmount();
+        setTotalCurrentInvoiceDueAmount();
     });
 
     function cashPaymentMakingZeroWithHide()
     {
-        jQuery('.cash_payment_section').hide(300);
+        jQuery('.cash_payment_section').hide();
         jQuery('.cash_payment_making_zero').val(0);
     }
-    function advancePaymentingakeZeroWithHide()
+    function advancePaymentMakingZeroWithHide()
     {
-        jQuery('.advance_payment_section').hide(300);
+        jQuery('.advance_payment_section').hide();
         jQuery('.advance_payment_making_zero').val(0);
     }
-    function bankingPaymentingakeZeroWithHide()
+    function bankingPaymentMakingZeroWithHide()
     {
-        jQuery('.banking_payment_section').hide(300);
+        jQuery('.banking_payment_section').hide();
         jQuery('.banking_payment_making_zero').val(0);
     }
 
+    function advanceDifferentPayingAmountOptionMakingDisabledWhenAdvancedZero()
+    {
+        var advanceAmount = nanCheck(parseFloat(jQuery('.total_advance_amount').val()));
+        if(advanceAmount == 0)
+        {
+            jQuery('.advance_payment_value').val(0);
+            jQuery('.advance_payment_value').attr('disabled',true);
+        }else{
+            jQuery('.advance_payment_value').removeAttr('disabled');
+        }
+    }
 
 
 
+    //when change invoice continue with
     jQuery(document).on('change','.invoice_continue_with',function()
     {
-        var totalInvoicePayableAmount = nanCheck(parseFloat(jQuery('.total_invoice_payble_amount').text()));
         var invoice_continue_type = jQuery('.invoice_continue_with option:selected').val();
         if(invoice_continue_type == 1) //due
         {
             jQuery('.payment_option option[value=0]').prop('selected',true);
             jQuery('.payment_option').attr('disabled',true);
-            //paymentProcessKeepingDueAmountFullAndPayingAmountZero();
-            paymentProcessKeepingDueAmountFullAndPayingAmountDisabledAndZero();
+            paymentProcessingWithDueFullAmountAndPayingAmountDisabledAndZero();
             cashPaymentMakingZeroWithHide();
-            advancePaymentingakeZeroWithHide();
-            bankingPaymentingakeZeroWithHide();
+            advancePaymentMakingZeroWithHide();
+            bankingPaymentMakingZeroWithHide();
+
+            emptyAndHideBankingOptionAllData();
         }else{
             jQuery('.payment_option').removeAttr('disabled');
+
+            //first time cash is open
+            jQuery('.payment_option option[value=1]').prop('selected',true);
+            jQuery('.cash_payment_section').show(300);
+            jQuery('.cash_payment_value').focus();
         }
     });
-    
-    function paymentProcessKeepingDueAmountFullAndPayingAmountZero()
+    //payment Processing With Due Full Amount And Paying Amount Zero
+    function paymentProcessingWithDueFullAmountAndPayingAmountZero()
     {
         var totalInvoicePayableAmount = nanCheck(parseFloat(jQuery('.total_invoice_payble_amount').text()));
         jQuery('.invoice_paying_amount').val(0);
         jQuery('.invoice_due_amount').val(totalInvoicePayableAmount);
     }
-
-    function paymentProcessKeepingDueAmountFullAndPayingAmountDisabledAndZero()
+    //payment Processing With Due Full Amount And Paying Amount Disabled And Zero
+    function paymentProcessingWithDueFullAmountAndPayingAmountDisabledAndZero()
     {
         var totalInvoicePayableAmount = nanCheck(parseFloat(jQuery('.total_invoice_payble_amount').text()));
         jQuery('.invoice_paying_amount').val(0);
         jQuery('.invoice_due_amount').val(totalInvoicePayableAmount);
         jQuery('.invoice_paying_amount').attr('readonly',true);
+
+        //paying different method
+        jQuery('.cash_payment_value').val(0);
+        jQuery('.advance_payment_value').val(0);
+        jQuery('.banking_payment_value').val(0);
     }
 
+
+    //when pressing paying different method : keyup method
+    jQuery(document).on('keyup','.paying_different_method',function()
+    {
+        var pressingAmount = nanCheck(parseFloat(jQuery(this).val()));
+        var currentPressableAmount = setCurrentPressingDifferentAmountAfterAllCalculation(pressingAmount);
+        jQuery(this).val(currentPressableAmount);
+
+        calculationTotalPayingDifferentAllMethodsAmount();
+        setTotalPayingAmountIsNotMoreThenInvoicePayableAmount();
+        setTotalCurrentInvoiceDueAmount();
+    });
+    //set current pressing different amount after all calculation
+    function setCurrentPressingDifferentAmountAfterAllCalculation(pressingAmount)
+    { 
+        var totalInvoicePayableAmount = nanCheck(parseFloat(jQuery('.total_invoice_payble_amount').text()));
+        var totalDifferentAmountExceptCurrentType = getTotalPayingDifferentAmountExceptCurrentPressingAmount(pressingAmount);
+        var currentRemainingAmount = totalInvoicePayableAmount - totalDifferentAmountExceptCurrentType ;
+        var currentPressableAmount = 0;
+        if(pressingAmount <= currentRemainingAmount)
+        {
+            currentPressableAmount = pressingAmount;
+        }else{
+            currentPressableAmount = currentRemainingAmount;
+        }
+        return currentPressableAmount;
+    }
+    //get total different methods amount except current pressing amount
+    function getTotalPayingDifferentAmountExceptCurrentPressingAmount(pressingAmount)
+    {
+        var total = calculationTotalPayingDifferentAllMethodsAmount();
+        return total - pressingAmount;
+    }
+
+    //set total paying amount not more then invoice payable amount
+    function setTotalPayingAmountIsNotMoreThenInvoicePayableAmount()
+    {
+        var totalInvoicePayableAmount = nanCheck(parseFloat(jQuery('.total_invoice_payble_amount').text()));
+        var allMethodAmount =  calculationTotalPayingDifferentAllMethodsAmount();
+      
+        if(totalInvoicePayableAmount >= allMethodAmount)
+        {
+            jQuery('.invoice_paying_amount').val(allMethodAmount)
+        }else{
+            jQuery('.invoice_paying_amount').val(totalInvoicePayableAmount)
+        }
+    }
+
+    //total paying from all different methods
+    function calculationTotalPayingDifferentAllMethodsAmount()
+    {
+        var total = 0;
+        jQuery(".paying_different_method").each(function() {
+            total += nanCheck(parseFloat(jQuery(this).val()));
+        });
+        return total = ((total).toFixed(2));
+    }
+
+    //current invoice due amount
+    function setTotalCurrentInvoiceDueAmount()
+    {
+        var totalInvoicePayableAmount = nanCheck(parseFloat(jQuery('.total_invoice_payble_amount').text()));
+        //var currentInvoiceBeforePressingAmont = nanCheck(parseFloat(jQuery('.invoice_due_amount').val()));
+        var currentPayingAmount = calculationTotalPayingDifferentAllMethodsAmount(); 
+        var currentDue =  (totalInvoicePayableAmount - currentPayingAmount);
+        jQuery('.invoice_due_amount').val(currentDue);
+    }
+
+
+    //banking option all data
+    function emptyAndHideBankingOptionAllData()
+    {
+        jQuery('.rendering_payment_banking_option_data').html('');
+        jQuery('.banking_option_data option[value=0]').prop('selected',true);
+    }
+    jQuery(document).on('change','.banking_option_data',function(){
+        var banking_option_id = jQuery('.banking_option_data option:selected').val();
+        var url = jQuery('.paymentBankingOptionUrl').val();
+        jQuery.ajax({
+            url:url,
+            data:{banking_option_id:banking_option_id},
+            beforeSend:function(){
+                jQuery('.processing').fadeIn();
+            },
+            success:function(response){
+                if(response.status == true)
+                {
+                    jQuery('.rendering_payment_banking_option_data').html(response.list);
+                }
+            },
+            complete:function(){
+                jQuery('.processing').fadeOut();
+            },
+        });
+    });
+    //banking option all data
     
+    jQuery(document).on('change','.banking_transaction_type',function()
+    {
+        var banking_type = jQuery('.banking_transaction_type option:selected').val();
+        if(banking_type == 1) //direct deposit
+        {
+            jQuery('.bank_banking_transfer_section').hide();
+            jQuery('.bank_banking_cheque_section').hide(100);
+        }
+        else if(banking_type == 2) //cheque
+        {
+            jQuery('.bank_banking_transfer_section').hide();
+            jQuery('.bank_banking_cheque_section').show(300);
+        }
+        else if(banking_type == 3) //online transfer
+        {
+            jQuery('.bank_banking_cheque_section').hide();
+            jQuery('.bank_banking_transfer_section').show(300);
+        }
+    });
+
     /*
     |-----------------------------------------------
     | finally submit sell (final sell and quotation)

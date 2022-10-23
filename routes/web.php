@@ -406,7 +406,9 @@ Route::group(['middleware' => ['auth']], function ()
             //sell payment modal open 
             Route::get('sell/payment/modal/open','PosController@paymentModalOpen')->name('sell.payment.modal.open');
             Route::get('sell/quotation/modal/open','PosController@quotationModalOpen')->name('sell.quotation.modal.open');
-                   
+            
+            //
+            Route::get('sell/payment/banking/option','PosController@paymentBankingOption')->name('sell.payment.banking.option');
         });
         
         //customer shipping address
