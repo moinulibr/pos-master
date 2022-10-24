@@ -869,8 +869,14 @@
         {
             jQuery('.advance_payment_value').val(0);
             jQuery('.advance_payment_value').attr('disabled',true);
+            jQuery('.advance_payment_value').css({
+                'background-color':'red','color':'#ffff'
+            });
         }else{
             jQuery('.advance_payment_value').removeAttr('disabled');
+            jQuery('.advance_payment_value').css({
+                'background-color':'green','color':'#ffff'
+            });
         }
     }
 
