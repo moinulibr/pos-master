@@ -382,3 +382,50 @@ use App\Models\Backend\Stock\ProductStock;
         }
         return NULL;
     }
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Module during payment processing
+    |--------------------------------------------------------------------------
+    */
+        function getModuleBySingleModuleId_hh($key)
+        {
+            $arrayLabel = "Not Match";
+            if(array_key_exists($key,allModule_hh()))
+            {
+                $arrayLabel = allModule_hh()[$key];
+            }
+            return $arrayLabel;
+        }
+        function getModuleBySingleModuleLebel_hh($value)
+        {
+            $indexOfValue = "Not Match";
+            if(in_array($value,allModule_hh()))
+            {
+                foreach(allModule_hh() as $index => $val)
+                {
+                    if($value == $val)
+                    {
+                        $indexOfValue = $index;
+                        break;
+                    }
+                }
+            }
+            return $indexOfValue; 
+        }
+        function allModule_hh()
+        {
+            return [
+                //value = label
+                1 => "Purchase",
+                2 => "Sell",
+                3 => "Expense",
+            ];
+        }
+    /*
+    |--------------------------------------------------------------------------
+    | Module during payment processing
+    |--------------------------------------------------------------------------
+    */

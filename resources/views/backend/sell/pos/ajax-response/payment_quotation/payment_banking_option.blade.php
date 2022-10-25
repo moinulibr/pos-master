@@ -7,17 +7,17 @@
             @if ($banking_option_id == 1)
                 <tr class="mobile_banking_section">
                     <td style="width:33%">
-                        <select name="" id="" class="form-control">
-                            <option value="">01712794033 - Bkash</option>
-                            <option value="">01712794033 - Nagad</option>
-                            <option value="">01712794033 - Roket</option>
+                        <select name="mobile_banking_receive_account_name" class="form-control">
+                            @foreach ($moibleBankingAccounts as $item)     
+                            <option value="">{{$item->account_no}} - {{$item->account_name}} - ({{ $item->bank ? $item->bank->short_name : NULL }})</option>
+                            @endforeach
                         </select>
                     </td>
                     <td style="width:33%;background-color:#f8ebeb;">
-                        <input type="text" class="form-control" placeholder="Customer Mobile No">
+                        <input type="text" name="mobile_banking_customer_mobile_no" class="form-control" placeholder="Customer Mobile No">
                     </td>
                     <td style="width:33%">
-                        <input type="text" class="form-control" placeholder="Transaction  ID">
+                        <input type="text" name="mobile_banking_transaction_id" class="form-control" placeholder="Transaction  ID">
                     </td>
                 </tr>
             @endif
@@ -26,32 +26,21 @@
 
             <!---banking section-->
             @if ($banking_option_id == 2)
-                <tr  class="bank_banking_section">
+                <tr class="bank_banking_section">
                     <td style="width:33%">
-                        <select name="" id="" class="form-control banking_transaction_type">
+                        <select name="banking_transaction_type" class="form-control banking_transaction_type">
                             <option value="1">Direct Deposit</option>
                             <option value="2">Cheque</option>
                             <option value="3">Online Transfer</option>
                         </select>
                     </td>
-                    <td style="width:33%;background-color:#f8ebeb;">
-                        <select name="" id="" class="form-control">
-                            <option value="">Deposit To Bank</option>
-                            <option value="">Bank Asia Ltd</option>
-                            <option value="">Brac Bank Ltd </option>
-                        </select>
-                    </td>
-                    <td style="width:33%">
-                        <select name="" id="" class="form-control">
-                            <option value="">Deposit Bank Accont</option>
-                            <option value="">
-                                acc-name: Amir Hossain - 
-                                acc-no: 009847898458
+                    <td style="width:67%;" colspan="2">
+                        <select name="bank_name" class="form-control">
+                            @foreach ($bankingAccounts as $item)     
+                            <option value="{{$item->id}}">
+                                {{$item->account_no}} - {{$item->account_name}} - ({{ $item->bank ? $item->bank->short_name : NULL }})
                             </option>
-                            <option value="">
-                                acc-name: Amir Hossain - 
-                                acc-no: 009847898458
-                            </option>
+                            @endforeach
                         </select>
                     </td>
                 </tr>
@@ -59,24 +48,24 @@
 
                 <tr style="display:none;" class="bank_banking_cheque_section">
                     <td style="width:33%">
-                        <input type="text" class="form-control" placeholder="Customer Cheque No">
+                        <input type="text" name="cheque_no" class="form-control" placeholder="Customer Cheque No">
                     </td>
                     <td style="width:33%;background-color:#f8ebeb;">
-                        <input type="text" class="form-control" placeholder="Customer Bank Name">
+                        <input type="text" name="cheque_customer_bank_name" class="form-control" placeholder="Customer Bank Name">
                     </td>
                     <td style="width:33%">
-                        <input type="text" class="form-control" placeholder="Short Note">
+                        <input type="text" name="cheque_banking_short_note" class="form-control" placeholder="Short Note">
                     </td>
                 </tr>
                 <tr style="display:none;" class="bank_banking_transfer_section">
                     <td style="width:33%">
-                        <input type="text" class="form-control" placeholder="Customer Bank Name">
+                        <input type="text" name="banking_online_transfer_transation_customer_bank_name" class="form-control" placeholder="Customer Bank Name">
                     </td>
                     <td style="width:33%;background-color:#f8ebeb;">
-                        <input type="text" class="form-control" placeholder="Customer Transaction Note">
+                        <input type="text" name="banking_online_transfer_customer_transaction_note" class="form-control" placeholder="Customer Transaction Note">
                     </td>
                     <td style="width:33%">
-                        <input type="text" class="form-control" placeholder="Received Bank Transaction ID">
+                        <input type="text" name="banking_online_transfer_received_bank_transaction_id" class="form-control" placeholder="Received Bank Transaction ID">
                     </td>
                 </tr>
             @endif
@@ -87,18 +76,18 @@
             @if ($banking_option_id == 3)
                 <tr style="display:;" class="bank_card_banking_transfer_section">
                     <td style="width:33%">
-                        <input type="text" id="swipe" class="form-control swipe swipe_input" placeholder="Swipe card here then write security code manually">
+                        <input type="text" name="bank_card_swipe_code" class="form-control" placeholder="Swipe card here (write security code)">
                     </td>
                     <td style="width:33%">
-                        <input type="text" id="pcc_no" class="form-control" placeholder="Credit Card No">
+                        <input type="text" name="bank_card_credit_card_no" class="form-control" placeholder="Credit Card No">
                     </td>
                     <td style="width:33%">
-                        <input type="text" id="pcc_holder" class="form-control kb-text" placeholder="Holder Name">
+                        <input type="text" name="bank_card_holder_name" class="form-control" placeholder="Holder Name">
                     </td>
                 </tr>
-                <tr style="display:;" class="bank_card_section">
+                <tr class="bank_card_section">
                     <td style="width:33%">
-                        <select id="pcc_type" class="form-control pcc_type select2 select2-hidden-accessible" placeholder="Card Type" tabindex="-1" aria-hidden="true">
+                        <select name="bank_card_type" class="form-control" placeholder="Card Type">
                             <option value="1">Card Type</option>
                             <option value="1">Credit Card</option>
                             <option value="2">Debit Card</option>
@@ -109,7 +98,7 @@
                     <td style="width:33%">
                         <div style="width: 100%;">
                             <div style="float:left;width:50%;">
-                                <select name="" id="" class="form-control">
+                                <select name="bank_card_expire_month" class="form-control">
                                     <option value="">Month</option>
                                     <option value="1">January</option>
                                     <option value="2">February</option>
@@ -126,12 +115,12 @@
                                 </select>
                             </div>
                             <div style="float:right;width:48%;">
-                                <input type="text" id="" class="form-control" placeholder="Year">
+                                <input type="text" name="bank_card_expire_year" class="form-control" placeholder="Year">
                             </div>
                         </div>
                     </td>
                     <td style="width:33%">
-                        <input type="text" id="pcc_cvv2" class="form-control" placeholder="CVV2">
+                        <input type="text" name="bank_card_cvv2" class="form-control" placeholder="CVV2">
                     </td>
                 </tr>
             @endif

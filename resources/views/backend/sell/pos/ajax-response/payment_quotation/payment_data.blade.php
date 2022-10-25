@@ -63,14 +63,14 @@
                     <tr>
                         <td style="width:20%">
                             <label for="">Invoice Continue With</label>
-                            <select name="" id="" class="form-control invoice_continue_with">
+                            <select name="invoice_continue_with" class="form-control invoice_continue_with">
                                 <option value="1">Due</option>
                                 <option value="2">Payment</option>
                             </select>
                         </td>
                         <td style="width:50%;background-color:#f7f1f1;">
                             <label for="">Payment Option</label>
-                            <select name="" id="" class="form-control payment_option" disabled>
+                            <select name="payment_option_id" class="form-control payment_option" disabled>
                                 <option value="0">Select One</option>
                                 <option value="1">Cash Only</option>
                                 <option value="2">Advance Only</option>
@@ -83,11 +83,11 @@
                         </td>
                         <td style="width:15%">
                             <label for="">Paying Amount</label>
-                            <input type="text" class="form-control invoice_paying_amount" readonly value="0"  style="background-color:#4f6e4f;color: #ffff;;font-size:14px;font-weight:800;">
+                            <input name="invoice_total_paying_amount" type="text" class="form-control invoice_paying_amount" readonly value="0"  style="background-color:#4f6e4f;color: #ffff;;font-size:14px;font-weight:800;">
                         </td>
                         <td style="width:15%">
                             <label for="">Due Amount</label>
-                            <input type="text" class="form-control invoice_due_amount" readonly style="background-color:#f15454;color:#ffff;font-size:14px;font-weight:800;">
+                            <input name="invoice_total_due_amount" type="text" class="form-control invoice_due_amount" readonly style="background-color:#f15454;color:#ffff;font-size:14px;font-weight:800;">
                         </td>
                     </tr>
                 </table>
@@ -121,7 +121,7 @@
                                     <label style="padding-top: 5px;">Banking Option : </label>
                                 </div>
                                 <div class="col-8">
-                                    <select name="" id="" class="form-control banking_option_data">
+                                    <select name="banking_option_id" class="form-control banking_option_data">
                                         <option value="0">Select One</option>
                                         <option value="1">Mobile Banking</option>
                                         <option value="2">Bank</option>
@@ -132,7 +132,7 @@
                         </td>
                         <td style="width:15%;text-align:right;background-color:#f8ebeb;"><small>Paying Amount</small></td>
                         <td style="width:15%">
-                            <input type="text" name="banking_payment_value"  class="paying_different_method form-control banking_payment_value banking_payment_making_zero inputFieldValidatedOnlyNumeric" style="background-color:green;color: #ffff;font-weight: bold;">
+                            <input type="text" name="banking_payment_value" class="paying_different_method form-control banking_payment_value banking_payment_making_zero inputFieldValidatedOnlyNumeric" style="background-color:green;color: #ffff;font-weight: bold;">
                         </td>
                     </tr>
                 </table>
@@ -184,7 +184,7 @@
     <div class="row">
         <div class="col-md-12">
             <label for="">Payment Note</label>
-            <textarea name="" id="" cols="5" rows="2" class="form-control"></textarea>
+            <textarea name="payment_note" id="" cols="5" rows="2" class="form-control"></textarea>
         </div>
     </div>
 

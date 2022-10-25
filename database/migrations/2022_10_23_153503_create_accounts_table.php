@@ -18,7 +18,8 @@ class CreateAccountsTable extends Migration
                 $table->id();
                 $table->integer('branch_id')->nullable();
 
-                $table->integer('payment_method_id')->nullable();
+                $table->integer('payment_method_id')->nullable()->comment('same to payment_option_id');
+                $table->integer('banking_option_id')->nullable();
                 $table->integer('bank_id')->nullable();
                 
                 $table->string('account_name',200)->nullable();

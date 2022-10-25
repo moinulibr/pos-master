@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend\Sell\Pos;
 
 use App\Http\Controllers\Controller;
 use App\Models\Backend\Customer\Customer;
+use App\Models\Backend\Payment\Account;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Str;
@@ -35,9 +36,11 @@ use App\Traits\Backend\Pos\Create\SellCreateAddToCart;
 
 use App\Traits\Backend\Pos\Create\StoreDataFromSellCartTrait;
 
+use App\Traits\Backend\Payment\PaymentProcessTrait;
+
 class PosController extends Controller
 {
-    use SellCreateAddToCart, StoreDataFromSellCartTrait;
+    use SellCreateAddToCart, StoreDataFromSellCartTrait, PaymentProcessTrait;
     /**
      * Display a listing of the resource.
      *
@@ -303,7 +306,8 @@ class PosController extends Controller
     public function paymentBankingOption(Request $request)
     {
         $data['banking_option_id'] = $request->banking_option_id;
-        
+        $data['moibleBankingAccounts'] = Account::whereNotNull('banking_option_id')->where('banking_option_id',1)->get();
+        $data['bankingAccounts'] = Account::whereNotNull('banking_option_id')->where('banking_option_id',2)->get();
         $list = view('backend.sell.pos.ajax-response.payment_quotation.payment_banking_option',$data)->render();
         return response()->json([
             'status'    => true,
@@ -331,6 +335,8 @@ class PosController extends Controller
     // store sell and quotation data from sell cart (pos)
     public function storeDataFromSellCart(Request $request)
     {   
+        //$this->testCheck();
+        return $request;
         DB::beginTransaction();
 
         try {
