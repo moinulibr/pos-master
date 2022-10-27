@@ -36,11 +36,10 @@ use App\Traits\Backend\Pos\Create\SellCreateAddToCart;
 
 use App\Traits\Backend\Pos\Create\StoreDataFromSellCartTrait;
 
-use App\Traits\Backend\Payment\PaymentProcessTrait;
 
 class PosController extends Controller
 {
-    use SellCreateAddToCart, StoreDataFromSellCartTrait, PaymentProcessTrait;
+    use SellCreateAddToCart, StoreDataFromSellCartTrait;
     /**
      * Display a listing of the resource.
      *
@@ -335,8 +334,6 @@ class PosController extends Controller
     // store sell and quotation data from sell cart (pos)
     public function storeDataFromSellCart(Request $request)
     {   
-        //$this->testCheck();
-        return $request;
         DB::beginTransaction();
 
         try {

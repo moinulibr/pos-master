@@ -7,9 +7,9 @@
             @if ($banking_option_id == 1)
                 <tr class="mobile_banking_section">
                     <td style="width:33%">
-                        <select name="mobile_banking_receive_account_name" class="form-control">
+                        <select name="mobile_banking_receive_account_id" class="form-control">
                             @foreach ($moibleBankingAccounts as $item)     
-                            <option value="">{{$item->account_no}} - {{$item->account_name}} - ({{ $item->bank ? $item->bank->short_name : NULL }})</option>
+                            <option value="{{$item->id}}">{{$item->account_no}} - {{$item->account_name}} - ({{ $item->bank ? $item->bank->short_name : NULL }})</option>
                             @endforeach
                         </select>
                     </td>

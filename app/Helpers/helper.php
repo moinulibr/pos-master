@@ -399,7 +399,7 @@ use App\Models\Backend\Stock\ProductStock;
             }
             return $arrayLabel;
         }
-        function getModuleBySingleModuleLebel_hh($value)
+        function getModuleIdBySingleModuleLebel_hh($value)
         {
             $indexOfValue = "Not Match";
             if(in_array($value,allModule_hh()))
@@ -428,4 +428,133 @@ use App\Models\Backend\Stock\ProductStock;
     |--------------------------------------------------------------------------
     | Module during payment processing
     |--------------------------------------------------------------------------
+    */
+
+    /*
+    |--------------------------------------------------------------------------
+    | CDF during payment processing
+    |--------------------------------------------------------------------------
+    */
+        function getCdfLabelBySingleCdfId_hh($key)
+        {
+            $arrayLabel = "Not Match";
+            if(array_key_exists($key,allCdf_hh()))
+            {
+                $arrayLabel = allCdf_hh()[$key];
+            }
+            return $arrayLabel;
+        }
+        
+        function getCdfIdBySingleCdfLebel_hh($value)
+        {
+            $indexOfValue = "Not Match";
+            if(in_array($value,allCdf_hh()))
+            {
+                foreach(allCdf_hh() as $index => $val)
+                {
+                    if($value == $val)
+                    {
+                        $indexOfValue = $index;
+                        break;
+                    }
+                }
+            }
+            return $indexOfValue; 
+        }
+        function allCdf_hh()
+        {
+            return [
+                //value = label
+                1 => "Credit",
+                2 => "Debit"
+            ];
+        }
+
+        //not using this..just for understand
+        //get cdf sign by single cdf id
+        function getCdfSignBySingleCdfId_hh($key)
+        {
+            $arraySign = "Not Match";
+            if(array_key_exists($key,allCdfSign_hh()))
+            {
+                $arraySign = allCdfSign_hh()[$key];  
+            }
+            return $arraySign;
+        }
+        //all cdf sign
+        function allCdfSign_hh()
+        {
+            return [
+                //value = label
+                1 => "+",//"Credit",
+                2 => "-"//"Debit"
+            ];
+        }
+        //not using this..just for understand
+    /*
+    |--------------------------------------------------------------------------
+    | CDF during payment processing
+    |--------------------------------------------------------------------------
+    */
+
+
+
+    /*
+    |----------------------------------------------------------------------------------------
+    |--------------------------------------------------------------------------
+    | Payment Details : when INSERT
+    |--------------------------------------------------------------------------
+    */
+        function paymentDataProcessingWhenSellingSubmitFromPos_hh($sellCreateFormData)
+        {
+            $paymentAllData = [
+                'account_id' => $sellCreateFormData['account_id']??1,
+                'payment_method_id' => $sellCreateFormData['payment_option_id'],
+                'next_payment_date' => $sellCreateFormData['next_payment_date'] ?? NULL,
+                'sms_send' => $sellCreateFormData['send_sms'],
+                'email_send' => $sellCreateFormData['send_email'],
+                'payment_note' => $sellCreateFormData['payment_note'],
+    
+                'payment_method_details' => [
+                    'invoice_continue_with' => $sellCreateFormData['invoice_continue_with'],
+                    'payment_method_id' => $sellCreateFormData['payment_option_id'],
+                    'invoice_total_paying_amount' => $sellCreateFormData['invoice_total_paying_amount'],
+                    'invoice_total_due_amount' => $sellCreateFormData['invoice_total_due_amount'],
+                    'cash_payment_value' => $sellCreateFormData['cash_payment_value'],
+                    'advance_payment_value' => $sellCreateFormData['advance_payment_value'],
+                    'banking_payment_value' => $sellCreateFormData['banking_payment_value'],
+                    'banking_option_id' => $sellCreateFormData['banking_option_id'],
+    
+                    //mobile banking
+                    'mb_receive_account_id' => $sellCreateFormData['mobile_banking_receive_account_id'],
+                    'mb_customer_moible_no' => $sellCreateFormData['mobile_banking_customer_mobile_no'],
+                    'mb_transaction_id' => $sellCreateFormData['mobile_banking_transaction_id'],
+    
+                    'b_transaction_type' => $sellCreateFormData['banking_transaction_type'],
+                    'bank_name' => $sellCreateFormData['bank_name'],
+    
+                    'cheque_no' => $sellCreateFormData['cheque_no'],
+                    'cheque_customer_b_name' => $sellCreateFormData['cheque_customer_bank_name'],
+                    'cheque_b_short_note' => $sellCreateFormData['cheque_banking_short_note'],
+    
+                    'online_transfer_customer_b_name' => $sellCreateFormData['banking_online_transfer_transation_customer_bank_name'],
+                    'online_transfer_customer_transaction_note' => $sellCreateFormData['banking_online_transfer_customer_transaction_note'],
+                    'online_transfer_received_transaction_id' => $sellCreateFormData['banking_online_transfer_received_bank_transaction_id'],
+                    
+                    'b_card_swipe_code' => $sellCreateFormData['bank_card_swipe_code'],
+                    'b_card_credit_card_no' => $sellCreateFormData['bank_card_credit_card_no'],
+                    'b_card_holder_name' => $sellCreateFormData['bank_card_holder_name'],
+                    'b_card_type' => $sellCreateFormData['bank_card_type'],
+                    'b_card_expire_month' => $sellCreateFormData['bank_card_expire_month'],
+                    'b_card_expire_year' => $sellCreateFormData['bank_card_expire_year'],
+                    'b_card_cvv2' => $sellCreateFormData['bank_card_cvv2'],
+                ],
+            ];
+            return $paymentAllData;
+        }
+    /*
+    |--------------------------------------------------------------------------
+    | Payment Details : when INSERT
+    |--------------------------------------------------------------------------
+    |----------------------------------------------------------------------------------------
     */
