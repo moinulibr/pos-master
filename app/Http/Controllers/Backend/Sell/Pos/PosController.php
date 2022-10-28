@@ -293,12 +293,18 @@ class PosController extends Controller
         $data['totalPayableAmount'] = $sellInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'];
         
         $data['customer'] = Customer::findOrFail($request->customer_id);
-        
-        $list = view('backend.sell.pos.ajax-response.payment_quotation.payment_data',$data)->render();
-        return response()->json([
-            'status'    => true,
-            'list'     => $list,
-        ]);
+        if($data['totalPayableAmount'] > 0)
+        {
+            $list = view('backend.sell.pos.ajax-response.payment_quotation.payment_data',$data)->render();
+            return response()->json([
+                'status'    => true,
+                'list'     => $list,
+            ]);
+        }else{
+            return response()->json([
+                'status'    => false,
+            ]);
+        }
     }
 
     //payment banking option

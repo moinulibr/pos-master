@@ -736,34 +736,45 @@
     */
         jQuery('#payment-popup').css('overflow-y', 'auto');
         jQuery(document).on('click','.paymentModalOpen',function(){
-            var customer_id = jQuery('.customer_id option:selected').val();
-            var totalItem = nanCheck(parseFloat(jQuery('.totalItemFromSellCartList').text()));
-            if(!totalItem){
-                jQuery('#payment-popup').modal('hide');
-                alert('Please select a minimum item');
-                jQuery.notify("Please select a minimum item", 'error');
-                return 0;
-            }else{
-                jQuery('#payment-popup').modal('show');
-            }
-            var url = jQuery('.paymentModalOpenUrl').val();
-            jQuery.ajax({
-                url:url,
-                data:{customer_id:customer_id},
-                beforeSend:function(){
-                    jQuery('.processing').fadeIn();
-                },
-                success:function(response){
-                    if(response.status == true)
-                    {
-                        jQuery('.payment_data_response').html(response.list);
-                        paymentProcessingWithDueFullAmountAndPayingAmountZero();
-                    }
-                },
-                complete:function(){
-                    jQuery('.processing').fadeOut();
-                },
-            });
+            jQuery('.payment_processing_gif').fadeIn();
+            setTimeout(function() 
+            {   
+                jQuery('.payment_processing_gif').fadeOut();
+
+                var customer_id = jQuery('.customer_id option:selected').val();
+                var totalItem = nanCheck(parseFloat(jQuery('.totalItemFromSellCartList').text()));
+                var subtotal = nanCheck(parseFloat(jQuery('.subtotalFromSellCartList').text()));
+                if(!totalItem && subtotal == 0){
+                    jQuery('#payment-popup').modal('hide');
+                    alert('Please select a minimum item');
+                    jQuery.notify("Please select a minimum item", 'error');
+                    return 0;
+                }else{
+                    jQuery('#payment-popup').modal('show');
+                }
+                var url = jQuery('.paymentModalOpenUrl').val();
+                jQuery.ajax({
+                    url:url,
+                    data:{customer_id:customer_id},
+                    beforeSend:function(){
+                        jQuery('.processing').fadeIn();
+                    },
+                    success:function(response){
+                        if(response.status == true)
+                        {
+                            jQuery('.payment_data_response').html(response.list);
+                            paymentProcessingWithDueFullAmountAndPayingAmountZero();
+                        }else{
+                            jQuery('#payment-popup').modal('hide');
+                            alert('Please press again');
+                            jQuery.notify("Please press again", 'error');
+                        }
+                    },
+                    complete:function(){
+                        jQuery('.processing').fadeOut();
+                    },
+                });
+            },1200);
         });
     /*
     |-----------------------------------------------
@@ -1043,6 +1054,11 @@
         }
     });
 
+
+
+
+
+    
     /*
     |-----------------------------------------------
     | finally submit sell (final sell and quotation)

@@ -507,7 +507,7 @@ use App\Models\Backend\Stock\ProductStock;
     */
         function paymentDataProcessingWhenSellingSubmitFromPos_hh($sellCreateFormData)
         {
-            $paymentAllData = [
+            $paymentAllData = [ 
                 'account_id' => $sellCreateFormData['account_id']??1,
                 'payment_method_id' => $sellCreateFormData['payment_option_id'],
                 'next_payment_date' => $sellCreateFormData['next_payment_date'] ?? NULL,
@@ -551,6 +551,36 @@ use App\Models\Backend\Stock\ProductStock;
                 ],
             ];
             return $paymentAllData;
+        }
+
+        function paymentMethod()
+        {
+            return [
+                1 => 1,
+                2 => 1,
+                3 => 2,
+                4 => 1,
+                5 => 2,
+                6 => 2,
+                7 => 3,
+            ];
+        }
+        function paymentMethodAndPaymentOptionBothAreSame()
+        {
+            return [
+                //index = value
+                1 => "Cash Only",
+                2 => "Advance Only",
+                3 => "Cash + Advance",
+                4 => "Banking Only",
+                5 => "Banking + Cash",
+                6 => "Banking + Advance",
+                7 => "Banking + Cash + Advance",
+            ];
+        }
+        function accountDetails()
+        {
+
         }
     /*
     |--------------------------------------------------------------------------
