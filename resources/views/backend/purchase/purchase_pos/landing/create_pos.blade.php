@@ -255,7 +255,7 @@ License: You must have a valid license purchased only from themeforest(the above
             </div>
         </header>
 
-        <div class="contentPOS h-90" style="background-color: #878787 !important">
+        <div class="contentPOS h-90" style="background-color: #2297eb !important">
             <div class="container-fluid h-100">
                 <!-----row------>
                 <div class="row h-100">
@@ -315,22 +315,15 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 Cancel
                                             </a>
 
-                                        
-                                            <a  class="paymentQuotationButtonWhenCartItemZero btn btn-dark btnFullWidth white" style="margin-top: 1%; cursor: pointer;">
-                                                Quotation
-                                            </a>
-                                            <a href="#" class="paymentQuotationButtonWhenCartItemMoreThenZero btn btn-dark btnFullWidth white" style="margin-top: 1%; display:none; cursor: pointer;"><!--- data-toggle="modal" data-target="#quotation-popup"-->
+                                            <a href="#" class="paymentQuotationButtonWhenCartItemMoreThenZero btn btn-dark btnFullWidth white" style="margin-top: 1%; display:; cursor: pointer;"><!--- data-toggle="modal" data-target="#quotation-popup"-->
                                                 Quotation
                                             </a>
 
-                                            <a class="paymentQuotationButtonWhenCartItemZero btn btn-success btnFullWidth white" style="margin-top: 1%; cursor: pointer;">
-                                                Payment
-                                            </a>
-                                            <a href="#" class="paymentModalOpen paymentQuotationButtonWhenCartItemMoreThenZero btn btn-success btnFullWidth white" style="margin-top: 1%; display:none; cursor: pointer;"> <!--- data-toggle="modal" data-target="#payment-popup"-->
-                                                Payment
+                                            <a href="#" class="paymentModalOpen paymentQuotationButtonWhenCartItemMoreThenZero btn btn-success btnFullWidth white" style="margin-top: 1%; display:; cursor: pointer;"> <!--- data-toggle="modal" data-target="#payment-popup"-->
+                                                Payment <img class="payment_processing_gif" src="{{asset('loading-img/loading1.gif')}}" alt="" style="margin-left:auto;margin-right:auto;height:20px;display:none;background-color:#ffff;border-radius: 50%;">
                                             </a>
                                             <input type="hidden" class="paymentModalOpenUrl" value="{{route('admin.purchase.regular.pos.purchase.payment.modal.open')}}">
-
+                                            <input type="hidden" class="paymentBankingOptionUrl" value="{{route('admin.sell.regular.pos.sell.payment.banking.option')}}">
 
                                             <a href="#" class="pos_print_direct_from_purchase_cart btn btn-info btnFullWidth white" style="margin-top: 1%;" data-href="{{ route('admin.purchase.regular.purchase.normal.print.from.direct.purchase.cart') }}">
                                                 Print

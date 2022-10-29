@@ -99,7 +99,13 @@
                 <table class="table table-bordered table striped">
                     <tr style="display:none;" class="cash_payment_section">
                         <td style="width:20%;background-color:#f8ebeb;">Cash</td>
-                        <td style="width:50%;text-align:center;background-color:#efeaea;">--</td>
+                        <td style="width:50%;text-align:center;background-color:#efeaea;">
+                            <select name="account_id_1" class="form-control">
+                                @foreach ($cashAccounts as $item)
+                                <option value="{{$item->id}}">{{$item->account_name}}</option>
+                                @endforeach
+                            </select>
+                        </td>
                         <td style="width:15%;text-align: right;background-color:#f8ebeb;"><small>Paying Amount</small></td>
                         <td style="width:15%">
                             <input type="text" name="cash_payment_value"  class="paying_different_method form-control cash_payment_value cash_payment_making_zero inputFieldValidatedOnlyNumeric" style="background-color:green;color: #ffff;font-weight: bold;">
@@ -107,7 +113,13 @@
                     </tr>
                     <tr style="display:none;" class="advance_payment_section">
                         <td style="width:20%;background-color:#efeaea;">Advance</td>
-                        <td style="width:50%;text-align:center;background-color:#f8ebeb;">--</td>
+                        <td style="width:50%;text-align:center;background-color:#f8ebeb;">
+                            <select name="account_id_2" class="form-control">
+                                @foreach ($advanceAccounts as $item)
+                                <option value="{{$item->id}}">{{$item->account_name}}</option>
+                                @endforeach 
+                            </select>
+                        </td>
                         <td style="width:15%;text-align:right;background-color:#efeaea;"><small>Paying Amount</small></td>
                         <td style="width:15%">
                             <input type="text" name="advance_payment_value" class="paying_different_method form-control advance_payment_value advance_payment_making_zero inputFieldValidatedOnlyNumeric" style="background-color:green;color: #ffff;font-weight: bold;">

@@ -293,6 +293,10 @@ class PosController extends Controller
         $data['totalPayableAmount'] = $sellInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'];
         
         $data['customer'] = Customer::findOrFail($request->customer_id);
+
+        $data['cashAccounts'] = cashAccounts_hh();
+        $data['advanceAccounts'] = advanceAccounts_hh();
+        
         if($data['totalPayableAmount'] > 0)
         {
             $list = view('backend.sell.pos.ajax-response.payment_quotation.payment_data',$data)->render();
@@ -311,8 +315,8 @@ class PosController extends Controller
     public function paymentBankingOption(Request $request)
     {
         $data['banking_option_id'] = $request->banking_option_id;
-        $data['moibleBankingAccounts'] = Account::whereNotNull('banking_option_id')->where('banking_option_id',1)->get();
-        $data['bankingAccounts'] = Account::whereNotNull('banking_option_id')->where('banking_option_id',2)->get();
+        $data['moibleBankingAccounts'] = mobileBankingAccounts_hh();
+        $data['bankingAccounts'] = onlyBankingAccounts_hh();
         $list = view('backend.sell.pos.ajax-response.payment_quotation.payment_banking_option',$data)->render();
         return response()->json([
             'status'    => true,
@@ -339,7 +343,7 @@ class PosController extends Controller
     /*======================================================= */
     // store sell and quotation data from sell cart (pos)
     public function storeDataFromSellCart(Request $request)
-    {   
+    {   return $request;
         DB::beginTransaction();
 
         try {

@@ -1,9 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use App\Models\Backend\Payment\Account;
 use App\Models\Backend\Price\ProductPrice;
-use App\Models\Backend\ProductAttribute\Unit;
 use App\Models\Backend\Stock\ProductStock;
+use App\Models\Backend\ProductAttribute\Unit;
 
     function authBranch_hh()
     {
@@ -505,6 +506,29 @@ use App\Models\Backend\Stock\ProductStock;
     | Payment Details : when INSERT
     |--------------------------------------------------------------------------
     */
+        //payment method: 1=cash, 2=advance,4=bank
+        function cashAccounts_hh()
+        {
+            return Account::where('payment_method_id',1)->get();
+        }
+        function advanceAccounts_hh()
+        {
+            return Account::whereIn('payment_method_id',[1,2])->get();
+        }
+        function bankAccounts_hh()
+        {
+            return Account::where('payment_method_id',4)->get();
+        }
+
+        function mobileBankingAccounts_hh()
+        {
+            return Account::whereNotNull('banking_option_id')->where('banking_option_id',1)->get();
+        }
+        function onlyBankingAccounts_hh()
+        {
+            return Account::whereNotNull('banking_option_id')->where('banking_option_id',2)->get();
+        }
+
         function paymentDataProcessingWhenSellingSubmitFromPos_hh($sellCreateFormData)
         {
             $paymentAllData = [ 
@@ -553,9 +577,19 @@ use App\Models\Backend\Stock\ProductStock;
             return $paymentAllData;
         }
 
-        function paymentMethod()
+        function paymentMethodsBasedLooping_hh($key)
+        {
+            $looping = 1;
+            if(array_key_exists($key,paymentMethodsBaseStoreData_hh()))
+            {
+                $looping = paymentMethodsBaseStoreData_hh()[$key];
+            }
+            return $looping;
+        }
+        function paymentMethodsBaseStoreData_hh()
         {
             return [
+                //payment method id = looping time
                 1 => 1,
                 2 => 1,
                 3 => 2,
@@ -565,7 +599,33 @@ use App\Models\Backend\Stock\ProductStock;
                 7 => 3,
             ];
         }
-        function paymentMethodAndPaymentOptionBothAreSame()
+
+        function getPaymentMethodIdByLebel_hh($value)
+        {
+            $indexOfValue = "Not Match";
+            if(in_array($value,paymentMethodAndPaymentOptionBothAreSame_hh()))
+            {
+                foreach(paymentMethodAndPaymentOptionBothAreSame_hh() as $index => $val)
+                {
+                    if($value == $val)
+                    {
+                        $indexOfValue = $index;
+                        break;
+                    }
+                }
+            }
+            return $indexOfValue; 
+        }
+        function getPaymentMethodLabelById_hh($key)
+        {
+            $label = "Not Match";
+            if(array_key_exists($key,paymentMethodAndPaymentOptionBothAreSame_hh()))
+            {
+                $label = paymentMethodAndPaymentOptionBothAreSame_hh()[$key];
+            }
+            return $label;
+        }
+        function paymentMethodAndPaymentOptionBothAreSame_hh()
         {
             return [
                 //index = value
@@ -578,9 +638,14 @@ use App\Models\Backend\Stock\ProductStock;
                 7 => "Banking + Cash + Advance",
             ];
         }
-        function accountDetails()
+        function bankingOptions_hh()
         {
-
+            return [
+                //index = value
+                1 => "Mobile Banking",
+                2 => "Bank",
+                3 => "Card",
+            ];
         }
     /*
     |--------------------------------------------------------------------------
