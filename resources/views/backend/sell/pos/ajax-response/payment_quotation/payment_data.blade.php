@@ -100,7 +100,7 @@
                     <tr style="display:none;" class="cash_payment_section">
                         <td style="width:20%;background-color:#f8ebeb;">Cash</td>
                         <td style="width:50%;text-align:center;background-color:#efeaea;">
-                            <select name="account_id_1" class="form-control">
+                            <select name="account_id_1" class="form-control account_id_1">
                                 @foreach ($cashAccounts as $item)
                                 <option value="{{$item->id}}">{{$item->account_name}}</option>
                                 @endforeach
@@ -114,7 +114,7 @@
                     <tr style="display:none;" class="advance_payment_section">
                         <td style="width:20%;background-color:#efeaea;">Advance</td>
                         <td style="width:50%;text-align:center;background-color:#f8ebeb;">
-                            <select name="account_id_2" class="form-control">
+                            <select name="account_id_2" class="form-control account_id_2">
                                 @foreach ($advanceAccounts as $item)
                                 <option value="{{$item->id}}">{{$item->account_name}}</option>
                                 @endforeach 

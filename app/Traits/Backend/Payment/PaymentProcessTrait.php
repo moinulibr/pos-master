@@ -20,24 +20,21 @@ trait PaymentProcessTrait
     protected $paymentCdfTypeId;
     protected $paymentProcessingRelatedOfAllRequestData;
     protected $paymentProcessingRequiredOfAllRequestOfModuleRelatedData;
-    protected $paymentAmount;
+    protected $invoiceTotalPayingAmount;
 
     private $currentPaymentAmount;
     private $lastPaymentAmount;
     
-    /** 1
-     * initial stock as increment stock
-     * when product created : 
-     * increase_stock_when_product_add
-     */
+    /*
+    * Processing Payment
+    */
     public function processingPayment()
     {   
-        //getCdfBySingleCdfId_hh($key)
-        //getCdfBySingleCdfLebel_hh($value)
         $this->insertAccountPaymentInvoice();
         return true;
     }
 
+    //insert account payment invoice
     protected function insertAccountPaymentInvoice()
     {
         $ap = new AccountPaymentInvoice();
@@ -51,12 +48,11 @@ trait PaymentProcessTrait
         $ap->module_invoice_id = $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData['module_invoice_id'];
 
         $ap->cdf_type_id = $this->paymentCdfTypeId;
-        $ap->payment_amount = $this->paymentAmount;
+        $ap->payment_amount = $this->invoiceTotalPayingAmount;
         $ap->user_id = $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData['user_id'];
         $ap->received_by = authId_hh();
         $ap->payment_date = date('Y-m-d');
 
-       
         $ap->payment_method_details = json_encode($this->paymentProcessingRelatedOfAllRequestData['payment_method_details']);
 
         $ap->next_payment_date = $this->paymentProcessingRelatedOfAllRequestData['next_payment_date'];
@@ -71,104 +67,55 @@ trait PaymentProcessTrait
         }
         return $ap;
     }
+
+    //insert account payment information
     protected function insertAccountPaymentInformation($accPymntInvoice,$paymentOptionId)
     {
+        $ap = new AccountPayment();
+        $ap->branch_id = $accPymntInvoice->branch_id;
+        $ap->account_payment_invoice_id = $accPymntInvoice->id;
+        $ap->payment_invoice_no = $accPymntInvoice->payment_invoice_no;
+        $ap->payment_reference_no = $accPymntInvoice->payment_reference_no;
+        $ap->module_id = $accPymntInvoice->module_id;
+        $ap->module_invoice_no = $accPymntInvoice->module_invoice_no;
+        $ap->module_invoice_id = $accPymntInvoice->module_invoice_id;
+
+        $ap->cdf_type_id = $accPymntInvoice->cdf_type_id;
+        $ap->payment_date = $accPymntInvoice->payment_date;
+        $ap->cdf_type_id = $this->paymentCdfTypeId;
+        $ap->user_id = $accPymntInvoice->user_id;
+       
+        $accArray = [];
+        $accId = 1;
+        $subPayingAmount = 1;
+        $accArray = accountIdExtensionByPaymentMethodOrOptionId_hh($paymentOptionId, $this->paymentProcessingRelatedOfAllRequestData['payment_method_id']);
+        if(array_key_exists('acc_id',$accArray))
+        {
+            $accId = $accArray['acc_id'];
+            $subPayingAmount = $accArray['subtotal_paying_amount'];
+        }
+        $ap->account_id = $this->paymentProcessingRelatedOfAllRequestData["account_id_".$accId];
+        $ap->payment_method_id = $this->paymentProcessingRelatedOfAllRequestData['payment_method_id'];
+      
+        $payingAmountNow = $this->paymentProcessingRelatedOfAllRequestData[$subPayingAmount] ?? 0;;
+        
+        $ap->payment_amount = $payingAmountNow;
+
         //required parameter 2 : $this->paymentCdfTypeId, $this->currentPaymentAmount
-        $this->currentPaymentAmount = 0;
-        $this->paymentCdfTypeId = 1;
+        $this->currentPaymentAmount = $payingAmountNow;
         $cdcAmountBeforeInsertingThisPayment = $this->currentCdcAmountAfterCalculationByCdfType();
 
-        $ap = new AccountPayment();
-
-       $ap->branch_id = $accPymntInvoice->branch_id;
-       $ap->account_payment_invoice_id = $accPymntInvoice->id;
-       $ap->payment_invoice_no = $accPymntInvoice->payment_invoice_no;
-       $ap->payment_reference_no = $accPymntInvoice->payment_reference_no;
-       $ap->module_id = $accPymntInvoice->module_id;
-       $ap->module_invoice_no = $accPymntInvoice->module_invoice_no;
-
-       $ap->cdf_type_id = $accPymntInvoice->cdf_type_id;
-       $ap->payment_date = $accPymntInvoice->payment_date;
-        
-       $ap->cdf_type_id = $this->paymentCdfTypeId;
-       $ap->payment_amount = $this->paymentAmount;
-       
-       $ap->cdc_amount = $cdcAmountBeforeInsertingThisPayment;
-
-       $ap->user_id = $accPymntInvoice->user_id;
-
-
-       $ap->account_id = $this->paymentProcessingRelatedOfAllRequestData['account_id'];
-       $ap->payment_method_id = $this->paymentProcessingRelatedOfAllRequestData['payment_method_id'];
-       $ap->payment_options = json_encode($this->paymentProcessingRelatedOfAllRequestData['payment_method_details']);
-
-        if($paymentOptionId == 1)
-        {
-           $ap->payment_amount = $this->paymentProcessingRelatedOfAllRequestData['payment_method_details']['cash_payment_value'] ?? 0;
-           $ap->account_id = $accPymntInvoice->account_id;
-           $ap->payment_method_id = $accPymntInvoice->payment_method_id;
-        }
-        if($paymentOptionId == 2)
-        {
-           $ap->payment_amount = $this->paymentProcessingRelatedOfAllRequestData['payment_method_details']['advance_payment_value'] ?? 0;
-           $ap->account_id = $accPymntInvoice->account_id;
-           $ap->payment_method_id = $accPymntInvoice->payment_method_id;
-        }
-        if($paymentOptionId == 3)
-        {
-           $ap->payment_amount = $this->paymentProcessingRelatedOfAllRequestData['payment_method_details']['banking_payment_value'] ?? 0;
-           $ap->account_id = $accPymntInvoice->account_id;
-           $ap->payment_method_id = $accPymntInvoice->payment_method_id;
-        }
-        //$apd->payment_options = $accPymntInvoice->payment_options;//
-        //$apd->transaction_no = $this->paymentProcessingRelatedOfAllRequestData;
-      
+        $ap->cdc_amount = $cdcAmountBeforeInsertingThisPayment;
+        $ap->payment_options = $accPymntInvoice->payment_options;
+        $ap->payment_options = json_encode($this->paymentProcessingRelatedOfAllRequestData['payment_method_details']);
+        $ap->transaction_no = "";//$this->paymentProcessingRelatedOfAllRequestData;
 
         $ap->received_by = authId_hh();
-        $ap->next_payment_date = $this->paymentProcessingRelatedOfAllRequestData['next_payment_date'];
+        $ap->next_payment_date = "";//$this->paymentProcessingRelatedOfAllRequestData['next_payment_date'];
         $ap->save();
         return $ap;
     }
 
-    //insert account payment details information data
-    private function ddinsertAccountPaymentInformation($accountPayment,$paymentOptionId)
-    {
-       $ap = new AccountPaymentDetails();
-       $ap->branch_id = $accPymntInvoice->branch_id;
-       $ap->account_payment_id = $accPymntInvoice->id;
-       $ap->payment_invoice_no = $accPymntInvoice->payment_invoice_no;
-       $ap->payment_reference_no = $accPymntInvoice->payment_reference_no;
-       $ap->module_id = $accPymntInvoice->module_id;
-       $ap->module_invoice_no = $accPymntInvoice->module_invoice_no;
-
-       $ap->cdf_type_id = $accPymntInvoice->cdf_type_id;
-       $ap->payment_date = $accPymntInvoice->payment_date;
-        
-        if($paymentOptionId == 1)
-        {
-           $ap->payment_amount = $this->paymentProcessingRelatedOfAllRequestData['payment_method_details']['cash_payment_value'] ?? 0;
-           $ap->account_id = $accPymntInvoice->account_id;
-           $ap->payment_method_id = $accPymntInvoice->payment_method_id;
-        }
-        if($paymentOptionId == 2)
-        {
-           $ap->payment_amount = $this->paymentProcessingRelatedOfAllRequestData['payment_method_details']['advance_payment_value'] ?? 0;
-           $ap->account_id = $accPymntInvoice->account_id;
-           $ap->payment_method_id = $accPymntInvoice->payment_method_id;
-        }
-        if($paymentOptionId == 3)
-        {
-           $ap->payment_amount = $this->paymentProcessingRelatedOfAllRequestData['payment_method_details']['banking_payment_value'] ?? 0;
-           $ap->account_id = $accPymntInvoice->account_id;
-           $ap->payment_method_id = $accPymntInvoice->payment_method_id;
-        }
-        //$apd->payment_options = $accPymntInvoice->payment_options;//
-        //$apd->transaction_no = $this->paymentProcessingRelatedOfAllRequestData;
-      
-       $ap->save();
-        return true;
-    }
-   
     
     //current cdc amount after culculation by cdf type id
     private function currentCdcAmountAfterCalculationByCdfType()

@@ -343,7 +343,7 @@ class PosController extends Controller
     /*======================================================= */
     // store sell and quotation data from sell cart (pos)
     public function storeDataFromSellCart(Request $request)
-    {   return $request;
+    {   
         DB::beginTransaction();
 
         try {

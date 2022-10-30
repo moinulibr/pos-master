@@ -7,11 +7,13 @@
             @if ($banking_option_id == 1)
                 <tr class="mobile_banking_section">
                     <td style="width:33%">
-                        <select name="mobile_banking_receive_account_id" class="form-control">
+                        <select name="account_id_3" class="form-control">
                             @foreach ($moibleBankingAccounts as $item)     
                             <option value="{{$item->id}}">{{$item->account_no}} - {{$item->account_name}} - ({{ $item->bank ? $item->bank->short_name : NULL }})</option>
                             @endforeach
                         </select>
+                        <input type="hidden" name="banking_option_id" value="1">
+                        <input type="hidden" name="banking_option_name" value="mobile_banking">
                     </td>
                     <td style="width:33%;background-color:#f8ebeb;">
                         <input type="text" name="mobile_banking_customer_mobile_no" class="form-control" placeholder="Customer Mobile No">
@@ -35,13 +37,15 @@
                         </select>
                     </td>
                     <td style="width:67%;" colspan="2">
-                        <select name="bank_name" class="form-control">
+                        <select name="account_id_3" class="form-control">
                             @foreach ($bankingAccounts as $item)     
                             <option value="{{$item->id}}">
                                 {{$item->account_no}} - {{$item->account_name}} - ({{ $item->bank ? $item->bank->short_name : NULL }})
                             </option>
                             @endforeach
                         </select>
+                        <input type="hidden" name="banking_option_id" value="2">
+                        <input type="hidden" name="banking_option_name" value="banking">
                     </td>
                 </tr>
             

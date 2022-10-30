@@ -697,6 +697,7 @@
 
 
 
+    //change payment options
     jQuery(document).on('change','.payment_option',function(){
         var payment_id = jQuery('.payment_option option:selected').val();
         if(payment_id)
@@ -705,6 +706,10 @@
         }else{
             paymentProcessingWithDueFullAmountAndPayingAmountDisabledAndZero();
             emptyAndHideBankingOptionAllData();
+
+            cashPaymentRemoveAttributeNameAndRequired();
+            advancePaymentRemoveAttributeNameAndRequired();
+            bankingPaymentRemoveAttributeNameAndRequired();
         }
         if(payment_id == 1) //only cash
         {
@@ -713,6 +718,10 @@
             jQuery('.cash_payment_section').show(300);
 
             emptyAndHideBankingOptionAllData();
+
+            cashPaymentAddAttributeNameAndRequired();//add
+            advancePaymentRemoveAttributeNameAndRequired();//remove
+            bankingPaymentRemoveAttributeNameAndRequired();//remove
         }
         else if(payment_id == 2) //Only Advance
         {
@@ -721,6 +730,10 @@
             jQuery('.advance_payment_section').show(300);
             advanceDifferentPayingAmountOptionMakingDisabledWhenAdvancedZero();
             emptyAndHideBankingOptionAllData();
+
+            advancePaymentAddAttributeNameAndRequired();//add
+            cashPaymentRemoveAttributeNameAndRequired();//remove
+            bankingPaymentRemoveAttributeNameAndRequired();//remove
         }
         else if(payment_id == 3) //Advance + Cash
         {
@@ -729,18 +742,31 @@
             jQuery('.advance_payment_section').show(300);
             advanceDifferentPayingAmountOptionMakingDisabledWhenAdvancedZero();
             emptyAndHideBankingOptionAllData();
+
+            cashPaymentAddAttributeNameAndRequired();//add
+            advancePaymentAddAttributeNameAndRequired();//add
+            bankingPaymentRemoveAttributeNameAndRequired();//remove
+
         }
         else if(payment_id == 4) //Only Banking
         {
             cashPaymentMakingZeroWithHide();
             advancePaymentMakingZeroWithHide();
             jQuery('.banking_payment_section').show(300);
+
+            bankingPaymentAddAttributeNameAndRequired();//add
+            cashPaymentRemoveAttributeNameAndRequired();//add
+            advancePaymentRemoveAttributeNameAndRequired();//remove
         }
         else if(payment_id == 5) //Banking + Cash
         {
             advancePaymentMakingZeroWithHide();
             jQuery('.banking_payment_section').show(300);
             jQuery('.cash_payment_section').show(300);
+
+            cashPaymentAddAttributeNameAndRequired();//add
+            bankingPaymentAddAttributeNameAndRequired();//add
+            advancePaymentRemoveAttributeNameAndRequired();//remove
         }
         else if(payment_id == 6) //Banking + Advance
         {
@@ -748,6 +774,10 @@
             jQuery('.banking_payment_section').show(300);
             jQuery('.advance_payment_section').show(300);
             advanceDifferentPayingAmountOptionMakingDisabledWhenAdvancedZero();
+
+            bankingPaymentAddAttributeNameAndRequired();//add
+            advancePaymentAddAttributeNameAndRequired();//add
+            cashPaymentRemoveAttributeNameAndRequired();//remove
         }
         else if(payment_id == 7) //Banking + Advance + Cash
         {
@@ -755,6 +785,10 @@
             jQuery('.advance_payment_section').show(300);
             jQuery('.banking_payment_section').show(300);
             advanceDifferentPayingAmountOptionMakingDisabledWhenAdvancedZero();
+
+            cashPaymentAddAttributeNameAndRequired();//add
+            advancePaymentAddAttributeNameAndRequired();//add
+            bankingPaymentAddAttributeNameAndRequired();//add
         }
         else{
             jQuery('.cash_payment_section').hide();
@@ -766,27 +800,73 @@
             jQuery('.banking_payment_making_zero').val(0);
 
             emptyAndHideBankingOptionAllData();
+
+            cashPaymentRemoveAttributeNameAndRequired();
+            advancePaymentRemoveAttributeNameAndRequired();
+            bankingPaymentRemoveAttributeNameAndRequired();
         }
         setTotalPayingAmountIsNotMoreThenInvoicePayableAmount();
         setTotalCurrentInvoiceDueAmount();
     });
 
+    //cash payment making zero with hide options 
     function cashPaymentMakingZeroWithHide()
     {
         jQuery('.cash_payment_section').hide();
         jQuery('.cash_payment_making_zero').val(0);
     }
+    //cash payment add attribute name and required 
+    function cashPaymentAddAttributeNameAndRequired()
+    {
+        jQuery('.account_id_1').attr('name','account_id_1');
+        jQuery('.account_id_1').attr('required',true);
+    }
+    //cash payment remove attribute name and required 
+    function cashPaymentRemoveAttributeNameAndRequired()
+    {
+        jQuery('.account_id_1').removeAttr('required');
+        jQuery('.account_id_1').removeAttr('name');
+    }
+
+    //advance payment making zero with hide options
     function advancePaymentMakingZeroWithHide()
     {
         jQuery('.advance_payment_section').hide();
         jQuery('.advance_payment_making_zero').val(0);
     }
+    //advance payment  add attribute name and required
+    function advancePaymentAddAttributeNameAndRequired()
+    {
+        jQuery('.account_id_2').attr('name','account_id_2');
+        jQuery('.account_id_2').attr('required',true);
+    }
+    //advance payment  remove attribute name and required
+    function advancePaymentRemoveAttributeNameAndRequired()
+    {
+        jQuery('.account_id_2').removeAttr('required');
+        jQuery('.account_id_2').removeAttr('name');
+    }
+
+    //banking payment makeing zero with hide optoins
     function bankingPaymentMakingZeroWithHide()
     {
         jQuery('.banking_payment_section').hide();
         jQuery('.banking_payment_making_zero').val(0);
     }
+    //banking payment  add attribute name and required
+    function bankingPaymentAddAttributeNameAndRequired()
+    {
+        jQuery('.account_id_3').attr('name','account_id_3');
+        jQuery('.account_id_3').attr('required',true);
+    }
+    //banking payment  remove attribute name and required
+    function bankingPaymentRemoveAttributeNameAndRequired()
+    {
+        jQuery('.account_id_3').removeAttr('required');
+        jQuery('.account_id_3').removeAttr('name');
+    }
 
+    //advance different paying amount option making disabled when advance zero
     function advanceDifferentPayingAmountOptionMakingDisabledWhenAdvancedZero()
     {
         var advanceAmount = nanCheck(parseFloat(jQuery('.total_advance_amount').val()));
@@ -863,6 +943,7 @@
         setTotalPayingAmountIsNotMoreThenInvoicePayableAmount();
         setTotalCurrentInvoiceDueAmount();
     });
+
     //set current pressing different amount after all calculation
     function setCurrentPressingDifferentAmountAfterAllCalculation(pressingAmount)
     { 
@@ -878,6 +959,7 @@
         }
         return currentPressableAmount;
     }
+
     //get total different methods amount except current pressing amount
     function getTotalPayingDifferentAmountExceptCurrentPressingAmount(pressingAmount)
     {
@@ -926,6 +1008,7 @@
         jQuery('.rendering_payment_banking_option_data').html('');
         jQuery('.banking_option_data option[value=0]').prop('selected',true);
     }
+    //change banking option data
     jQuery(document).on('change','.banking_option_data',function(){
         var banking_option_id = jQuery('.banking_option_data option:selected').val();
         var url = jQuery('.paymentBankingOptionUrl').val();
@@ -948,6 +1031,7 @@
     });
     //banking option all data
     
+    //change banking transaction type
     jQuery(document).on('change','.banking_transaction_type',function()
     {
         var banking_type = jQuery('.banking_transaction_type option:selected').val();
@@ -967,8 +1051,12 @@
             jQuery('.bank_banking_transfer_section').show(300);
         }
     });
+    //change banking transaction type
 
 
+
+
+    
 
 
 

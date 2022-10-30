@@ -130,7 +130,7 @@ trait StoreDataFromSellCartTrait
             ]; 
         */
         $this->paymentProcessingRelatedOfAllRequestData = paymentDataProcessingWhenSellingSubmitFromPos_hh($this->sellCreateFormData);// $paymentAllData;
-        $this->paymentAmount = $this->sellCreateFormData['invoice_total_paying_amount'] ?? 0 ;
+        $this->invoiceTotalPayingAmount = $this->sellCreateFormData['invoice_total_paying_amount'] ?? 0 ;
         $this->processingPayment();
         return $sellCart;
     }

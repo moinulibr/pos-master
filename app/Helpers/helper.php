@@ -507,55 +507,73 @@ use App\Models\Backend\ProductAttribute\Unit;
     |--------------------------------------------------------------------------
     */
         //payment method: 1=cash, 2=advance,4=bank
+        //cash accounts
         function cashAccounts_hh()
         {
             return Account::where('payment_method_id',1)->get();
         }
+        //advance account 
         function advanceAccounts_hh()
         {
             return Account::whereIn('payment_method_id',[1,2])->get();
         }
+
+        //all banking account
         function bankAccounts_hh()
         {
             return Account::where('payment_method_id',4)->get();
         }
 
+        //all mobile banking account
         function mobileBankingAccounts_hh()
         {
             return Account::whereNotNull('banking_option_id')->where('banking_option_id',1)->get();
         }
+        
+        //only banking accounts
         function onlyBankingAccounts_hh()
         {
             return Account::whereNotNull('banking_option_id')->where('banking_option_id',2)->get();
         }
 
+        //payment data processing when selling submit from post
         function paymentDataProcessingWhenSellingSubmitFromPos_hh($sellCreateFormData)
         {
             $paymentAllData = [ 
-                'account_id' => $sellCreateFormData['account_id']??1,
+                'account_id_1' => $sellCreateFormData['account_id_1'] ?? NULL,
+                'account_id_2' => $sellCreateFormData['account_id_2'] ?? NULL,
+                'account_id_3' => $sellCreateFormData['account_id_3'] ?? NULL,
                 'payment_method_id' => $sellCreateFormData['payment_option_id'],
                 'next_payment_date' => $sellCreateFormData['next_payment_date'] ?? NULL,
                 'sms_send' => $sellCreateFormData['send_sms'],
                 'email_send' => $sellCreateFormData['send_email'],
                 'payment_note' => $sellCreateFormData['payment_note'],
-    
+
+                'invoice_total_paying_amount' => $sellCreateFormData['invoice_total_paying_amount'] ?? 0,
+                'invoice_total_due_amount' => $sellCreateFormData['invoice_total_due_amount'] ?? 0,
+                'cash_payment_value' => $sellCreateFormData['cash_payment_value'] ?? 0,
+                'advance_payment_value' => $sellCreateFormData['advance_payment_value'] ?? 0,
+                'banking_payment_value' => $sellCreateFormData['banking_payment_value'] ?? 0,
+
                 'payment_method_details' => [
                     'invoice_continue_with' => $sellCreateFormData['invoice_continue_with'],
                     'payment_method_id' => $sellCreateFormData['payment_option_id'],
-                    'invoice_total_paying_amount' => $sellCreateFormData['invoice_total_paying_amount'],
-                    'invoice_total_due_amount' => $sellCreateFormData['invoice_total_due_amount'],
-                    'cash_payment_value' => $sellCreateFormData['cash_payment_value'],
-                    'advance_payment_value' => $sellCreateFormData['advance_payment_value'],
-                    'banking_payment_value' => $sellCreateFormData['banking_payment_value'],
+                    'invoice_total_paying_amount' => $sellCreateFormData['invoice_total_paying_amount'] ?? 0,
+                    'invoice_total_due_amount' => $sellCreateFormData['invoice_total_due_amount'] ?? 0,
+                    'cash_payment_value' => $sellCreateFormData['cash_payment_value'] ?? 0,
+                    'advance_payment_value' => $sellCreateFormData['advance_payment_value'] ?? 0,
+                    'banking_payment_value' => $sellCreateFormData['banking_payment_value'] ?? 0,
                     'banking_option_id' => $sellCreateFormData['banking_option_id'],
-    
+                    
+                    'banking_option_name' => $sellCreateFormData['banking_option_name'] ?? "cash_or_advance",
+
                     //mobile banking
-                    'mb_receive_account_id' => $sellCreateFormData['mobile_banking_receive_account_id'],
+                    'account_id_3_1' => $sellCreateFormData['account_id_3'],//mobile banking
                     'mb_customer_moible_no' => $sellCreateFormData['mobile_banking_customer_mobile_no'],
                     'mb_transaction_id' => $sellCreateFormData['mobile_banking_transaction_id'],
     
                     'b_transaction_type' => $sellCreateFormData['banking_transaction_type'],
-                    'bank_name' => $sellCreateFormData['bank_name'],
+                    'account_id_3_2' => $sellCreateFormData['account_id_3'],//banking
     
                     'cheque_no' => $sellCreateFormData['cheque_no'],
                     'cheque_customer_b_name' => $sellCreateFormData['cheque_customer_bank_name'],
@@ -577,29 +595,33 @@ use App\Models\Backend\ProductAttribute\Unit;
             return $paymentAllData;
         }
 
+        //payment methods based looping
         function paymentMethodsBasedLooping_hh($key)
         {
             $looping = 1;
-            if(array_key_exists($key,paymentMethodsBaseStoreData_hh()))
+            if(array_key_exists($key,paymentMethodsBasedOnStoreData_hh()))
             {
-                $looping = paymentMethodsBaseStoreData_hh()[$key];
+                $looping = paymentMethodsBasedOnStoreData_hh()[$key];
             }
             return $looping;
         }
-        function paymentMethodsBaseStoreData_hh()
+
+        //payment methods based on store data
+        function paymentMethodsBasedOnStoreData_hh()
         {
             return [
                 //payment method id = looping time
                 1 => 1,
                 2 => 1,
-                3 => 2,
+                3 => 2,//cash+advance
                 4 => 1,
-                5 => 2,
-                6 => 2,
-                7 => 3,
+                5 => 2,//cash+banking
+                6 => 2,//banking+advance
+                7 => 3,//cash+banking+advance
             ];
         }
 
+        //get payment method id by label/name
         function getPaymentMethodIdByLebel_hh($value)
         {
             $indexOfValue = "Not Match";
@@ -616,6 +638,8 @@ use App\Models\Backend\ProductAttribute\Unit;
             }
             return $indexOfValue; 
         }
+        
+        //get payment method label/name by payment method id
         function getPaymentMethodLabelById_hh($key)
         {
             $label = "Not Match";
@@ -625,6 +649,8 @@ use App\Models\Backend\ProductAttribute\Unit;
             }
             return $label;
         }
+        
+        //payment method and payment option 
         function paymentMethodAndPaymentOptionBothAreSame_hh()
         {
             return [
@@ -638,6 +664,7 @@ use App\Models\Backend\ProductAttribute\Unit;
                 7 => "Banking + Cash + Advance",
             ];
         }
+        //all banking options
         function bankingOptions_hh()
         {
             return [
@@ -646,6 +673,95 @@ use App\Models\Backend\ProductAttribute\Unit;
                 2 => "Bank",
                 3 => "Card",
             ];
+        }
+
+        //get account_id_ extension
+        function accountExtensions_hh($acc_id, $extension)
+        {
+            $method = [];
+            $method['subtotal_paying_amount'] = NULL;
+            $method['acc_id'] = NULL;
+            if( $extension == 1)//cash
+            {
+                $method['subtotal_paying_amount'] = "cash_payment_value";
+                $method['acc_id'] = $acc_id;
+            }
+            else if( $extension == 2)//advance
+            {
+                $method['subtotal_paying_amount'] = "advance_payment_value";
+                $method['acc_id'] = $acc_id;
+            } 
+            else if( $extension == 4)//bank 
+            {
+                $method['subtotal_paying_amount'] = "banking_payment_value";
+                $method['acc_id'] = $acc_id;
+            }
+            return $method; 
+        }
+        //account id extension by payment method or option
+        function accountIdExtensionByPaymentMethodOrOptionId_hh($paymentOptionId, $paymentMethodOptionId)
+        {
+            if($paymentMethodOptionId == 1)//"Cash Only",
+            {
+                return accountExtensions_hh($acc_id = 1,$pamentId = 1);//cash     
+            } 
+            else if($paymentMethodOptionId == 2)//"Advance Only",
+            {
+                return accountExtensions_hh($acc_id = 2,$pamentId = 2);//advance   
+            }
+            else if($paymentMethodOptionId == 3)//"Cash + Advance"
+            {
+                if($paymentOptionId == 1)
+                {
+                    return accountExtensions_hh($acc_id = 1,$pamentId = 1);//cash 
+                }
+                else if($paymentOptionId == 2)
+                {
+                    return accountExtensions_hh($acc_id = 2,$pamentId = 2);//advance 
+                }
+            }
+            else if($paymentMethodOptionId == 4)//"Banking Only",
+            { 
+                return accountExtensions_hh($acc_id = 3,$pamentId = 4);//Banking 
+            }
+            else if($paymentMethodOptionId == 5)//"Banking + Cash",
+            {
+                if($paymentOptionId == 1)
+                {
+                    return accountExtensions_hh($acc_id = 1,$pamentId = 1);//Cash 
+                }
+                else if($paymentOptionId == 2)
+                {
+                    return accountExtensions_hh($acc_id = 3,$pamentId = 4);//Banking  
+                }
+            }
+            else if($paymentMethodOptionId == 6)//"Banking + Advance",
+            {
+                if($paymentOptionId == 1)
+                {
+                    return accountExtensions_hh($acc_id = 2,$pamentId = 2);//advance
+                }
+                else if($paymentOptionId == 2)
+                {
+                    return accountExtensions_hh($acc_id = 3,$pamentId = 4);//Banking
+                }
+            }
+            else if($paymentMethodOptionId == 7)//"Banking + Cash + Advance",
+            {
+                if($paymentOptionId == 1)
+                {
+                    return accountExtensions_hh($acc_id = 1,$pamentId = 1);//Cash 
+                }
+                else if($paymentOptionId == 2)
+                {
+                    return accountExtensions_hh($acc_id = 2,$pamentId = 2);//Advance 
+                }
+                else if($paymentOptionId == 3)
+                {
+                    return accountExtensions_hh($acc_id = 3,$pamentId = 4);//Banking 
+                }
+            }
+            return 1;
         }
     /*
     |--------------------------------------------------------------------------
