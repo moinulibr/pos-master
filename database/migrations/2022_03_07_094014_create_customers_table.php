@@ -35,6 +35,12 @@ class CreateCustomersTable extends Migration
                 $table->string('company_name',100)->nullable();
                 $table->text('address')->nullable();
 
+                $table->decimal('ct_sell_invoice_amount', 20, 2)->default(00.00)->comment('creating time.just keep it, not change - before started this app');
+                $table->decimal('previous_sell_invoice_amount', 20, 2)->default(00.00)->comment('before started this app');
+                $table->decimal('current_sell_invoice_amount', 20, 2)->default(00.00)->comment('during using this app');
+                $table->decimal('total_sell_invoice_amount', 20, 2)->default(00.00)->comment('previous + current sell invoice total amount');
+ 
+
                 $table->decimal('ct_previous_due', 20, 2)->default(00.00)->comment('creating time.just keep it, not change - before started this app');
                 $table->decimal('previous_due', 20, 2)->default(00.00)->comment('before started this app');
                 $table->decimal('current_due', 20, 2)->default(00.00)->comment('during using this app');

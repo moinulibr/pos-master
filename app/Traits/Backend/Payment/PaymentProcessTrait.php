@@ -85,10 +85,11 @@ trait PaymentProcessTrait
         $ap->cdf_type_id = $this->paymentCdfTypeId;
         $ap->user_id = $accPymntInvoice->user_id;
        
-        $accArray = [];
+        
         $accId = 1;
         $subPayingAmount = 1;
         $accArray = accountIdExtensionByPaymentMethodOrOptionId_hh($paymentOptionId, $this->paymentProcessingRelatedOfAllRequestData['payment_method_id']);
+        if(is_array($accArray))
         if(array_key_exists('acc_id',$accArray))
         {
             $accId = $accArray['acc_id'];

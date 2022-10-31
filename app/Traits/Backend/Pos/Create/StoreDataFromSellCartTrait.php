@@ -74,64 +74,21 @@ trait StoreDataFromSellCartTrait
         $sellInvoice->save();
 
 
-
-        //for payment processing 
-        $this->paymentModuleId = getModuleIdBySingleModuleLebel_hh('Sell');
-        $this->paymentCdfTypeId = getCdfIdBySingleCdfLebel_hh('Credit');
-        $moduleRelatedData = [
-            'module_invoice_no' => $sellInvoice->invoice_no,
-            'module_invoice_id' => $sellInvoice->id,
-            'user_id' => $sellInvoice->customer_id,//client[customer,supplier,others staff]
-        ];
-        $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData = $moduleRelatedData;
-        /* 
-            $paymentAllData = [
-                'account_id' => $this->sellCreateFormData['account_id'] ?? 1,
-                'payment_method_id' => $this->sellCreateFormData['payment_option_id'],
-                'next_payment_date' => $this->sellCreateFormData['next_payment_date'] ?? NULL,
-                'sms_send' => $this->sellCreateFormData['send_sms'],
-                'email_send' => $this->sellCreateFormData['send_email'],
-                'payment_note' => $this->sellCreateFormData['payment_note'],
-
-                'payment_method_details' => [
-                    'invoice_continue_with' => $this->sellCreateFormData['invoice_continue_with'],
-                    'payment_method_id' => $this->sellCreateFormData['payment_option_id'],
-                    'invoice_total_paying_amount' => $this->sellCreateFormData['invoice_total_paying_amount'],
-                    'invoice_total_due_amount' => $this->sellCreateFormData['invoice_total_due_amount'],
-                    'cash_payment_value' => $this->sellCreateFormData['cash_payment_value'],
-                    'advance_payment_value' => $this->sellCreateFormData['advance_payment_value'],
-                    'banking_payment_value' => $this->sellCreateFormData['banking_payment_value'],
-                    'banking_option_id' => $this->sellCreateFormData['banking_option_id'],
-
-                    //mobile banking
-                    'mb_receive_account_id' => $this->sellCreateFormData['mobile_banking_receive_account_id'],
-                    'mb_customer_moible_no' => $this->sellCreateFormData['mobile_banking_customer_mobile_no'],
-                    'mb_transaction_id' => $this->sellCreateFormData['mobile_banking_transaction_id'],
-
-                    'b_transaction_type' => $this->sellCreateFormData['banking_transaction_type'],
-                    'bank_name' => $this->sellCreateFormData['bank_name'],
-
-                    'cheque_no' => $this->sellCreateFormData['cheque_no'],
-                    'cheque_customer_b_name' => $this->sellCreateFormData['cheque_customer_bank_name'],
-                    'cheque_b_short_note' => $this->sellCreateFormData['cheque_banking_short_note'],
-
-                    'online_transfer_customer_b_name' => $this->sellCreateFormData['banking_online_transfer_transation_customer_bank_name'],
-                    'online_transfer_customer_transaction_note' => $this->sellCreateFormData['banking_online_transfer_customer_transaction_note'],
-                    'online_transfer_received_transaction_id' => $this->sellCreateFormData['banking_online_transfer_received_bank_transaction_id'],
-                    
-                    'b_card_swipe_code' => $this->sellCreateFormData['bank_card_swipe_code'],
-                    'b_card_credit_card_no' => $this->sellCreateFormData['bank_card_credit_card_no'],
-                    'b_card_holder_name' => $this->sellCreateFormData['bank_card_holder_name'],
-                    'b_card_type' => $this->sellCreateFormData['bank_card_type'],
-                    'b_card_expire_month' => $this->sellCreateFormData['bank_card_expire_month'],
-                    'b_card_expire_year' => $this->sellCreateFormData['bank_card_expire_year'],
-                    'b_card_cvv2' => $this->sellCreateFormData['bank_card_cvv2'],
-                ],
-            ]; 
-        */
-        $this->paymentProcessingRelatedOfAllRequestData = paymentDataProcessingWhenSellingSubmitFromPos_hh($this->sellCreateFormData);// $paymentAllData;
-        $this->invoiceTotalPayingAmount = $this->sellCreateFormData['invoice_total_paying_amount'] ?? 0 ;
-        $this->processingPayment();
+        if(($this->sellCreateFormData['invoice_total_paying_amount'] ?? 0) > 0)
+        {
+            //for payment processing 
+            $this->paymentModuleId = getModuleIdBySingleModuleLebel_hh('Sell');
+            $this->paymentCdfTypeId = getCdfIdBySingleCdfLebel_hh('Credit');
+            $moduleRelatedData = [
+                'module_invoice_no' => $sellInvoice->invoice_no,
+                'module_invoice_id' => $sellInvoice->id,
+                'user_id' => $sellInvoice->customer_id,//client[customer,supplier,others staff]
+            ];
+            $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData = $moduleRelatedData;
+            $this->paymentProcessingRelatedOfAllRequestData = paymentDataProcessingWhenSellingSubmitFromPos_hh($this->sellCreateFormData);// $paymentAllData;
+            $this->invoiceTotalPayingAmount = $this->sellCreateFormData['invoice_total_paying_amount'] ?? 0 ;
+            $this->processingPayment();
+        }
         return $sellCart;
     }
 
@@ -314,9 +271,35 @@ trait StoreDataFromSellCartTrait
             $sign = "";
         }
         $sellInvoice->round_type = $sign;
-        $sellInvoice->total_payable_amount = $sellInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'];
+        $totalPayableAmount = $sellInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'];
+        $sellInvoice->total_payable_amount = $totalPayableAmount; 
         
         $sellInvoice->sell_type = $this->sellCreateFormData['sell_type'];
+        
+        //payment related section
+        $totalPaidAmount = ($this->sellCreateFormData['cash_payment_value'] ?? 0) + ($this->sellCreateFormData['advance_payment_value'] ?? 0) + ($this->sellCreateFormData['banking_payment_value'] ?? 0);
+        $sellInvoice->paid_amount = $totalPaidAmount;
+        $sellInvoice->total_paid_amount	 = $totalPaidAmount;
+        $sellInvoice->due_amount = $totalPayableAmount - $totalPaidAmount;
+
+        $paymentStatus = "";
+        $payment_type = "";
+        if($totalPayableAmount == $totalPaidAmount)
+        {
+            $paymentStatus = "Paid";
+            $payment_type = "Full Payment";
+        }
+        else if($totalPayableAmount > $totalPaidAmount &&  $totalPaidAmount > 0){
+            $paymentStatus = "Parital Payment";
+            $payment_type = "Partial Payment";
+        }
+        else if($totalPayableAmount > $totalPaidAmount &&  $totalPaidAmount == 0){
+            $paymentStatus = "Not Paid";
+            $payment_type = "Not Paid";
+        }
+        $sellInvoice->payment_status = $paymentStatus;
+        $sellInvoice->payment_type	 = $payment_type;
+        //payment related section
 
         $customerId = $sellInvoiceSummeryCart['invoice_customer_id'];
         if(count($shippingCart) > 0)
