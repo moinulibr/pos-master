@@ -36,7 +36,6 @@ class CreateAccountPaymentsTable extends Migration
                 $table->integer('user_id')->nullable()->comment('user like: customer, supplier,office staff and others user');
                 $table->integer('received_by')->nullable();
                 $table->string('payment_date',30)->nullable();
-                $table->string('next_payment_date',30)->nullable();
 
                 $table->tinyInteger('status')->nullable();
                 

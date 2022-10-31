@@ -111,7 +111,6 @@ trait PaymentProcessTrait
         $ap->transaction_no = "";//$this->paymentProcessingRelatedOfAllRequestData;
 
         $ap->received_by = authId_hh();
-        $ap->next_payment_date = "";//$this->paymentProcessingRelatedOfAllRequestData['next_payment_date'];
         $ap->save();
         return $ap;
     }
