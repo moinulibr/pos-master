@@ -893,6 +893,7 @@
         }
         setTotalPayingAmountIsNotMoreThenInvoicePayableAmount();
         setTotalCurrentInvoiceDueAmount();
+        submitButtonEnableDisabledAsRequirementByCalculation();
     });
 
     //cash payment making zero with hide options 
@@ -995,6 +996,7 @@
             jQuery('.cash_payment_section').show(300);
             jQuery('.cash_payment_value').focus();
         }
+        submitButtonEnableDisabledAsRequirementByCalculation();
     });
     //payment Processing With Due Full Amount And Paying Amount Zero
     function paymentProcessingWithDueFullAmountAndPayingAmountZero()
@@ -1028,6 +1030,8 @@
         calculationTotalPayingDifferentAllMethodsAmount();
         setTotalPayingAmountIsNotMoreThenInvoicePayableAmount();
         setTotalCurrentInvoiceDueAmount();
+
+        submitButtonEnableDisabledAsRequirementByCalculation();
     });
 
     //set current pressing different amount after all calculation
@@ -1097,6 +1101,7 @@
     //change banking option data
     jQuery(document).on('change','.banking_option_data',function(){
         var banking_option_id = jQuery('.banking_option_data option:selected').val();
+        submitButtonEnableDisabledAsRequirementByCalculation();
         var url = jQuery('.paymentBankingOptionUrl').val();
         jQuery.ajax({
             url:url,
@@ -1138,6 +1143,85 @@
         }
     });
     //change banking transaction type
+
+
+
+    //enable disabled submit button
+    function submitButtonEnableDisabledAsRequirementByCalculation()
+    {
+        var invoice_continue_type = jQuery('.invoice_continue_with option:selected').val();
+        //if(invoice_continue_type == 1)//due
+        if(invoice_continue_type == 2)//payment
+        {
+            var totalPayingAmount = calculationTotalPayingDifferentAllMethodsAmount();
+            
+            var payment_option = jQuery('.payment_option option:selected').val();
+           
+            
+            if(totalPayingAmount > 0 && payment_option > 0 &&  payment_option <= 3)
+            {
+                submitButtonEnable();
+            } 
+            else if(totalPayingAmount > 0 && payment_option >= 4 &&  payment_option <= 7)
+            {
+                var banking_option_id = jQuery('.banking_option_data option:selected').val();
+                if(banking_option_id > 0)
+                {
+                    submitButtonEnable();
+                }else{
+                    submitButtonDisabled();
+                }
+            }
+            else{
+                submitButtonDisabled();
+            }
+        }else{
+            submitButtonEnable();
+        }
+        exchangeGivenAmountAfterCalculator();
+    }
+    //submit button disabled
+    function submitButtonDisabled()
+    {
+        jQuery('.submitButton').attr('disabled',true); 
+    }
+    //submit button enabled
+    function submitButtonEnable()
+    {
+        jQuery('.submitButton').removeAttr('disabled'); 
+    }
+    //enable disabled submit button
+
+
+    //calculator
+    jQuery(document).on('click','.customer_calculator_button',function(){
+        jQuery('.customer_calculator').show(300);
+        jQuery('.customer_calculator_button').hide(300);
+    });
+    jQuery(document).on('click','.customer_calculator_close',function(){
+        jQuery('.customer_calculator').hide(300);
+        jQuery('.customer_calculator_button').show(300);
+    });
+    jQuery(document).on('keyup','.given_amount_for_calculator',function()
+    {
+        exchangeGivenAmountAfterCalculator();
+    });
+    function exchangeGivenAmountAfterCalculator()
+    {
+        var invoice_amount = nanCheck(parseFloat(jQuery('.total_invoice_amount_for_calculator').val()));
+        var paing_amount_cal = nanCheck(parseFloat(jQuery('.total_paying_amount_for_calculator').val()));
+        var given_amount = nanCheck(parseFloat(jQuery('.given_amount_for_calculator').val()));
+        
+        if(paing_amount_cal > 0)
+        {
+            var totalReturnAmount = paing_amount_cal - given_amount;
+            totalReturnAmount = totalReturnAmount.toFixed(2);
+            jQuery('.return_amount_for_calculator').val(totalReturnAmount);
+        }else{
+            jQuery('.return_amount_for_calculator').val(0.0);
+        }
+    }
+    //calculator
 
 
 
@@ -1188,3 +1272,13 @@
     |----------------------------------------------
     */
     
+
+    /*
+    |--------------------------------------------------------
+    | input field protected .. only for numeric
+    |--------------------------------------------------------
+    */
+    jQuery(document).on('keyup keypress','.inputFieldValidatedOnlyNumeric',function(e){
+        if (String.fromCharCode(e.keyCode).match(/[^0-9\.]/g)) return false;
+    });
+

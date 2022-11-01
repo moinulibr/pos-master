@@ -170,6 +170,70 @@
 
     </div>
 
+    <div style="text-align:right;">
+        <span class="customer_calculator_button" style="color:green;padding-right:10px;cursor: pointer;">Calculator</span>
+    </div>
+    <!---calculator for customer change money-->
+    <div class="col-md-12 customer_calculator" style="padding: 0;margin:0px;display:none;">
+        <div class="table" style="border-radius: 5%;">
+            <table class="table table-bordered table striped" style="background-color:#bcb9bf;color:#ffff;">
+                <tr>
+                    <td style="width:24.5%">
+                        <div style="width: 100%;">
+                            <div style="float:left;width:30%;">
+                                <label style="padding-top: 0.375rem;">
+                                    Invoice    
+                                </label> 
+                            </div>
+                            <div style="float:right;width:70%;">
+                                <input disabled type="text" class="form-control total_invoice_amount_for_calculator"  value="{{$totalPayableAmount}}"  placeholder="Invoice Amount">
+                            </div> 
+                        </div> 
+                    </td>
+                    <td style="width:24.5%">
+                        <div style="width: 100%;">
+                            <div style="float:left;width:30%;">
+                                <label style="padding-top: 0.375rem;">
+                                Paying
+                                </label> 
+                            </div>
+                            <div style="float:right;width:70%;">
+                                <input type="text" class="total_paying_amount_for_calculator form-control invoice_paying_amount" disabled placeholder=" Paying Amount">
+                            </div> 
+                        </div> 
+                    </td>
+                    <td style="width:24.5%">
+                        <div style="float:left;width:30%;">
+                            <label style="padding-top: 0.375rem;">
+                            Given
+                            </label> 
+                        </div>
+                        <div style="float:right;width:70%;">
+                            <input type="text" class="form-control given_amount_for_calculator form-control inputFieldValidatedOnlyNumeric"  placeholder="Given Amount" style="background-color:green;color:#ffff;">
+                        </div> 
+                    </td>
+                    <td style="width:24.5%">
+                        <div style="float:left;width:30%;">
+                            <label style="padding-top: 0.375rem;">
+                            Return
+                            </label> 
+                        </div>
+                        <div style="float:right;width:70%;">
+                            <input type="text"  class="form-control return_amount_for_calculator" disabled placeholder="Return Amount"  style="background-color:red;color:#ffff;">
+                        </div> 
+                    </td>
+                    <td style="width:2%">
+                        <span style="color:red;background-color:#fff;cursor: pointer;" class="customer_calculator_close">
+                            <svg width="20px" height="20px" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"></path>
+                            </svg>
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!---calculator for customer change money-->
 
     <br>
     <div class="row mt-10">
