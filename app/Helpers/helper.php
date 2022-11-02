@@ -595,6 +595,14 @@ use App\Models\Backend\ProductAttribute\Unit;
             return $paymentAllData;
         }
 
+        //invoice continue with
+        function invoiceContinueWith_hh()
+        {
+            return [
+                1 => "Due",
+                2 => "Payment",
+            ];
+        }
         //payment methods based looping
         function paymentMethodsBasedLooping_hh($key)
         {
@@ -672,6 +680,28 @@ use App\Models\Backend\ProductAttribute\Unit;
                 1 => "Mobile Banking",
                 2 => "Bank",
                 3 => "Card",
+            ];
+        }
+        //banking transaction type
+        function bankingTransactionType_hh()
+        {
+            return [
+                //index = value
+                1 => "Direct Deposit",
+                2 => "Cheque",
+                3 => "Online Transfer",
+            ];
+        }
+        //banking card type
+        function bankingCardType_hh()
+        {
+            return [
+                //index = value
+                //"" => 'Card Type',
+                1 => "Credit Card",
+                2 => "Debit Card",
+                3 => "Visa Card",
+                4 => "Master Card",
             ];
         }
 

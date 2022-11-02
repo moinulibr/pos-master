@@ -24,7 +24,7 @@
                         </td>
                         <td style="width:1%">:</td>
                         <td style="width:18%;background-color:#b72323;color:#ffff;">
-                            <h5>{{$customer->total_due}}</h5>
+                            <h6>{{$customer->total_due}}</h6>
                         </td>
                     <tr>
                         <td style="width:17%">Address</td>
@@ -36,7 +36,7 @@
                         </td>
                         <td style="width:1%;">:</td>
                         <td style="width:18%;background-color:green;color:#ffff;">
-                            <h5><strong class="total_advance_amount">{{$customer->total_advance}}</strong></h5>
+                            <h6><strong class="total_advance_amount">{{$customer->total_advance}}</strong></h6>
                         </td>
                     </tr>
 
@@ -53,6 +53,7 @@
 
     <br>
 
+    <!-----Invoice Payment--->
     <div class="row">
         <div class="col-md-12">
             <div class="table">
@@ -64,21 +65,18 @@
                         <td style="width:20%">
                             <label for="">Invoice Continue With</label>
                             <select name="invoice_continue_with" class="form-control invoice_continue_with">
-                                <option value="1">Due</option>
-                                <option value="2">Payment</option>
+                                @foreach (invoiceContinueWith_hh() as $index => $item)
+                                <option value="{{$index}}">{{$item}}</option>
+                                @endforeach
                             </select>
                         </td>
                         <td style="width:50%;background-color:#f7f1f1;">
                             <label for="">Payment Option</label>
                             <select name="payment_option_id" class="form-control payment_option" disabled>
                                 <option value="0">Select One</option>
-                                <option value="1">Cash Only</option>
-                                <option value="2">Advance Only</option>
-                                <option value="3">Advance + Cash</option>
-                                <option value="4">Banking Only</option>
-                                <option value="5">Banking + Cash</option>
-                                <option value="6">Banking + Advance</option>
-                                <option value="7">Banking + Advance + Cash</option>
+                                @foreach (paymentMethodAndPaymentOptionBothAreSame_hh() as $index => $item)
+                                <option value="{{$index}}">{{$item}}</option>
+                                @endforeach
                             </select>
                         </td>
                         <td style="width:15%">
@@ -135,9 +133,9 @@
                                 <div class="col-8">
                                     <select name="banking_option_id" class="form-control banking_option_data">
                                         <option value="0">Select One</option>
-                                        <option value="1">Mobile Banking</option>
-                                        <option value="2">Bank</option>
-                                        <option value="3">Card</option>
+                                        @foreach (bankingOptions_hh() as $index => $item)
+                                        <option value="{{$index}}">{{$item}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -169,11 +167,12 @@
         <div class="rendering_payment_banking_option_data"  style="width:100%"></div>
 
     </div>
+    <!-----Invoice Payment--->
 
+    <!---calculator for customer change money-->
     <div style="text-align:right;">
         <span class="customer_calculator_button" style="color:green;padding-right:10px;cursor: pointer;">Calculator</span>
     </div>
-    <!---calculator for customer change money-->
     <div class="col-md-12 customer_calculator" style="padding: 0;margin:0px;display:none;">
         <div class="table" style="border-radius: 5%;">
             <table class="table table-bordered table striped" style="background-color:#bcb9bf;color:#ffff;">
@@ -236,6 +235,8 @@
     <!---calculator for customer change money-->
 
     <br>
+
+    <!---sending mail,sms-->
     <div class="row mt-10">
         <div class="col-sm-4 col-md-4"></div>
         <div class="col-sm-4 col-md-4">
@@ -255,14 +256,15 @@
             </div>
         </div>
     </div>
+    <!---sending mail,sms-->
 
-
+    <!---payment note-->
     <div class="row">
         <div class="col-md-12">
             <label for="">Payment Note</label>
             <textarea name="payment_note" id="" cols="5" rows="2" class="form-control"></textarea>
         </div>
     </div>
-
+    <!---payment note-->
    <br/>
 

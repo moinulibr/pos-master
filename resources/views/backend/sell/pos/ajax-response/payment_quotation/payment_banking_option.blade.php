@@ -31,9 +31,9 @@
                 <tr class="bank_banking_section">
                     <td style="width:33%">
                         <select name="banking_transaction_type" class="form-control banking_transaction_type">
-                            <option value="1">Direct Deposit</option>
-                            <option value="2">Cheque</option>
-                            <option value="3">Online Transfer</option>
+                            @foreach (bankingTransactionType_hh() as $index => $item)
+                                <option value="{{$index}}">{{$item}}</option>
+                            @endforeach
                         </select>
                     </td>
                     <td style="width:67%;" colspan="2">
@@ -92,11 +92,9 @@
                 <tr class="bank_card_section">
                     <td style="width:33%">
                         <select name="bank_card_type" class="form-control" placeholder="Card Type">
-                            <option value="1">Card Type</option>
-                            <option value="1">Credit Card</option>
-                            <option value="2">Debit Card</option>
-                            <option value="3">Visa Card</option>
-                            <option value="4">Master Card</option>
+                            @foreach (bankingCardType_hh() as $index => $item)
+                                <option value="{{$index}}">{{$item}}</option>
+                            @endforeach
                         </select> 
                     </td>
                     <td style="width:33%">
