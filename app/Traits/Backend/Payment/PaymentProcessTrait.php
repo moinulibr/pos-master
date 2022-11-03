@@ -107,9 +107,11 @@ trait PaymentProcessTrait
         $cdcAmountBeforeInsertingThisPayment = $this->currentCdcAmountAfterCalculationByCdfType();
 
         $ap->cdc_amount = $cdcAmountBeforeInsertingThisPayment;
-        $ap->payment_options = $accPymntInvoice->payment_options;
-        $ap->payment_options = json_encode($this->paymentProcessingRelatedOfAllRequestData['payment_method_details']);
-        $ap->transaction_no = "";//$this->paymentProcessingRelatedOfAllRequestData;
+
+        //$ap->payment_options = json_encode($this->paymentProcessingRelatedOfAllRequestData['payment_method_details']);
+        //$ap->payment_options = json_encode($this->paymentProcessingRelatedOfAllRequestData['current_payment_options']);
+        //$ap->transaction_no = $this->paymentProcessingRelatedOfAllRequestData['current_transaction_id'];
+        
 
         $ap->received_by = authId_hh();
         $ap->save();
