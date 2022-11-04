@@ -108,9 +108,10 @@ trait PaymentProcessTrait
 
         $ap->cdc_amount = $cdcAmountBeforeInsertingThisPayment;
 
+        $options = currentPaymentOptionMethod_hh($paymentOptionId, $this->paymentProcessingRelatedOfAllRequestData['payment_method_id'],$this->paymentProcessingRelatedOfAllRequestData);
         //$ap->payment_options = json_encode($this->paymentProcessingRelatedOfAllRequestData['payment_method_details']);
-        //$ap->payment_options = json_encode($this->paymentProcessingRelatedOfAllRequestData['current_payment_options']);
-        //$ap->transaction_no = $this->paymentProcessingRelatedOfAllRequestData['current_transaction_id'];
+        $ap->payment_options = json_encode($options['currentPaymentAccounts']);
+        $ap->transaction_no = $options['transactionId'];
         
 
         $ap->received_by = authId_hh();

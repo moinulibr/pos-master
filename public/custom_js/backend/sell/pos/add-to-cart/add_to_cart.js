@@ -1212,7 +1212,7 @@
         var paing_amount_cal = nanCheck(parseFloat(jQuery('.total_paying_amount_for_calculator').val()));
         var given_amount = nanCheck(parseFloat(jQuery('.given_amount_for_calculator').val()));
         
-        if(paing_amount_cal > 0)
+        if(paing_amount_cal > 0 && given_amount > 0 && given_amount > paing_amount_cal)
         {
             var totalReturnAmount = paing_amount_cal - given_amount;
             totalReturnAmount = totalReturnAmount.toFixed(2);
