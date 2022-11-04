@@ -407,10 +407,14 @@ Route::group(['middleware' => ['auth']], function ()
             Route::get('sell/payment/modal/open','PosController@paymentModalOpen')->name('sell.payment.modal.open');
             Route::get('sell/quotation/modal/open','PosController@quotationModalOpen')->name('sell.quotation.modal.open');
             
-            //
-            Route::get('sell/payment/banking/option','PosController@paymentBankingOption')->name('sell.payment.banking.option');
         });
         
+        //Payment options
+        Route::group(['as'=> 'admin.payment.', 'prefix'=>'admin/payment','namespace'=>'Backend\Payment'],function(){
+            Route::get('payment/banking/option/data','PaymentController@paymentBankingOptionData')->name('common.banking.option.data');
+        });
+        //Payment options
+
         //customer shipping address
         Route::group(['as'=> 'admin.customer.', 'prefix'=>'admin/customer/shipping','namespace'=>'Backend\Customer'],function(){
             Route::get('address/details/by','ShippingAddressController@getCustomerShippingAddressDetailsByCustomerId')->name('shipping.address.details.by.customer.id');

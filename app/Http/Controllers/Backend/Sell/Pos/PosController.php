@@ -311,20 +311,6 @@ class PosController extends Controller
         }
     }
 
-    //payment banking option
-    public function paymentBankingOption(Request $request)
-    {
-        $data['banking_option_id'] = $request->banking_option_id;
-        $data['moibleBankingAccounts'] = mobileBankingAccounts_hh();
-        $data['bankingAccounts'] = onlyBankingAccounts_hh();
-        $list = view('backend.sell.pos.ajax-response.payment_quotation.payment_banking_option',$data)->render();
-        return response()->json([
-            'status'    => true,
-            'list'     => $list,
-        ]);
-    }
-
-   
 
 
 
