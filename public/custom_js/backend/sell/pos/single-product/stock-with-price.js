@@ -335,6 +335,9 @@
 
         //enable disabled add to cart button
         enabledDisabledAddToCartButton();
+
+        //percentage of selling price aginst of the purchase price
+        getAndSetPercentageOfSellingPriceAginstOfPurchasePrice();
     }
 
 
@@ -651,6 +654,39 @@
     | Selling Discount
     |-----------------------------------------------------------------------
     */
+
+    
+    /*
+    |-----------------------------------------------------------------------
+    | get Percentage of Selling price aginst of purchase price
+    |-----------------------------------------------------------------------
+    */
+        function getAndSetPercentageOfSellingPriceAginstOfPurchasePrice()
+        {
+            var purchasePrice           = nanCheck(jQuery('.selling_from_purchase_price').val());
+            var finalSellingPrice       = nanCheck(jQuery('.final_sell_price').val());
+            var sellProfitOfASingleProduct =  finalSellingPrice - purchasePrice;
+            var percentageOfPurchasePrice = 0;
+            percentageOfPurchasePrice = (((sellProfitOfASingleProduct * 100) / purchasePrice).toFixed(2));
+            jQuery('.percentage_of_sell_price_against_of_the_purchase_price_text').text(percentageOfPurchasePrice);
+            jQuery('.percentage_of_sell_price_against_of_the_purchase_price_value').val(percentageOfPurchasePrice);
+            
+            var mrpPrice           = nanCheck(jQuery('.selling_from_mrp_price').val());
+            var sellProfitOfASingleProductAginstOfMRP =  mrpPrice - finalSellingPrice;
+            var percentageOfMRPPrice = 0;
+            percentageOfMRPPrice = (((sellProfitOfASingleProductAginstOfMRP * 100) / mrpPrice).toFixed(2));
+            jQuery('.percentage_of_sell_price_against_of_the_mrp_price_text').text(percentageOfMRPPrice);
+            jQuery('.percentage_of_sell_price_against_of_the_mrp_price_value').val(percentageOfMRPPrice);
+           return 1;
+        }
+    /*
+    |-----------------------------------------------------------------------
+    | get Percentage of Selling price aginst of purchase price
+    |-----------------------------------------------------------------------
+    */
+        
+    
+        
     /*
     |-----------------------------------------------------------------------
     | Selling discount permission applicable and alert message

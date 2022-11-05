@@ -192,7 +192,7 @@
                                 <thead>
                                     <tr>
                                         <th>Date</th>
-                                        <th>Reference No</th>
+                                        <th><small>Payment Invoice No</small></th>
                                         <th>Amount</th>
                                         <th>Credit/Debit</th>
                                         <th>Payment Method</th>
@@ -200,22 +200,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- @foreach($data->payments??NULL as $payment)
+                                    @foreach($data->invoicePayment ?? [] as $payment)
                                     <tr>
                                         <td>{{date('d-m-Y',strtotime($payment->payment_date))}}</td>
-                                        <td>{{$payment->payment_reference_no}}</td>
+                                        <td>{{$payment->payment_invoice_no}}</td>
                                         <td>{{number_format($payment->payment_amount,2,'.','')}}</td>
-                                            <td>
-                                            {{getCDFName_HH($payment->cdf_type_id)}}
+                                        <td>
+                                            {{getCdfLabelBySingleCdfId_hh($payment->cdf_type_id)}}
                                         </td>
-                                        <td>{{$payment->paymentMethods?$payment->paymentMethods->method:NULL}}</td>
+                                        <td>{{$payment->paymentMethods?$payment->paymentMethods->name:NULL}}</td>
                                         <td>
                                             <small style="font-size:11px;">
-                                            {{ $payment->paymentNotes?$payment->paymentNotes->payment_note:"--" }}
+                                            {{ $payment->accountPaymentInvoice?$payment->accountPaymentInvoice->payment_note:"--" }}
                                             </small>
                                         </td>
                                     </tr>
-                                    @endforeach --}}
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

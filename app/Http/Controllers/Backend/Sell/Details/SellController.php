@@ -62,6 +62,52 @@ class SellController extends Controller
             'html' => $html
         ]);
     }
+
+
+    //payment mmodal open with customer information and invoice information
+    //admin.sell.regular.sell.view.receive.payment.modal
+    public function receivePayment(Request $request)
+    {   
+        $data['data'] = SellInvoice::findOrFail($request->id);
+        if($data['data'])
+        {
+            $list = view('backend.sell.payment.payment',$data)->render();
+            return response()->json([
+                'status'    => true,
+                'list'     => $list,
+            ]);
+        }else{
+            return response()->json([
+                'status'    => false,
+            ]);
+        }
+    }
+    public function paymentModalOpen(Request $request)
+    {
+        //sellCreateCartSessionName_hh();
+        $sellInvoiceSummeryCartName = sellCreateCartInvoiceSummerySessionName_hh();
+        $sellInvoiceSummeryCart = [];
+        $sellInvoiceSummeryCart = session()->has($sellInvoiceSummeryCartName) ? session()->get($sellInvoiceSummeryCartName)  : [];
+        $data['totalPayableAmount'] = $sellInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'];
+        
+        $data['customer'] = Customer::findOrFail($request->customer_id);
+
+        $data['cashAccounts'] = cashAccounts_hh();
+        $data['advanceAccounts'] = advanceAccounts_hh();
+        
+        if($data['totalPayableAmount'] > 0)
+        {
+            $list = view('backend.sell.pos.ajax-response.payment_quotation.payment_data',$data)->render();
+            return response()->json([
+                'status'    => true,
+                'list'     => $list,
+            ]);
+        }else{
+            return response()->json([
+                'status'    => false,
+            ]);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *

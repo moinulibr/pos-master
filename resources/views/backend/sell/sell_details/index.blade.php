@@ -103,6 +103,11 @@
             <input type="hidden" class="sellProductReturnInvoiceWiseModalRoute" value="{{route('admin.sell.product.return.invoice.wise.list.index')}}">
             <!-------Sell product delivery Modal------> 
 
+            <!-------Sell receive payment Modal------> 
+            <div class="modal fade " id="sellViewSingleInvoiceReceivePaymentModal"  aria-modal="true"></div>
+            <input type="hidden" class="sellViewSingleInvoiceReceivePaymentModalRoute" value="{{route('admin.sell.regular.sell.view.single.invoice.receive.payment.modal')}}">
+            <!-------Sell receive payment Modal------> 
+
 
            {{--  <!-------delete Customer Modal------> 
             @include('backend.customer.customer.partial.delete_modal')
@@ -142,6 +147,7 @@
 <script src="{{asset('custom_js/backend')}}/sell/sell_details/index.js?v=1"></script>
 <script src="{{asset('custom_js/backend')}}/sell/delivery/index.js?v=1"></script>
 <script src="{{asset('custom_js/backend')}}/sell/sell_return/index.js?v=1"></script>
+<script src="{{asset('custom_js/backend')}}/sell/sell_payment/index.js?v=1"></script>
 
 
 

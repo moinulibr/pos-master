@@ -405,43 +405,59 @@
                                                             <strong>Less Amount</strong>
                                                             <div style="background-color:#ededed;color:red;margin-bottom:1.5px;">
                                                                 <label class="switcher" style="padding-right: 7px;padding-left: 3px;">
-                                                                        <input type="radio"  name="discount_type" class="switcher-input  discount_type" value="fixed" style="margin-top:5px;cursor: pointer;" />
+                                                                        <input type="radio" disabled name="discount_type" class="switcher-input  discount_type" value="fixed" style="margin-top:5px;cursor:not-allowed;" />
                                                                         <small class="switcher-indicator" style="cursor: pointer;backgound-color:#140505 !important">
                                                                             <span class="switcher-yes"></span>
                                                                             <span class="switcher-no"></span>
                                                                         </small>
-                                                                        <small class="switcher-label" style="cursor:pointer;font-size:10px;color:#020222;padding-right:1px;">
+                                                                        <small class="switcher-label" style="cursor:not-allowed;font-size:10px;color:#020222;padding-right:1px;">
                                                                             Fixed
                                                                         </small>
                                                                 </label>
                                                                 <label class="switcher" style="padding-right: 7px;padding-left: 3px;">
-                                                                    <input type="radio"  name="discount_type" class="switcher-input  discount_type" value="percentage" style="margin-top:5px;cursor: pointer;" />
+                                                                    <input type="radio" disabled name="discount_type" class="switcher-input  discount_type" value="percentage" style="margin-top:5px;cursor:not-allowed;" />
                                                                     <small class="switcher-indicator" style="cursor: pointer;backgound-color:#140505 !important">
                                                                         <span class="switcher-yes"></span>
                                                                         <span class="switcher-no"></span>
                                                                     </small>
-                                                                    <small class="switcher-label" style="cursor:pointer;color:#020222;font-size:8px;">
+                                                                    <small class="switcher-label" style="cursor:not-allowed;color:#020222;font-size:8px;">
                                                                         Percentage(%)
                                                                     </small>
                                                                 </label>
                                                             </div>
                                                             
-                                                            <input type="text" name="discount_amount"  class="form-control discount_amount inputFieldValidatedOnlyNumeric" placeholder="Less Amount" style="font-size: 15px;background-color:#ffff94;color:#1e0303;font-weight:700;" />
+                                                            <input type="text" disabled name="discount_amount"  class="form-control discount_amount inputFieldValidatedOnlyNumeric" placeholder="Less Amount" style="font-size: 15px;background-color:#ffff94;color:#1e0303;font-weight:700;cursor:not-allowed;" />
                                                             <strong class="discount_amount_err"></strong>
 
                                                             <div style="font-size:14px;margin-top:1px;width:100%;padding:1% 1%;background-color:green;color:white;">
                                                                 <div style="width:52%;float:left;border-right:1px solid white;margin-left:2px;">
-                                                                    <strong class="total_amount_before_discount_text" style="font-size:11px;">(180.00)</strong>
+                                                                    <strong class="total_amount_before_discount_text" style="font-size:11px;"></strong>
                                                                     <input type="hidden" name="total_amount_before_discount" class="total_amount_before_discount_value">
                                                                 </div>
                                                                 <div style="width:43%;float:right;text-align:right;margin-right:2px;">
-                                                                    <strong class="total_discount_amount_text" style="font-size:11px;">(8.00)</strong>
+                                                                    <strong class="total_discount_amount_text" style="font-size:11px;"></strong>
                                                                     <input type="hidden" name="total_discount_amount" class="total_discount_amount_value">
                                                                 </div>
                                                                 <div style="float:clear;clear: both;"></div>
                                                             </div>
                                                             <strong class="name_err color-red"></strong>
                                                             <div class="clearfix"></div>
+                                                            
+                                                            <!----selling price percentage----->
+                                                            <div style="font-size:14px;margin-top:1px;width:100%;padding:1% 1%;background-color:#d0e7ef;color:#100f0f;">
+                                                                <div style="width:52%;float:left;border-right:1px solid white;margin-left:2px;background-color:#979393;color:#b8f988;padding:0px 1px 0px 3px;">
+                                                                    <strong class="percentage_of_sell_price_against_of_the_purchase_price_text" style="font-size:13px;color:#b8f988;" title="Purchase"></strong>%
+                                                                    <input type="hidden" name="percentage_of_sell_price_against_of_the_purchase_price_value" class="percentage_of_sell_price_against_of_the_purchase_price_value">
+                                                                </div>
+                                                                <div style="width:43%;float:right;text-align:right;margin-right:2px;background-color:#979393;color:#fffffd;padding:0px 3px 0px 1px;">
+                                                                    <strong class="percentage_of_sell_price_against_of_the_mrp_price_text" style="font-size:13px;color:#fffffd;" title="MRP"></strong>%
+                                                                    <input type="hidden" name="percentage_of_sell_price_against_of_the_mrp_price_value" class="percentage_of_sell_price_against_of_the_purchase_price_value">
+                                                                </div>
+                                                                <div style="float:clear;clear:both;"></div>
+                                                            </div>
+                                                            <!----selling price percentage----->
+                                                            <div class="clearfix"></div>
+                                                            
                                                                 <!---selling discount price custom alert message--->
                                                                 <div id="sellingPriceBaseLayerWhenDiscount">
                                                                     <div id="sellingPriceErrorMessageLayerWhenDiscount">

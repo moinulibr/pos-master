@@ -5,6 +5,7 @@ namespace App\Models\Backend\Purchase;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Backend\Supplier\Supplier;
+use App\Models\Backend\Payment\AccountPayment;
 use App\Models\Backend\Purchase\PurchaseProduct;
 use App\Models\Backend\Purchase\PurchaseProductStock;
 
@@ -30,5 +31,10 @@ class PurchaseInvoice extends Model
         return $this->hasMany(PurchaseProductStock::class,'purchase_invoice_id','id');
     }
 
+    
+    public function invoicePayment()
+    {
+        return $this->hasMany(AccountPayment::class,'module_invoice_id','id')->where('module_id',getModuleIdBySingleModuleLebel_hh("Purchase"));
+    }
 
 }
