@@ -218,7 +218,7 @@
                             </label> 
                         </div>
                         <div style="float:right;width:70%;">
-                            <input type="text"  class="form-control return_amount_for_calculator" disabled placeholder="Return Amount"  style="background-color:red;color:#ffff;">
+                            <input type="text"  class="form-control return_amount_for_calculator" disabled placeholder="Return Amount"  style="background-color:red;color:#ffff !important;">
                         </div> 
                     </td>
                     <td style="width:2%">

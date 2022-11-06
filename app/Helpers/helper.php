@@ -536,8 +536,16 @@ use App\Models\Backend\ProductAttribute\Unit;
             return Account::whereNotNull('banking_option_id')->where('banking_option_id',2)->get();
         }
 
-        //payment data processing when selling submit from post
+        function paymentDataProcessingWhenPurchaseingSubmitFromPos_hh($sellCreateFormData)
+        {
+            return paymentDataProcessingWhenSubmitingFromPos_hh($sellCreateFormData);
+        }
         function paymentDataProcessingWhenSellingSubmitFromPos_hh($sellCreateFormData)
+        {
+            return paymentDataProcessingWhenSubmitingFromPos_hh($sellCreateFormData);
+        }
+        //payment data processing when selling submit from post
+        function paymentDataProcessingWhenSubmitingFromPos_hh($sellCreateFormData)
         {
             $currentPaymentAccount = [];
             $transactionId = NULL;
@@ -957,6 +965,36 @@ use App\Models\Backend\ProductAttribute\Unit;
     /*
     |--------------------------------------------------------------------------
     | Payment Details : when INSERT
+    |--------------------------------------------------------------------------
+    |----------------------------------------------------------------------------------------
+    */
+      
+
+    /*
+    |--------------------------------------------------------------------------
+    |--------------------------------------------------------------------------
+    | Setting, App Name, App Address, Phone, and others
+    |----------------------------------------------------------------------------------------
+    */
+        function AppName_hh()
+        {
+            return "Amader Sanitary"; 
+        }
+        function AppPhone_hh()
+        {
+            return "01711 11 11 92";
+        }
+        function AppAddressFirstLine_hh()
+        {
+            return "Janata Bank More, Hafej Bulding Under";
+        } 
+        function AppAddressSecondLine_hh()
+        {
+            return "Graound, Faridpur";
+        }
+    /*
+    |--------------------------------------------------------------------------
+    | Setting, App Name, App Address, Phone, and others
     |--------------------------------------------------------------------------
     |----------------------------------------------------------------------------------------
     */

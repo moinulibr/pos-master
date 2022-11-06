@@ -237,11 +237,24 @@ class PurchasePosController extends Controller
         $purchaseInvoiceSummeryCart = [];
         $purchaseInvoiceSummeryCart = session()->has($purchaseInvoiceSummeryCartName) ? session()->get($purchaseInvoiceSummeryCartName)  : [];
         
-        $list = view('backend.purchase.purchase_pos.ajax-response.payment_quotation.payment_data')->render();
-        return response()->json([
-            'status'    => true,
-            'list'     => $list,
-        ]);
+        $data['cashAccounts'] = cashAccounts_hh();
+        $data['advanceAccounts'] = advanceAccounts_hh();
+        $data['totalPayableAmount'] = $purchaseInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'];
+
+        $data['supplier'] = Supplier::findOrFail($request->supplier_id);
+
+         if($data['totalPayableAmount'] > 0)
+        {
+            $list = view('backend.purchase.purchase_pos.ajax-response.payment_quotation.payment_data',$data)->render();
+            return response()->json([
+                'status'    => true,
+                'list'     => $list,
+            ]);
+        }else{
+            return response()->json([
+                'status'    => false,
+            ]);
+        }
     }
     //payment modal open
 

@@ -80,7 +80,7 @@
                         </div>
                         </a>
                     </li>
-                    <li class="sidenav-item">
+                    {{-- <li class="sidenav-item">
                         <a href="dashboards_corona.html" class="sidenav-link">
                         <div>Purchase Return</div>
                         <div class="pl-1 ml-auto">
@@ -127,7 +127,7 @@
                             <div class="badge badge-danger">New</div>
                         </div>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </li>
             <!---purchase--->

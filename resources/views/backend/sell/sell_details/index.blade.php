@@ -106,6 +106,7 @@
             <!-------Sell receive payment Modal------> 
             <div class="modal fade " id="sellViewSingleInvoiceReceivePaymentModal"  aria-modal="true"></div>
             <input type="hidden" class="sellViewSingleInvoiceReceivePaymentModalRoute" value="{{route('admin.sell.regular.sell.view.single.invoice.receive.payment.modal')}}">
+            <input type="hidden" class="paymentBankingOptionUrl" value="{{route('admin.payment.common.banking.option.data')}}">
             <!-------Sell receive payment Modal------> 
 
 

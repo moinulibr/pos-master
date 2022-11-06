@@ -380,10 +380,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <input type="hidden" class="paymentBankingOptionUrl" value="{{route('admin.payment.common.banking.option.data')}}">
                                             <input type="hidden" class="quotationModalOpenUrl" value="{{route('admin.sell.regular.pos.sell.quotation.modal.open')}}">
 
-                                            <a href="{{ route('admin.sell.regular.pos.pos.print.from.direct.sell.cart') }}" class="print normal_print_direct_from_sell_cart btn btn-primary btnFullWidth white" data-href="#" style="margin-top: 1%;" target="_blank">
+                                            <a href="{{ route('admin.sell.regular.pos.pos.print.from.direct.sell.cart') }}" class="print normal_print_direct_from_sell_cart btn btn-info btnFullWidth white" data-href="#" style="margin-top: 1%;" target="_blank">
                                                 POS Print
                                             </a>
-                                            <a class="pos_print_direct_from_sell_cart btn btn-info btnFullWidth white" style="cursor:not-allowed !important;margin-top:1%;color:#d1cdcd;" data-href="{{ route('admin.sell.regular.pos.normal.print.from.direct.sell.cart') }}">
+                                            <a class="pos_print_direct_from_sell_cart btn btn-primary btnFullWidth white" style="cursor:not-allowed !important;margin-top:1%;color:#d1cdcd;" data-href="{{ route('admin.sell.regular.pos.normal.print.from.direct.sell.cart') }}">
                                                 Print
                                             </a>
                                         </div>

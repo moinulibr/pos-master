@@ -746,7 +746,6 @@
                 var subtotal = nanCheck(parseFloat(jQuery('.subtotalFromSellCartList').text()));
                 if(!totalItem && subtotal == 0){
                     jQuery('#payment-popup').modal('hide');
-                    alert('Please select a minimum item');
                     jQuery.notify("Please select a minimum item", 'error');
                     return 0;
                 }else{

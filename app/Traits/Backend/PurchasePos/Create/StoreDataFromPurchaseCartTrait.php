@@ -18,6 +18,7 @@ use App\Models\Backend\Purchase\PurchaseProduct;
 use App\Traits\Backend\FileUpload\FileUploadTrait;
 use App\Models\Backend\Purchase\PurchaseProductStock;
 use App\Traits\Backend\Stock\Logical\StockChangingTrait;
+use App\Traits\Backend\Payment\PaymentProcessTrait;
 /**
  * store data trait
  * 
@@ -27,6 +28,7 @@ trait StoreDataFromPurchaseCartTrait
     use FileUploadTrait;
     use StockChangingTrait;
     use ProductSetting;
+    use PaymentProcessTrait;
 
     protected $purchaseCreateFormRequestData;
     protected $totalPurchasePriceOfAllQuantityOfThisInvoice;
@@ -61,6 +63,23 @@ trait StoreDataFromPurchaseCartTrait
         
         $purchaseInvoice->total_purchase_amount = $this->totalPurchasePriceOfAllQuantityOfThisInvoice;
         $purchaseInvoice->save();
+
+        if(($this->purchaseCreateFormRequestData['invoice_total_paying_amount'] ?? 0) > 0)
+        {
+            //for payment processing 
+            $this->paymentModuleId = getModuleIdBySingleModuleLebel_hh('Purchase');
+            $this->paymentCdfTypeId = getCdfIdBySingleCdfLebel_hh('Debit');
+            $moduleRelatedData = [
+                'module_invoice_no' => $purchaseInvoice->invoice_no,
+                'module_invoice_id' => $purchaseInvoice->id,
+                'user_id' => $purchaseInvoice->supplier_id,//client[customer,supplier,others staff]
+            ];
+            $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData = $moduleRelatedData;
+            $this->paymentProcessingRelatedOfAllRequestData = paymentDataProcessingWhenPurchaseingSubmitFromPos_hh($this->purchaseCreateFormRequestData);// $paymentAllData;
+            $this->invoiceTotalPayingAmount = $this->purchaseCreateFormRequestData['invoice_total_paying_amount'] ?? 0 ;
+            $this->processingPayment();
+        }
+
         return $purchaseSessionCarts;
     }
 
@@ -185,12 +204,13 @@ trait StoreDataFromPurchaseCartTrait
         $rand = rand(01,99);
         $makeInvoice = date("iHsymd").$rand;
         $purchaseInvoice->invoice_no = $makeInvoice;
+        $purchaseInvoice->supplier_id = $this->purchaseCreateFormRequestData['supplier_id'];
         $purchaseInvoice->chalan_no = $this->purchaseCreateFormRequestData['chalan_no'];
         $purchaseInvoice->reference_no = $this->purchaseCreateFormRequestData['reference_no'];
 
-        $purchaseInvoice->shipping_note = $shippingCart['shipping_note'];
-        $purchaseInvoice->receiver_details = $shippingCart['receiver_details'];
-        $purchaseInvoice->purchase_note = $shippingCart['purchase_note'];
+        $purchaseInvoice->shipping_note = $this->purchaseCreateFormRequestData['shipping_note'];
+        $purchaseInvoice->receiver_details = $this->purchaseCreateFormRequestData['receiver_details'];
+        $purchaseInvoice->purchase_note = $this->purchaseCreateFormRequestData['purchase_note'];
         
         $purchaseInvoice->total_item = $purchaseInvoiceSummeryCart['totalItem'];
         $purchaseInvoice->total_quantity = $purchaseInvoiceSummeryCart['totalQuantity'];
@@ -215,11 +235,37 @@ trait StoreDataFromPurchaseCartTrait
             $sign = "";
         }
         $purchaseInvoice->round_type = $sign;
-        $purchaseInvoice->total_payable_amount = $purchaseInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'];
-        
+        $totalPayableAmount = $purchaseInvoiceSummeryCart['lineInvoicePayableAmountWithRounding'];
+        $purchaseInvoice->total_payable_amount = $totalPayableAmount;
+
+        //payment related section
+        $totalPaidAmount = ($this->purchaseCreateFormRequestData['cash_payment_value'] ?? 0) + ($this->purchaseCreateFormRequestData['advance_payment_value'] ?? 0) + ($this->purchaseCreateFormRequestData['banking_payment_value'] ?? 0);
+        $purchaseInvoice->paid_amount = $totalPaidAmount;
+        $purchaseInvoice->total_paid_amount	 = $totalPaidAmount;
+        $purchaseInvoice->due_amount = $totalPayableAmount - $totalPaidAmount;
+
+        $paymentStatus = "";
+        $payment_type = "";
+        if($totalPayableAmount == $totalPaidAmount)
+        {
+            $paymentStatus = "Paid";
+            $payment_type = "Full Payment";
+        }
+        else if($totalPayableAmount > $totalPaidAmount &&  $totalPaidAmount > 0){
+            $paymentStatus = "Parital Payment";
+            $payment_type = "Partial Payment";
+        }
+        else if($totalPayableAmount > $totalPaidAmount &&  $totalPaidAmount == 0){
+            $paymentStatus = "Not Paid";
+            $payment_type = "Not Paid";
+        }
+        $purchaseInvoice->payment_status = $paymentStatus;
+        $purchaseInvoice->payment_type	 = $payment_type;
+        //payment related section
+
         $purchaseInvoice->purchase_type = $this->purchaseCreateFormRequestData['purchase_type'];
 
-        $supplierId = $purchaseInvoiceSummeryCart['invoice_supplier_id'];
+        $supplierId = $this->purchaseCreateFormRequestData['supplier_id'];
         $supplier = Supplier::select('supplier_type_id')->where('id',$supplierId)->first();
         if($supplier)
         {
@@ -229,7 +275,7 @@ trait StoreDataFromPurchaseCartTrait
         }
         if( $this->purchaseCreateFormRequestData['purchase_type'] == 1) 
         {
-            $purchaseInvoice->purchase_date = date('Y-m-d',strtotime($this->purchaseCreateFormRequestData['purchase_date']));
+            $purchaseInvoice->purchase_date = $this->purchaseCreateFormRequestData['purchase_date'] ? date('Y-m-d',strtotime($this->purchaseCreateFormRequestData['purchase_date'])) : date('Y-m-d');
         }
         $purchaseInvoice->status = 1;
         $purchaseInvoice->delivery_status = 1;

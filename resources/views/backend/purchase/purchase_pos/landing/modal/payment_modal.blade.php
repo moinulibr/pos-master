@@ -24,7 +24,7 @@
                     <div class="form-group row justify-content-end mb-0">
                         <div class="col-md-6 text-right">
                             <button type="button" class="btn btn-danger" data-dismiss="modal" style="padding:7px 20px;">Close</button>
-                            <input type="submit" class="btn btn-primary" value="Payment" style="padding:7px 20px;">
+                            <input type="submit" class="btn btn-primary submitButton" disabled value="Payment" style="padding:7px 20px;">
                         </div>
                     </div>
                    

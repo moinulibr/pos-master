@@ -71,10 +71,13 @@ class SellController extends Controller
         $data['data'] = SellInvoice::findOrFail($request->id);
         if($data['data'])
         {
-            $list = view('backend.sell.payment.payment',$data)->render();
+            $data['cashAccounts'] = cashAccounts_hh();
+            $data['advanceAccounts'] = advanceAccounts_hh();
+            
+            $html = view('backend.sell.payment.payment',$data)->render();
             return response()->json([
                 'status'    => true,
-                'list'     => $list,
+                'html'     => $html,
             ]);
         }else{
             return response()->json([
