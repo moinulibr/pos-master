@@ -8,12 +8,17 @@ use App\Models\Backend\Supplier\Supplier;
 use App\Models\Backend\Payment\AccountPayment;
 use App\Models\Backend\Purchase\PurchaseProduct;
 use App\Models\Backend\Purchase\PurchaseProductStock;
+use App\Models\Backend\Supplier\SupplierType;
 
 class PurchaseInvoice extends Model
 {
     public function supplier()
     {
         return $this->belongsTo(Supplier::class,'supplier_id','id');
+    }
+     public function supplierType()
+    {
+        return $this->belongsTo(SupplierType::class,'supplier_type_id','id');
     }
     
     public function createdBy()

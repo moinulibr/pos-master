@@ -70,6 +70,29 @@ class PurchaseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+    //payment mmodal open with customer information and invoice information
+    public function makeSingleInvoiceWisePayment(Request $request)
+    {   
+        $data['data'] = PurchaseInvoice::findOrFail($request->id);
+        if($data['data'])
+        {
+            $data['cashAccounts'] = cashAccounts_hh();
+            $data['advanceAccounts'] = advanceAccounts_hh();
+            
+            $html = view('backend.purchase.payment.single_payment',$data)->render();
+            return response()->json([
+                'status'    => true,
+                'html'     => $html,
+            ]);
+        }else{
+            return response()->json([
+                'status'    => false,
+            ]);
+        }
+    }
+    
     public function create()
     {
         //

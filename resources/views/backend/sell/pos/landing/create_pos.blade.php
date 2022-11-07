@@ -234,7 +234,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                             >
                                                 <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
                                                 <line x1="12" y1="2" x2="12" y2="12"></line>
-                                            </svg>
+                                            </svg> Logout
                                         </span>
                                        {{--  <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();

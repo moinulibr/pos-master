@@ -437,8 +437,9 @@ Route::group(['middleware' => ['auth']], function ()
                 Route::get('sell/list/by/ajr','SellController@sellListByAjaxResponse')->name('list.ajaxresponse');//->middleware(['permissions:unit|index']);
                 Route::get('sell/single/view','SellController@singleView')->name('single.view');//->middleware(['permissions:unit|index']);
                 Route::get('sell/single/invoice/profit/loss','SellController@viewSingleInvoiceProfitLoss')->name('view.single.invoice.profit.loss');
+                
                 //payment
-                Route::get('sell/receive/payment/','SellController@receivePayment')->name('view.single.invoice.receive.payment.modal');
+                Route::get('sell/receive/payment/','SellController@receiveSingleInvoiceWisePayment')->name('view.single.invoice.receive.payment.modal');
             });
             //quotation
             Route::group(['prefix'=>'admin/sell/regular','as'=> 'admin.sell.regular.quotation.', 'namespace'=>'Backend\Sell\Details'],function(){
@@ -577,6 +578,9 @@ Route::group(['middleware' => ['auth']], function ()
             Route::get('purchase/list','PurchaseController@index')->name('index');//->middleware(['permissions:unit|index']);
             Route::get('purchase/list/by/ajr','PurchaseController@purchaseListByAjaxResponse')->name('list.ajaxresponse');//->middleware(['permissions:unit|index']);
             Route::get('purchase/single/view','PurchaseController@singleView')->name('single.view');//->middleware(['permissions:unit|index']);
+            
+            //payment
+            Route::get('purchase/receive/payment/','PurchaseController@makeSingleInvoiceWisePayment')->name('view.single.invoice.make.payment.modal');
         });
 
         //quotation

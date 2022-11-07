@@ -95,6 +95,12 @@
             <!-------purchase product receive Modal------> 
 
 
+            <!-------purchase receive payment Modal------> 
+            <div class="modal fade " id="purchaseViewSingleInvoiceMakePaymentModal"  aria-modal="true"></div>
+            <input type="hidden" class="purchaseViewSingleInvoiceMakePaymentModalRoute" value="{{route('admin.purchase.regular.purchase.view.single.invoice.make.payment.modal')}}">
+            <input type="hidden" class="paymentBankingOptionUrl" value="{{route('admin.payment.common.banking.option.data')}}">
+            <!-------purchase receive payment Modal------> 
+
            {{--  <!-------delete Customer Modal------> 
             @include('backend.customer.customer.partial.delete_modal')
             <input type="hidden" class="deleteCustomerModalRoute" value="{{ route('admin.customer.delete') }}">
@@ -132,6 +138,7 @@
 <!--=================js=================-->
 <script src="{{asset('custom_js/backend')}}/purchase/purchase_details/index.js?v=1"></script>
 <script src="{{asset('custom_js/backend')}}/purchase/receive/index.js?v=1"></script>
+<script src="{{asset('custom_js/backend')}}/purchase/purchase_payment/payment.js?v=1"></script>
 
 
 

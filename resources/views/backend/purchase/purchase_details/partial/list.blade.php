@@ -37,7 +37,7 @@
                                 <a class="dropdown-item print" target="_blank" data-id="{{$item->id}}" href="{{route('admin.sell.regular.normal.print.from.sell.list',$item->id)}}" style="cursor: pointer">Print</a>
                                 <a class="dropdown-item print"  target="_blank" data-id="{{$item->id}}" href="{{route('admin.sell.regular.pos.print.from.sell.list',$item->id)}}" style="cursor: pointer">Print (POS)</a>
                                 <a class="dropdown-item singlePurchaseInvoiceWiseReceiveProduct" data-id="{{$item->id}}" style="cursor: pointer">Receive Product</a>
-                                <a class="dropdown-item singleSellInvoiceWiseDelivery" data-id="{{$item->id}}" style="cursor: pointer">Make Payment</a>
+                                <a class="dropdown-item singleViewPurchaseInvoiceWiseMakePaymentModal" data-id="{{$item->id}}" style="cursor: pointer">Make Payment</a>
                                 {{-- <a class="dropdown-item singleEditModal" data-id="{{$item->id}}" href="javascript:void(0)">Edit</a>
                                 <a class="dropdown-item singleDeleteModal" data-id="{{$item->id}}" data-name="{{$item->name}}" href="javascript:void(0)">Delete</a> --}}
                             {{-- <div class="dropdown-divider"></div>

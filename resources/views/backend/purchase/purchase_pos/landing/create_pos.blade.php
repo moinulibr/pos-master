@@ -179,7 +179,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <!--calculator-->
 
                             <!--session-->
-                            <div class="topbar-item folder-data">
+                            {{-- <div class="topbar-item folder-data">
                                 <div class="btn btn-icon w-auto h-auto btn-clean d-flex align-items-center py-0 mr-3" data-toggle="modal" data-target="#folderpop">
                                     <span class="badge badge-pill badge-primary">
                                         @php
@@ -199,7 +199,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </span>
                                     </span>
                                 </div>
-                            </div>
+                            </div> --}}
                             <!--session-->
 
                             <!--logout-->
@@ -234,7 +234,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                             >
                                                 <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
                                                 <line x1="12" y1="2" x2="12" y2="12"></line>
-                                            </svg>
+                                            </svg> Logout
                                         </span>
                                        {{--  <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
