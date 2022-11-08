@@ -198,7 +198,7 @@
         //advance different paying amount option making disabled when advance zero
         function advanceDifferentPayingAmountOptionMakingDisabledWhenAdvancedZero()
         {
-            var advanceAmount = nanCheck(parseFloat(jQuery('.total_advance_amount').val()));
+            var advanceAmount = nanCheckForSellPayment(parseFloat(jQuery('.total_advance_amount').val()));
             if(advanceAmount == 0)
             {
                 jQuery('.advance_payment_value').val(0);
@@ -243,14 +243,14 @@
         //payment Processing With Due Full Amount And Paying Amount Zero
         function paymentProcessingWithDueFullAmountAndPayingAmountZero()
         {
-            var totalInvoicePayableAmount = nanCheck(parseFloat(jQuery('.total_invoice_payble_amount').text()));
+            var totalInvoicePayableAmount = nanCheckForSellPayment(parseFloat(jQuery('.total_invoice_payble_amount').text()));
             jQuery('.invoice_paying_amount').val(0);
             jQuery('.invoice_due_amount').val(totalInvoicePayableAmount);
         }
         //payment Processing With Due Full Amount And Paying Amount Disabled And Zero
         function paymentProcessingWithDueFullAmountAndPayingAmountDisabledAndZero()
         {
-            var totalInvoicePayableAmount = nanCheck(parseFloat(jQuery('.total_invoice_payble_amount').text()));
+            var totalInvoicePayableAmount = nanCheckForSellPayment(parseFloat(jQuery('.total_invoice_payble_amount').text()));
             jQuery('.invoice_paying_amount').val(0);
             jQuery('.invoice_due_amount').val(totalInvoicePayableAmount);
             jQuery('.invoice_paying_amount').attr('readonly',true);
@@ -265,7 +265,7 @@
         //when pressing paying different method : keyup method
         jQuery(document).on('keyup','.paying_different_method',function()
         {
-            var pressingAmount = nanCheck(parseFloat(jQuery(this).val()));
+            var pressingAmount = nanCheckForSellPayment(parseFloat(jQuery(this).val()));
             var currentPressableAmount = setCurrentPressingDifferentAmountAfterAllCalculation(pressingAmount);
             jQuery(this).val(currentPressableAmount);
 
@@ -279,7 +279,7 @@
         //set current pressing different amount after all calculation
         function setCurrentPressingDifferentAmountAfterAllCalculation(pressingAmount)
         { 
-            var totalInvoicePayableAmount = nanCheck(parseFloat(jQuery('.total_invoice_payble_amount').text()));
+            var totalInvoicePayableAmount = nanCheckForSellPayment(parseFloat(jQuery('.total_invoice_payble_amount').text()));
             var totalDifferentAmountExceptCurrentType = getTotalPayingDifferentAmountExceptCurrentPressingAmount(pressingAmount);
             var currentRemainingAmount = totalInvoicePayableAmount - totalDifferentAmountExceptCurrentType ;
             var currentPressableAmount = 0;
@@ -302,7 +302,7 @@
         //set total paying amount not more then invoice payable amount
         function setTotalPayingAmountIsNotMoreThenInvoicePayableAmount()
         {
-            var totalInvoicePayableAmount = nanCheck(parseFloat(jQuery('.total_invoice_payble_amount').text()));
+            var totalInvoicePayableAmount = nanCheckForSellPayment(parseFloat(jQuery('.total_invoice_payble_amount').text()));
             var allMethodAmount =  calculationTotalPayingDifferentAllMethodsAmount();
         
             if(totalInvoicePayableAmount >= allMethodAmount)
@@ -318,7 +318,7 @@
         {
             var total = 0;
             jQuery(".paying_different_method").each(function() {
-                total += nanCheck(parseFloat(jQuery(this).val()));
+                total += nanCheckForSellPayment(parseFloat(jQuery(this).val()));
             });
             return total = ((total).toFixed(2));
         }
@@ -326,8 +326,8 @@
         //current invoice due amount
         function setTotalCurrentInvoiceDueAmount()
         {
-            var totalInvoicePayableAmount = nanCheck(parseFloat(jQuery('.total_invoice_payble_amount').text()));
-            //var currentInvoiceBeforePressingAmont = nanCheck(parseFloat(jQuery('.invoice_due_amount').val()));
+            var totalInvoicePayableAmount = nanCheckForSellPayment(parseFloat(jQuery('.total_invoice_payble_amount').text()));
+            //var currentInvoiceBeforePressingAmont = nanCheckForSellPayment(parseFloat(jQuery('.invoice_due_amount').val()));
             var currentPayingAmount = calculationTotalPayingDifferentAllMethodsAmount(); 
             var currentDue =  (totalInvoicePayableAmount - currentPayingAmount);
             jQuery('.invoice_due_amount').val(currentDue);
@@ -450,9 +450,9 @@
         });
         function exchangeGivenAmountAfterCalculator()
         {
-            var invoice_amount = nanCheck(parseFloat(jQuery('.total_invoice_amount_for_calculator').val()));
-            var paing_amount_cal = nanCheck(parseFloat(jQuery('.total_paying_amount_for_calculator').val()));
-            var given_amount = nanCheck(parseFloat(jQuery('.given_amount_for_calculator').val()));
+            var invoice_amount = nanCheckForSellPayment(parseFloat(jQuery('.total_invoice_amount_for_calculator').val()));
+            var paing_amount_cal = nanCheckForSellPayment(parseFloat(jQuery('.total_paying_amount_for_calculator').val()));
+            var given_amount = nanCheckForSellPayment(parseFloat(jQuery('.given_amount_for_calculator').val()));
             
             if(paing_amount_cal > 0 && given_amount > 0 && given_amount > paing_amount_cal)
             {
@@ -471,3 +471,16 @@
     |----------------------------------------------
     */
       
+
+
+    
+    function nanCheckForSellPayment(value)
+    {
+        if(isNaN(value))
+        {
+            return 0;
+        }
+        else{
+            return value;
+        }
+    }

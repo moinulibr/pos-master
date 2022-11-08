@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div class="table-responsive table-responsive-index-page">
     <table class="table table-bordered mb-0">
         <thead>
             <tr>
