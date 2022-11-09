@@ -65,12 +65,83 @@
         <!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->   
         
 
-            <div class="row" style="margin-bottom: 5px;">
-                <div class="col-8"></div>
-                <div class="col-4">
-                    <input type="text" class="form-control search" style="border:1px solid #d2d4d5;" placeholder="Search" autofocus>
+            <div class="row" style="margin-bottom: 5px;background-color:#ffff;padding:5px 0px 10px 0px;">
+                <div class="col-12">
+                    <div>
+                        <table  style="width: 100%;">
+                            <tr>
+                                <td style="width:7%">
+                                    <label for="">&nbsp;</label>
+                                    <select class="form-control paginate" id="paginate" name="paginate" style="font-size: 12px;width:100%;">
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="40">40</option>
+                                        <option value="50" selected>50</option>
+                                        <option value="100">100</option>
+                                        <option value="200">200</option>
+                                        <option value="300">300</option>
+                                        <option value="500">500</option>
+                                        <option value="1000">1000</option>
+                                    </select>
+                                </td>
+                                <td style="width:1%"></td>
+                                <td style="width: 20%">
+                                    <label for="">Supplier</label>
+                                    <select name="supplier_id" id="supplier_filter_id" class="supplier_filter_id form-control">
+                                        <option value="">Select Supllier</option>
+                                        @foreach ($suppliers as $item)
+                                            <option value="{{$item->id}}">{{$item->name}}</option> 
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td style="width:1%"></td>
+                                <td style="width:14%">
+                                    <label for="">Group</label>
+                                    <select name="ground" id="ground_filter_id" class="ground_filter_id form-control">
+                                        <option value="">Select Group</option>
+                                        @foreach ($groups as $item)
+                                            <option value="{{$item->id}}">{{$item->name}}</option> 
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td style="width:1%"></td>
+                                <td style="width: 15%">
+                                    <label for="">Brand</label>
+                                    <select name="brand" id="brand_filter_id" class="brand_filter_id form-control">
+                                        <option value="">Select Brand</option>
+                                        @foreach ($brands as $item)
+                                            <option value="{{$item->id}}">{{$item->name}}</option> 
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td style="width:1%"></td>
+                                <td style="width:19%">
+                                    <label for="">Category</label>
+                                    <select name="category" id="category_filter_id" class="category_filter_id form-control">
+                                        <option value="">Select Category</option>
+                                        @foreach ($categories as $item)
+                                            <option value="{{$item->id}}">{{$item->name}}</option> 
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td style="width:1%"></td>
+                                <td style="width: 20%">
+                                    <label for="">Search</label>
+                                    <input type="text" class="search form-control" name="search" autofocus autocomplete="off">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    {{-- <div class="on_processing" style="text-align: center;padding-bottom:20px;display:none;">
+                        <strong style="color:#0c0c0c;z-index:99999;background-color:#f9f9f9;padding:3px 5px;border-radious:3px solidg gray;">
+                            Processing...
+                        </strong>
+                    </div> --}}
                 </div>
             </div>
+            <br>
             <!-------responsive table------> 
             <div class="productListAjaxResponseResult">
 

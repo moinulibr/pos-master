@@ -99,5 +99,17 @@
             @endforeach
         </tbody>
     </table>
-    {{$datas->links()}}
+    {{-- {{$datas->links()}} --}}
+</div>
+<input type="hidden" class="page_no" name="page" value="{{$page_no}}">
+                    
+<div class="row">
+    <div class="col-md-3">
+        Showing {{$datas->count()}} from {{ $datas->firstItem() ?? 0 }} to {{ $datas->lastItem() }} of {{ $datas->total() }}  entries 
+    </div>
+    <div class="col-md-9">
+        <div style="float: right">
+        {{ $datas->links() }}
+        </div>
+    </div>
 </div>

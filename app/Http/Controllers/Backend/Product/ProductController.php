@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Backend\Product;
 
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Backend\Price\Price;
-use App\Models\Backend\Stock\Stock;
 
 //use Illuminate\Support\Facades\Validator;
 
+use App\Models\Backend\Stock\Stock;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\Permission\Permission;
@@ -40,6 +41,11 @@ class ProductController extends Controller
      */
     public function index()
     {   
+        $data['page_no'] = 1;
+        $data['categories'] = Category::latest()->get();
+        $data['brands'] = Brand::latest()->get();
+        $data['groups'] = SupplierGroup::latest()->get();
+        $data['suppliers'] = Supplier::latest()->get();
         $data['colors'] = Color::latest()->get();
         $data['datas']  = Product::latest()->paginate(50);
         $data['prices'] = Price::where('status',1)
@@ -57,6 +63,10 @@ class ProductController extends Controller
      */
     public function productListByAjaxResponse(Request $request)
     {
+        $data['categories'] = Category::latest()->get();
+        $data['brands'] = Brand::latest()->get();
+        $data['groups'] = SupplierGroup::latest()->get();
+        $data['suppliers'] = Supplier::latest()->get();
         $data['colors'] = Color::latest()->get();
         $data['prices'] = Price::where('status',1)
                         ->where('branch_id',authBranch_hh())
@@ -64,18 +74,47 @@ class ProductController extends Controller
                         ->orderBy('custom_serial','ASC')
                         ->get();
 
+        $status     = $request->status ?? NULL;
+        $pagination = $request->pagination ?? 50;
+        $search     = $request->search ?? NULL;
+        $supplier_id = $request->supplier_id ?? NULL;
+        $supplier_group_id = $request->supplier_group_id ?? NULL;
+        $brand_id = $request->brand_id ?? NULL;
+        $category_id = $request->category_id ?? NULL;
+        $date_from = Carbon::parse($request->input('start_date'));
+        $date_to = Carbon::parse($request->input('end_date') ?? date("Y-m-d h:i:s",strtotime(date("Y-m-d h:i:s")."-21 day")));
+        
         $product  = Product::query();
         if($request->ajax())
         {
             if($request->search)
             {
-                $product->where('name','like','%'.$request->search.'%')
-                        ->orWhere('sku','like','%'.$request->search.'%')
-                        ->orWhere('bacode','like','%'.$request->search.'%')
-                        ->orWhere('custom_code','like','%'.$request->search.'%')
-                        ->orWhere('company_code','like','%'.$request->search.'%');
+                $product->where('name','like','%'.$search.'%')
+                        ->orWhere('sku','like','%'.$search.'%')
+                        ->orWhere('bacode','like','%'.$search.'%')
+                        ->orWhere('custom_code','like','%'.$search.'%')
+                        ->orWhere('company_code','like','%'.$search.'%');
             }
-            $data['datas']  =  $product->latest()->paginate(50);
+            if($supplier_id)
+            {
+                $product->where('supplier_id', $supplier_id);
+            }
+            if($supplier_group_id)
+            {
+                $product->where('supplier_group_id', $supplier_group_id);
+            }  
+            if($brand_id)
+            {
+                $product->where('brand_id', $brand_id);
+            }
+            if($category_id)
+            {
+                $product->where('category_id', $category_id);
+            }               
+            $data['datas']  =  $product->orderBy('custom_code', 'desc')
+                                        ->latest()
+                                        ->paginate($pagination);
+            $data['page_no'] = $request->page ?? 1;
             $html = view('backend.product.product.ajax.list_ajax_response',$data)->render();
             return response()->json([
                 'status' => true,

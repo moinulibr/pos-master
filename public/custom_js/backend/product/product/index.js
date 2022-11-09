@@ -5,9 +5,20 @@
 
     function productList()
     {
-        var url = $('.productListUrl').val();
+        var createUrl = $('.productListUrl').val();
+        var page_no     = parseInt($('.page_no').val());
+        var pagination  = $('.paginate :selected').val();
+        var supplier_id = $('.supplier_filter_id :selected').val();
+        var supplier_group_id = $('.ground_filter_id :selected').val();
+        var brand_id = $('.brand_filter_id :selected').val();
+        var category_id = $('.category_filter_id :selected').val();
+        var search = $('.search').val();
+        var url  =  createUrl+"?page="+page_no;
         $.ajax({
             url:url,
+            data:{
+                pagination:pagination,search:search,supplier_id:supplier_id,page_no:page_no,supplier_group_id:supplier_group_id,brand_id:brand_id,category_id:category_id
+            },
             success:function(response){
                 if(response.status == true)
                 {
@@ -28,8 +39,18 @@
     function getPagination(pageNumber){
         var createUrl = $('.productListUrl').val();
         var url =  createUrl+"?page="+pageNumber;
+        var page_no     = parseInt($('.page_no').val());
+        var pagination  = $('.paginate :selected').val();
+        var supplier_id = $('.supplier_filter_id :selected').val();
+        var supplier_group_id = $('.ground_filter_id :selected').val();
+        var brand_id = $('.brand_filter_id :selected').val();
+        var category_id = $('.category_filter_id :selected').val();
+        var search = $('.search').val();
         $.ajax({
             url: url,
+            data:{
+                pagination:pagination,search:search,supplier_id:supplier_id,page_no:page_no,supplier_group_id:supplier_group_id,brand_id:brand_id,category_id:category_id
+            },
             type: "GET",
             datatype:"HTML",
             success: function(response){
@@ -41,6 +62,10 @@
         });
     }
 //-----------------------------------------------------------------------
+
+    $(document).on('change','.paginate,.supplier_filter_id,.ground_filter_id,.brand_filter_id,.category_filter_id',function(){
+        productList();
+    });
 
 //-----------------------------------------------------------------------
     //search 
@@ -54,10 +79,21 @@
         if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = true;
         if (ctrlDown && (e.keyCode == vKey || e.keyCode == cKey || e.keyCode == xKey)) return false;
         var search = $(this).val();
-        var url = $('.productListUrl').val();
+        var createUrl = $('.productListUrl').val();
+
+        var page_no     = parseInt($('.page_no').val());
+        var pagination  = $('.paginate :selected').val();
+        var supplier_id = $('.supplier_filter_id :selected').val();
+        var supplier_group_id = $('.ground_filter_id :selected').val();
+        var brand_id = $('.brand_filter_id :selected').val();
+        var category_id = $('.category_filter_id :selected').val();
+        var url  =  createUrl+"?page="+page_no;
+
         $.ajax({
             url: url,
-            data:{search:search},
+            data:{
+                pagination:pagination,search:search,supplier_id:supplier_id,page_no:page_no,supplier_group_id:supplier_group_id,brand_id:brand_id,category_id:category_id
+            },
             type: "GET",
             datatype:"HTML",
             success: function(response){
