@@ -445,12 +445,12 @@
                                                             
                                                             <!----selling price percentage----->
                                                             <div style="font-size:14px;margin-top:1px;width:100%;padding:1% 1%;background-color:#d0e7ef;color:#100f0f;">
-                                                                <div style="width:52%;float:left;border-right:1px solid white;margin-left:2px;background-color:#979393;color:#b8f988;padding:0px 1px 0px 3px;">
-                                                                    <strong class="percentage_of_sell_price_against_of_the_purchase_price_text" style="font-size:13px;color:#b8f988;" title="Purchase"></strong>%
+                                                                <div style="width:52%;float:left;border-right:1px solid white;margin-left:1px;background-color:#979393;color:#fffffd;padding:0px 1px 0px 2px;">
+                                                                    <span style="font-size: 12px;">P+ </span><strong class="percentage_of_sell_price_against_of_the_purchase_price_text" style="font-size:12px;color:#fffffd;" title="Purchase"></strong>%
                                                                     <input type="hidden" name="percentage_of_sell_price_against_of_the_purchase_price_value" class="percentage_of_sell_price_against_of_the_purchase_price_value">
                                                                 </div>
-                                                                <div style="width:43%;float:right;text-align:right;margin-right:2px;background-color:#979393;color:#fffffd;padding:0px 3px 0px 1px;">
-                                                                    <strong class="percentage_of_sell_price_against_of_the_mrp_price_text" style="font-size:13px;color:#fffffd;" title="MRP"></strong>%
+                                                                <div style="width:45%;float:right;text-align:right;margin-right:2px;background-color:#979393;color:yellow;padding:0px 0px 0px 1px;">
+                                                                    <span style="font-size: 12px;">M- </span><strong class="percentage_of_sell_price_against_of_the_mrp_price_text" style="font-size:12px;color:yellow;" title="MRP"></strong>%
                                                                     <input type="hidden" name="percentage_of_sell_price_against_of_the_mrp_price_value" class="percentage_of_sell_price_against_of_the_purchase_price_value">
                                                                 </div>
                                                                 <div style="float:clear;clear:both;"></div>

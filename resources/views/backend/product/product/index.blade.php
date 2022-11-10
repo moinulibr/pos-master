@@ -270,7 +270,7 @@
                                                 <div class="clearfix"></div>
                                             </div>
                                             <div class="form-group col-md-12 product_name_with_variant_div product_name_with_variant_div_${uniqueId}" data-product_name_with_variant_div="${uniqueId}" style="display:none;margin-bottom:-2px;margin-top:-8px;">
-                                                <strong style="color:red;">Product</strong> : <span class="product_name_with_variant_text product_name_with_variant_text_${uniqueId}" data-product_name_with_variant_text="${uniqueId}" style="color:yellow;font-size:12px;"></span>
+                                                <strong style="color:red;">Product</strong> : <span class="product_name_with_variant_text product_name_with_variant_text_${uniqueId}" data-product_name_with_variant_text="${uniqueId}" style="font-weight: bold;color:#262625;font-size:12px;"></span>
                                             </div>
                                         </div>
                                     </div>

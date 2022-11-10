@@ -68,7 +68,7 @@
                                                             <div class="clearfix"></div>
                                                         </div>
                                                         <div class="form-group col-md-12 product_name_with_variant_div product_name_with_variant_div_0" data-product_name_with_variant_div="0" style="display:none;margin-bottom:-2px;margin-top:-8px;">
-                                                            <strong style="color:red;">Product</strong> : <span class="product_name_with_variant_text product_name_with_variant_text_0" data-product_name_with_variant_text="0" style="font-size:13px;"></span>
+                                                            <strong style="color:red;">Product</strong> : <span class="product_name_with_variant_text product_name_with_variant_text_0" data-product_name_with_variant_text="0" style="font-size:13px;font-weight: bold;"></span>
                                                         </div>
                                                     </div>
                                                 </div>
