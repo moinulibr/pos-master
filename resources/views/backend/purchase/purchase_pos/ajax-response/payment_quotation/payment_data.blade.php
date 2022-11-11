@@ -25,7 +25,7 @@
                     </td>
                     <td style="width:1%">:</td>
                     <td style="width:18%;background-color:#b72323;color:#ffff;">
-                        <h5></h5>
+                        <strong></strong>
                     </td>
                 <tr>
                     <td style="width:17%">Address</td>
@@ -37,14 +37,14 @@
                     </td>
                     <td style="width:1%;">:</td>
                     <td style="width:18%;background-color:green;color:#ffff;">
-                        <h5><strong class="total_advance_amount"></strong></h5>
+                        <strong class="total_advance_amount"></strong>
                     </td>
                 </tr>
 
                 <tr>
                     <th colspan="3" style="text-align: right;background-color:#433d48;color:#ffff;">Current Invoice Payable Amount</th>
                     <th colspan="3" style="text-align: left;background-color:#8938dd;color:#ffff;">
-                        <h5><strong class="total_invoice_payble_amount">{{$totalPayableAmount}}</strong></h5>
+                        <strong class="total_invoice_payble_amount">{{$totalPayableAmount}}</strong>
                     </th>
                 </tr>
             </table>
