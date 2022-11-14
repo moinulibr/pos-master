@@ -37,6 +37,10 @@ class SellProductReturnController extends Controller
     public function index(Request $request)
     {
         $data['data']  =  SellInvoice::where('id',$request->id)->first();
+        
+        $data['cashAccounts'] = cashAccounts_hh();
+        $data['advanceAccounts'] = advanceAccounts_hh();
+        
         $html = view('backend.sell.sell_return.index',$data)->render();
         $product = view('backend.sell.sell_return.product_only',$data)->render();
         return response()->json([

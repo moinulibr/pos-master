@@ -149,6 +149,7 @@
 <script src="{{asset('custom_js/backend')}}/sell/delivery/index.js?v=1"></script>
 <script src="{{asset('custom_js/backend')}}/sell/sell_return/index.js?v=1"></script>
 <script src="{{asset('custom_js/backend')}}/sell/sell_payment/payment.js?v=1"></script>
+<script src="{{asset('custom_js/backend')}}/sell/sell_return_payment/return_payment.js?v=2"></script>
 
 
 

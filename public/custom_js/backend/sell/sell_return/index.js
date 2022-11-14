@@ -251,6 +251,9 @@
         var totalReturnAmountAfterDiscount = subtotalBeforeDiscount - totalInvoiceDiscountAmount; 
         $('.total_return_amount_after_discount').text(totalReturnAmountAfterDiscount.toFixed(2));
         $('.total_return_amount_after_discount_val').val(totalReturnAmountAfterDiscount.toFixed(2));
+        
+        //payments part, return payable amount
+        linkBetweenSellReturnFunctionAndSellReturnPaymentOption();
     }
 
 

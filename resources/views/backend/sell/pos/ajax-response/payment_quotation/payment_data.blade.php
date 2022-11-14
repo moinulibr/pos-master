@@ -185,7 +185,7 @@
                                 </label> 
                             </div>
                             <div style="float:right;width:70%;">
-                                <input disabled type="text" class="form-control total_invoice_amount_for_calculator"  value="{{$totalPayableAmount}}"  placeholder="Invoice Amount">
+                                <input disabled type="text"  style="color:yellow!important;" class="form-control total_invoice_amount_for_calculator"  value="{{$totalPayableAmount}}"  placeholder="Invoice Amount">
                             </div> 
                         </div> 
                     </td>
@@ -197,7 +197,7 @@
                                 </label> 
                             </div>
                             <div style="float:right;width:70%;">
-                                <input type="text" class="total_paying_amount_for_calculator form-control invoice_paying_amount" disabled placeholder=" Paying Amount">
+                                <input type="text"  style="color:yellow!important;" class="total_paying_amount_for_calculator form-control invoice_paying_amount" disabled placeholder=" Paying Amount">
                             </div> 
                         </div> 
                     </td>
