@@ -422,7 +422,9 @@ use App\Models\Backend\ProductAttribute\Unit;
                 //value = label
                 1 => "Purchase",
                 2 => "Sell",
-                3 => "Expense",
+                3 => "Purchase Return",
+                4 => "Sell Return",
+                5 => "Expense",
             ];
         }
     /*

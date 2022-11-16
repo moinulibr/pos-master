@@ -320,6 +320,7 @@
             $('.total_invoice_amount_for_calculator_for_sell_return').val(totalReturnAmountAfterDiscount);
             if(totalReturnAmountAfterDiscount > 0)
             {
+                submitButtonEnableForSellReturn();
                 var currentPayingAmount = calculationTotalPayingDifferentAllMethodsAmountForSellReturn(); 
                 if(currentPayingAmount > totalReturnAmountAfterDiscount)
                 {
@@ -327,17 +328,14 @@
                 }else{
                     paymentProcessingWithDueFullAmountAndPayingAmountDisabledAndZeroForSellReturn();
                     emptyAndHideBankingOptionAllDataForSellReturn();
-    
-                    cashPaymentRemoveAttributeNameAndRequiredForSellReturn();
-                    advancePaymentRemoveAttributeNameAndRequiredForSellReturn();
-                    bankingPaymentRemoveAttributeNameAndRequiredForSellReturn();
                 }
             }else{
+                submitButtonDisabledForSellReturn();
                 paymentProcessingWithDueFullAmountAndPayingAmountZeroForSellReturn();
-                
             }
         }
         //this is used for first time in the sell_return/index.js file
+
         //banking option all data
         function emptyAndHideBankingOptionAllDataForSellReturn()
         {

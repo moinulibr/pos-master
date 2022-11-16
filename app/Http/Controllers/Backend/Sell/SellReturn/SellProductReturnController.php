@@ -13,10 +13,10 @@ use App\Models\Backend\SellDelivery\SellProductDelivery;
 use App\Models\Backend\SellReturn\SellReturnProduct;
 use App\Models\Backend\SellReturn\SellReturnProductInvoice;
 use App\Traits\Backend\Stock\Logical\StockChangingTrait;
-
+use App\Traits\Backend\Payment\PaymentProcessTrait;
 class SellProductReturnController extends Controller
 {
-    use StockChangingTrait;
+    use StockChangingTrait, PaymentProcessTrait;
 
     private $invoiceTotalQuantity;
     private $invoiceTotalPayableAmount;
@@ -90,6 +90,24 @@ class SellProductReturnController extends Controller
                     $this->sellProductStockChangesData($returnInvoice,$invoiceData, $sell_product_stock_id, $request->input('returning_qty_'.$sell_product_stock_id));
                 }
                 $this->updateSellInvoiceTable($invoiceData);
+
+                //payment process
+                if(($request->invoice_total_paying_amount ?? 0) > 0)
+                {
+                    //for payment processing 
+                    $this->paymentModuleId = getModuleIdBySingleModuleLebel_hh('Sell Return');
+                    $this->paymentCdfTypeId = getCdfIdBySingleCdfLebel_hh('Debit');
+                    $moduleRelatedData = [
+                        'module_invoice_no' => $makeInvoice,
+                        'module_invoice_id' => $returnInvoice->id,
+                        'user_id' => $invoiceData->customer_id,//client[customer,supplier,others staff]
+                    ];
+                    $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData = $moduleRelatedData;
+                    $this->paymentProcessingRelatedOfAllRequestData = paymentDataProcessingWhenSellingSubmitFromPos_hh($request);// $paymentAllData;
+                    $this->invoiceTotalPayingAmount = $request->invoice_total_paying_amount ?? 0 ;
+                    $this->processingPayment();
+                }
+
                 DB::commit();
             }else{
                 return response()->json([
