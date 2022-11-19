@@ -127,7 +127,7 @@
         //cash payment add attribute name and required 
         function cashPaymentAddAttributeNameAndRequiredForSellReturn()
         {
-            jQuery('.account_id_for_sell_return_1').attr('name','account_id_for_sell_return_1');
+            jQuery('.account_id_for_sell_return_1').attr('name','account_id_1');
             jQuery('.account_id_for_sell_return_1').attr('required',true);
         }
         //cash payment remove attribute name and required 
@@ -146,7 +146,7 @@
         //advance payment  add attribute name and required
         function advancePaymentAddAttributeNameAndRequiredForSellReturn()
         {
-            jQuery('.account_id_for_sell_return_2').attr('name','account_id_for_sell_return_2');
+            jQuery('.account_id_for_sell_return_2').attr('name','account_id_2');
             jQuery('.account_id_for_sell_return_2').attr('required',true);
         }
         //advance payment  remove attribute name and required
@@ -241,6 +241,18 @@
             jQuery('.banking_payment_value_for_sell_return').val(0);
         }
 
+        //new payment Processing With Due Full Amount And All Paying Amount Zero
+        function paymentProcessingWithDueFullAmountAndAllPayingAmountZeroForSellReturn()
+        {
+            //paying different method 
+            jQuery('.cash_payment_value_for_sell_return').val(0);
+            jQuery('.advance_payment_value_for_sell_return').val(0);
+            jQuery('.banking_payment_value_for_sell_return').val(0);
+            var totalInvoicePayableAmount = nanCheckForSellReturnPayment(parseFloat(jQuery('.total_sell_return_invoice_payable_amount').text()));
+            jQuery('.invoice_paying_amount_for_sell_return').val(0);
+            jQuery('.invoice_due_amount_for_sell_return').val(totalInvoicePayableAmount);
+        }
+
 
         //when pressing paying different method : keyup method
         jQuery(document).on('keyup','.paying_different_method_for_sell_return',function()
@@ -319,19 +331,30 @@
             $('.total_sell_return_invoice_payable_amount').text(totalReturnAmountAfterDiscount);
             $('.total_invoice_amount_for_calculator_for_sell_return').val(totalReturnAmountAfterDiscount);
             if(totalReturnAmountAfterDiscount > 0)
-            {
+            { 
                 submitButtonEnableForSellReturn();
                 var currentPayingAmount = calculationTotalPayingDifferentAllMethodsAmountForSellReturn(); 
                 if(currentPayingAmount > totalReturnAmountAfterDiscount)
                 {
+                    paymentProcessingWithDueFullAmountAndAllPayingAmountZeroForSellReturn();
                     paymentProcessingWithDueFullAmountAndPayingAmountZeroForSellReturn();
-                }else{
+                }
+                else if(currentPayingAmount <= totalReturnAmountAfterDiscount)
+                { 
+                    paymentProcessingWithDueFullAmountAndAllPayingAmountZeroForSellReturn();
+                    paymentProcessingWithDueFullAmountAndPayingAmountDisabledAndZeroForSellReturn();
+                    emptyAndHideBankingOptionAllDataForSellReturn();
+                    paymentProcessingWithDueFullAmountAndPayingAmountZeroForSellReturn();
+                }
+                else{
                     paymentProcessingWithDueFullAmountAndPayingAmountDisabledAndZeroForSellReturn();
                     emptyAndHideBankingOptionAllDataForSellReturn();
                 }
             }else{
                 submitButtonDisabledForSellReturn();
                 paymentProcessingWithDueFullAmountAndPayingAmountZeroForSellReturn();
+                paymentProcessingWithDueFullAmountAndPayingAmountDisabledAndZeroForSellReturn();
+                emptyAndHideBankingOptionAllDataForSellReturn();
             }
         }
         //this is used for first time in the sell_return/index.js file

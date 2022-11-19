@@ -20,7 +20,8 @@ class CreateSellReturnProductInvoicesTable extends Migration
                 $table->string('invoice_no',50)->nullable();
                 $table->string('sell_invoice_no',50)->nullable();
                 $table->integer('sell_invoice_id')->nullable();
-               
+                $table->integer('customer_id')->nullable();
+                
                 $table->decimal('quantity',20,3)->default(0);
 
                 $table->decimal('subtotal_before_discount',20,2)->nullable();

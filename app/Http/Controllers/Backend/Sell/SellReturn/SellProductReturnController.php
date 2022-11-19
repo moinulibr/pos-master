@@ -43,10 +43,12 @@ class SellProductReturnController extends Controller
         
         $html = view('backend.sell.sell_return.index',$data)->render();
         $product = view('backend.sell.sell_return.product_only',$data)->render();
+        $payment = view('backend.sell.sell_return.payment',$data)->render();
         return response()->json([
             'status' => true,
             'html' => $html,
-            'product' => $product
+            'product' => $product,
+            'payment' => $payment,
         ]);
     }
 
@@ -79,6 +81,8 @@ class SellProductReturnController extends Controller
                 $dataRequest['subtotal_before_discount'] = $request->return_invoice_subtotal_before_discount;
                 $dataRequest['total_amount_after_discount'] = $request->return_invoice_total_amount_after_discount;
                 $dataRequest['total_discount_amount'] = $request->return_invoice_total_discount_amount;
+                $dataRequest['invoice_total_paying_amount'] = $request->invoice_total_paying_amount ?? 0 ;
+                $dataRequest['customer_id'] = $request->customer_id;
                 $rand = rand(01,99);
                 $makeInvoice = 'SREL'.date("iHsymd").$rand;
                 $invoiceData = SellInvoice::where('id',$request->sell_invoice_id)->first();
@@ -116,13 +120,18 @@ class SellProductReturnController extends Controller
                     'type'      => 'error'
                 ]);
             }
+            $data['cashAccounts'] = cashAccounts_hh();
+            $data['advanceAccounts'] = advanceAccounts_hh();
+            
             $data['data']  = SellInvoice::where('id',$request->sell_invoice_id)->first();
             $product = view('backend.sell.sell_return.product_only',$data)->render();
+            $payment = view('backend.sell.sell_return.payment',$data)->render();
             $printRoute = route('admin.sell.product.return.print.product.returned.invoice.wise.returned.list',$makeInvoice);
             $printRouteHtml = '<a href="'.$printRoute.'" class="print" target="_blank">Print</a>';
             return response()->json([
                 'status'    => true,
                 'product' => $product,
+                'payment' => $payment,
                 'print' => $printRouteHtml,
                 'message'   => "Return submited successfully!",
                 'type'      => 'success'
@@ -327,6 +336,7 @@ class SellProductReturnController extends Controller
         $returnInvoice->invoice_no = $makeInvoice;
         $returnInvoice->sell_invoice_no = $sellInvoiceData->invoice_no;
         $returnInvoice->sell_invoice_id = $sellInvoiceData->id;
+        $returnInvoice->customer_id = $dataRequest['customer_id'];
         //$returnInvoice->quantity = $makeInvoice;
         $returnInvoice->subtotal_before_discount = $dataRequest['subtotal_before_discount'];
         $returnInvoice->discount_amount = $dataRequest['discount_amount'];
@@ -336,6 +346,10 @@ class SellProductReturnController extends Controller
         $returnInvoice->total_payable_amount = $dataRequest['total_amount_after_discount'];
         $returnInvoice->return_note = $dataRequest['return_note'];
         $returnInvoice->receive_note = $dataRequest['receive_note'];
+
+        $returnInvoice->paid_amount	 = $dataRequest['invoice_total_paying_amount'];
+        $returnInvoice->due_amount	 = $dataRequest['total_amount_after_discount'] - $dataRequest['invoice_total_paying_amount'];
+       
         $returnInvoice->return_date = date('Y-m-d');
         $returnInvoice->created_by = authId_hh();
         $returnInvoice->save();
@@ -371,8 +385,8 @@ class SellProductReturnController extends Controller
     public function printSellReturnProducInvoiceWisedProductList($invoiceId)
     {
         $data['delivery_invoice'] = $invoiceId;
-        $data['sellProductDelivery']  =  SellProductDelivery::where('invoice_no',$invoiceId)->first();
-        $data['data']  =  SellProductDelivery::where('invoice_no',$invoiceId)->get();
+        $data['sellProductDelivery']  =  SellReturnProductInvoice::where('invoice_no',$invoiceId)->first();
+        $data['data']  =  SellReturnProductInvoice::where('invoice_no',$invoiceId)->get();
         return view('backend.sell.sell_return.print',$data);
     }
 

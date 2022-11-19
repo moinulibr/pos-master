@@ -21,6 +21,7 @@
                     {
                         $('#sellProductReturnModal').html(response.html).modal('show');
                         $('.product_related_response_here').html(response.product);
+                        $('.sell_return_payment_options_render').html(response.payment);
                     }
                 }
             });
@@ -256,6 +257,11 @@
         linkBetweenSellReturnFunctionAndSellReturnPaymentOption();
     }
 
+    function discountCalculationBasedOnSubtotalAfterSubmit()
+    {
+        subtotalBeforeDiscount();
+        discountCalculationBasedOnSubtotal();
+    }
 
 
     jQuery(document).on("submit",'.storeReturnDataFromReturnOption',function(e){
@@ -281,8 +287,10 @@
                 if(response.status == true)
                 {
                     $('.product_related_response_here').html(response.product);
+                    $('.sell_return_payment_options_render').html(response.payment);
                     $('.alert_success_message_div').show();
                     $('.success_message_text').html(response.message+"<br/>"+response.print);
+                    discountCalculationBasedOnSubtotalAfterSubmit();
                 }else{
                     $('.alert_danger_message_div').show();
                     $('.danger_message_text').text(response.message);
