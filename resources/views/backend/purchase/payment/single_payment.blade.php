@@ -9,11 +9,11 @@
                 </button>
             </h4>
         </div>
-        <form action="{{route('admin.purchase.regular.pos.store.data.from.purchase.cart')}}" method="POST"  class="storeDataFromPurchaseCart" enctype="multipart/form-data">
+        <form action="{{route('admin.purchase.regular.purchase.view.single.invoice.wise.payment.making.modal')}}" method="POST"  class="storeSingleInvoiceWisePaymentData" enctype="multipart/form-data">
             @csrf
             <div class="modal-body">
 
-
+                <input type="hidden" name="purchase_invoice_id" value="{{$data->id}}">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="table">
@@ -59,9 +59,25 @@
                                 <tr>
                                     <th colspan="3" style="text-align: right;background-color:#433d48;color:#ffff;">Current Invoice Payable Amount</th>
                                     <th colspan="3" style="text-align: left;background-color:#8938dd;color:#ffff;">
-                                        <strong class="total_invoice_payble_amount">{{$data->total_payable_amount}}</strong>
+                                        <strong class="">{{$data->total_payable_amount}}</strong>
                                     </th>
                                 </tr>
+                            </table>
+                        </div>
+                        <div class="table">
+                            <table class="table table-bordered table striped">
+                                <tr>
+                                    <td style="width:30%;background-color:#8fd38f;color:#ffff;">Invoice Total Paid Amount</td>
+                                    <td style="width:0.25%;background-color:#8fd38f;color:#ffff;">:</td>
+                                    <td style="width:18%;background-color:#35b935;color:#ffff;">{{ $data->total_paid_amount }}</td>
+                                    
+                                    <td style="width:2.50%"></td>
+
+                                    <td style="width:30%;background-color:#e67373;color:#ffff;text-align:right">Invoice Total Due Amount</td>
+                                    <td style="width:0.25%;background-color:#e67373;color:#ffff;">:</td>
+                                    <td style="width:18%;background-color:#f15454;color:#ffff;"><strong class="total_invoice_payble_amount">{{ $data->due_amount }}</strong></td>
+                                </tr>
+            
                             </table>
                         </div>
                     </div>

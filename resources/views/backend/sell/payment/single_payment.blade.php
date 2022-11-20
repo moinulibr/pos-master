@@ -9,10 +9,11 @@
                 </button>
             </h4>
         </div>
-        <form action="{{route('admin.purchase.regular.pos.store.data.from.purchase.cart')}}" method="POST"  class="storeDataFromPurchaseCart" enctype="multipart/form-data">
+        <form action="{{route('admin.sell.regular.sell.view.single.invoice.receiving.payment.modal')}}" method="POST"  class="storeSingleInvoiceWisePaymentData" enctype="multipart/form-data">
             @csrf
             <div class="modal-body">
 
+                <input type="hidden" name="sell_invoice_id" value="{{$data->id}}">
 
                 <div class="row">
                     <div class="col-md-12">
@@ -59,7 +60,7 @@
                                 <tr>
                                     <th colspan="3" style="text-align: right;background-color:#433d48;color:#ffff;">Current Invoice Payable Amount</th>
                                     <th colspan="3" style="text-align: left;background-color:#8938dd;color:#ffff;">
-                                        {{$data->total_payable_amount}}
+                                        {{$data->total_payable_amount }}
                                     </th>
                                 </tr>
                             </table>

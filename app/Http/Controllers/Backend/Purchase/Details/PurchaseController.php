@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Backend\Purchase\Details;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Backend\Sell\SellInvoice;
-use Illuminate\Http\Request;
 use App\Models\Backend\Purchase\PurchaseInvoice;
 
+use App\Traits\Backend\Payment\PaymentProcessTrait;
 class PurchaseController extends Controller
 {
+    use PaymentProcessTrait;
     /**
      * Display a listing of the resource.
      *
@@ -92,7 +95,60 @@ class PurchaseController extends Controller
             ]);
         }
     }
+     //store receiving single invoice swise payment
+     public function makingSingleInvoiceWisePayment(Request $request)
+     {
+        //return $request;
+        DB::beginTransaction();
+        try {
+            //payment process
+            if(($request->invoice_total_paying_amount ?? 0) > 0)
+            {
+                $invoiceData = PurchaseInvoice::findOrFail($request->purchase_invoice_id);
+                //for payment processing 
+                $this->paymentModuleId = getModuleIdBySingleModuleLebel_hh('Purchase Return');
+                $this->paymentCdfTypeId = getCdfIdBySingleCdfLebel_hh('Debit');
+                $moduleRelatedData = [
+                    'module_invoice_no' => $invoiceData->invoice_no,
+                    'module_invoice_id' => $invoiceData->id,
+                    'user_id' => $invoiceData->supplier_id,//client[customer,supplier,others staff]
+                ];
+                $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData = $moduleRelatedData;
+                $this->paymentProcessingRelatedOfAllRequestData = paymentDataProcessingWhenSellingSubmitFromPos_hh($request);// $paymentAllData;
+                $this->invoiceTotalPayingAmount = $request->invoice_total_paying_amount ?? 0 ;
+                $this->processingPayment();
+
+                //change amount from PurchaseInvoice 
+                $invoiceData->paid_amount = $invoiceData->paid_amount + $request->invoice_total_paying_amount ?? 0;
+                $invoiceData->due_amount = $invoiceData->due_amount - $request->invoice_total_paying_amount ?? 0;
+                $invoiceData->total_paid_amount = $invoiceData->total_paid_amount + $request->invoice_total_paying_amount ?? 0;
+                $invoiceData->save();
+            } 
+            DB::commit();
+
+            $data['data'] = PurchaseInvoice::findOrFail($request->purchase_invoice_id);
+            $data['cashAccounts'] = cashAccounts_hh();
+            $data['advanceAccounts'] = advanceAccounts_hh();
+            $html = view('backend.purchase.payment.single_payment',$data)->render();
+            return response()->json([
+                'status'    => true,
+                'message'   => "Payment process successfully!",
+                'type'      => 'success',
+                'html'     => $html,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+            return response()->json([
+                'status'    => true,
+                'message'   => "Something went wrong",
+                'type'      => 'error'
+            ]);
+        }
+    }
+ 
     
+
     public function create()
     {
         //

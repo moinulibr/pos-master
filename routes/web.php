@@ -440,6 +440,7 @@ Route::group(['middleware' => ['auth']], function ()
                 
                 //payment
                 Route::get('sell/receive/payment/','SellController@receiveSingleInvoiceWisePayment')->name('view.single.invoice.receive.payment.modal');
+                Route::post('/sell/receive/invoice/wise/payment/','SellController@receivingSingleInvoiceWisePayment')->name('view.single.invoice.receiving.payment.modal');
             });
             //quotation
             Route::group(['prefix'=>'admin/sell/regular','as'=> 'admin.sell.regular.quotation.', 'namespace'=>'Backend\Sell\Details'],function(){
@@ -580,7 +581,8 @@ Route::group(['middleware' => ['auth']], function ()
             Route::get('purchase/single/view','PurchaseController@singleView')->name('single.view');//->middleware(['permissions:unit|index']);
             
             //payment
-            Route::get('purchase/receive/payment/','PurchaseController@makeSingleInvoiceWisePayment')->name('view.single.invoice.make.payment.modal');
+            Route::get('purchase/making/payment/','PurchaseController@makeSingleInvoiceWisePayment')->name('view.single.invoice.make.payment.modal');
+            Route::post('single/invoice/wise/purchase/making/payment/','PurchaseController@makingSingleInvoiceWisePayment')->name('view.single.invoice.wise.payment.making.modal');
         });
 
         //quotation

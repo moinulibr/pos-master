@@ -473,6 +473,46 @@
       
 
 
+    jQuery(document).on("submit",'.storeSingleInvoiceWisePaymentData',function(e){
+        e.preventDefault();
+        $('.alert_success_message_div').hide();
+        $('.success_message_text').text('');
+        $('.alert_danger_message_div').hide();
+        $('.danger_message_text').text('');
+
+        var form = jQuery(this);
+        var url = form.attr("action");
+        var type = form.attr("method");
+        var data = form.serialize();
+        jQuery.ajax({
+            url: url,
+            data: data,
+            type: type,
+            datatype:"JSON",
+            beforeSend:function(){
+                jQuery('.processing').fadeIn();
+            },
+            success: function(response){
+                if(response.status == true)
+                {
+                    $('#purchaseViewSingleInvoiceMakePaymentModal').html('');
+                    $('#purchaseViewSingleInvoiceMakePaymentModal').html(response.html).modal('show');
+                    paymentProcessingWithDueFullAmountAndPayingAmountZero();
+                    jQuery.notify(response.message, response.type);
+                    $('.success_message_text').html(response.message);
+                }else{
+                    $('.alert_danger_message_div').show();
+                    $('.danger_message_text').text(response.message);
+                }
+            },
+            complete:function(){
+                jQuery('.processing').fadeOut();
+            },
+        });
+        //end ajax
+    });
+
+
     
     function nanCheckForPurchasePayment(value)
     {
