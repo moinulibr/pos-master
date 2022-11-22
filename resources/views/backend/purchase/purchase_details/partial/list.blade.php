@@ -38,6 +38,7 @@
                                 <a class="dropdown-item print"  target="_blank" data-id="{{$item->id}}" href="{{route('admin.sell.regular.pos.print.from.sell.list',$item->id)}}" style="cursor: pointer">Print (POS)</a>
                                 <a class="dropdown-item singlePurchaseInvoiceWiseReceiveProduct" data-id="{{$item->id}}" style="cursor: pointer">Receive Product</a>
                                 <a class="dropdown-item singleViewPurchaseInvoiceWiseMakePaymentModal" data-id="{{$item->id}}" style="cursor: pointer">Make Payment</a>
+                                <a class="dropdown-item singleViewPurchaseInvoiceWisePaymentModal" data-id="{{$item->id}}" style="cursor: pointer">View Payment</a>
                                 {{-- <a class="dropdown-item singleEditModal" data-id="{{$item->id}}" href="javascript:void(0)">Edit</a>
                                 <a class="dropdown-item singleDeleteModal" data-id="{{$item->id}}" data-name="{{$item->name}}" href="javascript:void(0)">Delete</a> --}}
                             {{-- <div class="dropdown-divider"></div>
@@ -68,7 +69,7 @@
                     <td>{{$item->supplier ? $item->supplier->name : NULL}}</td>
                     <td>{{$item->total_payable_amount}}</td>
                     <td>{{$item->total_discount}}</td>
-                    <td>{{$item->payment_status}}</td>
+                    <td>{{paymentStatus_hh($item->total_payable_amount,$item->total_paid_amount)}}</td>
                     <td>{{$item->total_paid_amount}}</td>
                     <td>{{$item->due_amount}}</td>
                     <td>{{$item->createdBy ? $item->createdBy->name : NULL}}</td>

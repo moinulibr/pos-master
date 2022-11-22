@@ -67,9 +67,12 @@ trait StoreDataFromPurchaseCartTrait
         if(($this->purchaseCreateFormRequestData['invoice_total_paying_amount'] ?? 0) > 0)
         {
             //for payment processing 
+            $this->mainPaymentModuleId = getModuleIdBySingleModuleLebel_hh('Purchase');
             $this->paymentModuleId = getModuleIdBySingleModuleLebel_hh('Purchase');
             $this->paymentCdfTypeId = getCdfIdBySingleCdfLebel_hh('Debit');
             $moduleRelatedData = [
+                'main_module_invoice_no' => $purchaseInvoice->invoice_no,
+                'main_module_invoice_id' => $purchaseInvoice->id,
                 'module_invoice_no' => $purchaseInvoice->invoice_no,
                 'module_invoice_id' => $purchaseInvoice->id,
                 'user_id' => $purchaseInvoice->supplier_id,//client[customer,supplier,others staff]

@@ -101,6 +101,11 @@
             <input type="hidden" class="paymentBankingOptionUrl" value="{{route('admin.payment.common.banking.option.data')}}">
             <!-------purchase receive payment Modal------> 
 
+            <!-------purchase receive payment Modal------> 
+            <div class="modal fade " id="purchaseViewSingleInvoiceWisePaymentModal"  aria-modal="true"></div>
+            <input type="hidden" class="purchaseViewSingleInvoiceWisePaymentModalRoute" value="{{route('admin.purchase.regular.purchase.view.single.invoice.wise.payment.details.modal')}}">
+            <!-------purchase receive payment Modal------> 
+
            {{--  <!-------delete Customer Modal------> 
             @include('backend.customer.customer.partial.delete_modal')
             <input type="hidden" class="deleteCustomerModalRoute" value="{{ route('admin.customer.delete') }}">

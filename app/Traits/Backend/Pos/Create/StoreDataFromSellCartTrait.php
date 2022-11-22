@@ -77,9 +77,12 @@ trait StoreDataFromSellCartTrait
         if(($this->sellCreateFormData['invoice_total_paying_amount'] ?? 0) > 0)
         {
             //for payment processing 
+            $this->mainPaymentModuleId = getModuleIdBySingleModuleLebel_hh('Sell');
             $this->paymentModuleId = getModuleIdBySingleModuleLebel_hh('Sell');
             $this->paymentCdfTypeId = getCdfIdBySingleCdfLebel_hh('Credit');
             $moduleRelatedData = [
+                'main_module_invoice_no' => $sellInvoice->invoice_no,
+                'main_module_invoice_id' => $sellInvoice->id,
                 'module_invoice_no' => $sellInvoice->invoice_no,
                 'module_invoice_id' => $sellInvoice->id,
                 'user_id' => $sellInvoice->customer_id,//client[customer,supplier,others staff]

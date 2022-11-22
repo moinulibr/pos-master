@@ -441,6 +441,7 @@ Route::group(['middleware' => ['auth']], function ()
                 //payment
                 Route::get('sell/receive/payment/','SellController@receiveSingleInvoiceWisePayment')->name('view.single.invoice.receive.payment.modal');
                 Route::post('/sell/receive/invoice/wise/payment/','SellController@receivingSingleInvoiceWisePayment')->name('view.single.invoice.receiving.payment.modal');
+                Route::get('single/invoice/wise/sell/payment/details','SellController@viewSingleInvoicePaymentDetails')->name('view.single.invoice.wise.payment.details.modal');
             });
             //quotation
             Route::group(['prefix'=>'admin/sell/regular','as'=> 'admin.sell.regular.quotation.', 'namespace'=>'Backend\Sell\Details'],function(){
@@ -583,6 +584,7 @@ Route::group(['middleware' => ['auth']], function ()
             //payment
             Route::get('purchase/making/payment/','PurchaseController@makeSingleInvoiceWisePayment')->name('view.single.invoice.make.payment.modal');
             Route::post('single/invoice/wise/purchase/making/payment/','PurchaseController@makingSingleInvoiceWisePayment')->name('view.single.invoice.wise.payment.making.modal');
+            Route::get('single/invoice/wise/purchase/payment/details/','PurchaseController@viewSingleInvoicePaymentDetails')->name('view.single.invoice.wise.payment.details.modal');
         });
 
         //quotation

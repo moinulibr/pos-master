@@ -100,9 +100,12 @@ class SellController extends Controller
             {
                 $invoiceData = SellInvoice::findOrFail($request->sell_invoice_id);
                 //for payment processing 
+                $this->mainPaymentModuleId = getModuleIdBySingleModuleLebel_hh('Sell');
                 $this->paymentModuleId = getModuleIdBySingleModuleLebel_hh('Sell');
                 $this->paymentCdfTypeId = getCdfIdBySingleCdfLebel_hh('Credit');
                 $moduleRelatedData = [
+                    'main_module_invoice_no' => $invoiceData->invoice_no,
+                    'main_module_invoice_id' => $invoiceData->id,
                     'module_invoice_no' => $invoiceData->invoice_no,
                     'module_invoice_id' => $invoiceData->id,
                     'user_id' => $invoiceData->customer_id,//client[customer,supplier,others staff]
@@ -140,6 +143,28 @@ class SellController extends Controller
             ]);
         }
     }
+
+
+
+    //view single invoice Payment details
+    public function viewSingleInvoicePaymentDetails(Request $request)
+    {   
+        $data['data'] = SellInvoice::findOrFail($request->id);
+        if($data['data'])
+        {
+            $html = view('backend.sell.payment.view_single_payment',$data)->render();
+            return response()->json([
+                'status'    => true,
+                'html'     => $html,
+            ]);
+        }else{
+            return response()->json([
+                'status'    => false,
+            ]);
+        }
+    }
+
+
 
     /**
      * Show the form for creating a new resource.

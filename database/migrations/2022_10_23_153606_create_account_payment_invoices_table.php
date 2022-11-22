@@ -19,9 +19,12 @@ class CreateAccountPaymentInvoicesTable extends Migration
                     $table->integer('branch_id')->nullable();
                     $table->string('payment_invoice_no',30)->nullable();
                     $table->string('payment_reference_no',50)->nullable();
-                    $table->integer('module_id')->nullable()->comment('Module id like: Sell -> module no 1, Purchase -> module no 2');
-                    $table->string('module_invoice_no',30)->nullable();
-                    $table->integer('module_invoice_id')->nullable();
+                    $table->integer('main_module_id')->nullable()->comment('Module id like: Sell -> module no 2, Purchase -> module no 1, not sell return, not purchase return');
+                    $table->string('main_module_invoice_no',30)->nullable()->comment('like: Sell invoice no, Purchase invoice no, not sell return, not purchase return');
+                    $table->integer('main_module_invoice_id')->nullable()->comment('like: Sellinvoice->id, Purchaseinvoice->id, not sell return, not purchase return');;
+                    $table->integer('module_id')->nullable()->comment('Current Module id like: Sell -> module no 2, Purchase -> module no 1, also sell return, purchase return');
+                    $table->string('module_invoice_no',30)->nullable()->comment('Current Module id like: Sell -> module no 2, Purchase -> module no 1, and also, sell return moudle no 4, purchase return module no 3');
+                    $table->integer('module_invoice_id')->nullable()->comment('Current all invoice id like: Sell ->invoice id, Purchase -> invoice id, and also, sell return invoice id, purchase return invoice id');
 
                     $table->text('payment_method_details')->nullable()->comment('payment method,payment option, bank option etc details , array json format');
                     $table->tinyInteger('cdf_type_id')->nullable()->comment('c=credit,d=debit,f=fund');

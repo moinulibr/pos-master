@@ -93,7 +93,21 @@
 //-----------------------------------------------------------------------
 
 
-
+$(document).on('click','.singleViewPurchaseInvoiceWisePaymentModal',function(e){
+    e.preventDefault();
+    var url = $('.purchaseViewSingleInvoiceWisePaymentModalRoute').val();
+    var id = $(this).data('id');
+    $.ajax({
+        url:url,
+        data:{id:id},
+        success:function(response){
+            if(response.status == true)
+            {
+                $('#purchaseViewSingleInvoiceWisePaymentModal').html(response.html).modal('show');
+            }
+        }
+    });
+});
 
 /* $(document).on('click','.singleDeleteModal',function(e){
     e.preventDefault();

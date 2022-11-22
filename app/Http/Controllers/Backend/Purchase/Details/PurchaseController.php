@@ -95,9 +95,10 @@ class PurchaseController extends Controller
             ]);
         }
     }
-     //store receiving single invoice swise payment
-     public function makingSingleInvoiceWisePayment(Request $request)
-     {
+
+    //store receiving single invoice swise payment
+    public function makingSingleInvoiceWisePayment(Request $request)
+    {
         //return $request;
         DB::beginTransaction();
         try {
@@ -106,9 +107,12 @@ class PurchaseController extends Controller
             {
                 $invoiceData = PurchaseInvoice::findOrFail($request->purchase_invoice_id);
                 //for payment processing 
-                $this->paymentModuleId = getModuleIdBySingleModuleLebel_hh('Purchase Return');
+                $this->mainPaymentModuleId = getModuleIdBySingleModuleLebel_hh('Purchase');
+                $this->paymentModuleId = getModuleIdBySingleModuleLebel_hh('Purchase');
                 $this->paymentCdfTypeId = getCdfIdBySingleCdfLebel_hh('Debit');
                 $moduleRelatedData = [
+                    'main_module_invoice_no' => $invoiceData->invoice_no,
+                    'main_module_invoice_id' => $invoiceData->id,
                     'module_invoice_no' => $invoiceData->invoice_no,
                     'module_invoice_id' => $invoiceData->id,
                     'user_id' => $invoiceData->supplier_id,//client[customer,supplier,others staff]
@@ -148,6 +152,26 @@ class PurchaseController extends Controller
     }
  
     
+
+
+    //view single invoice Payment details
+    public function viewSingleInvoicePaymentDetails(Request $request)
+    {   
+        $data['data'] = PurchaseInvoice::findOrFail($request->id);
+        if($data['data'])
+        {
+            $html = view('backend.purchase.payment.view_single_payment',$data)->render();
+            return response()->json([
+                'status'    => true,
+                'html'     => $html,
+            ]);
+        }else{
+            return response()->json([
+                'status'    => false,
+            ]);
+        }
+    }
+
 
     public function create()
     {

@@ -99,9 +99,12 @@ class SellProductReturnController extends Controller
                 if(($request->invoice_total_paying_amount ?? 0) > 0)
                 {
                     //for payment processing 
+                    $this->mainPaymentModuleId = getModuleIdBySingleModuleLebel_hh('Sell');
                     $this->paymentModuleId = getModuleIdBySingleModuleLebel_hh('Sell Return');
                     $this->paymentCdfTypeId = getCdfIdBySingleCdfLebel_hh('Debit');
                     $moduleRelatedData = [
+                        'main_module_invoice_no' => $invoiceData->invoice_no,
+                        'main_module_invoice_id' => $invoiceData->id,
                         'module_invoice_no' => $makeInvoice,
                         'module_invoice_id' => $returnInvoice->id,
                         'user_id' => $invoiceData->customer_id,//client[customer,supplier,others staff]

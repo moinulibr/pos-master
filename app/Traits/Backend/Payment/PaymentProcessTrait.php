@@ -16,6 +16,7 @@ trait PaymentProcessTrait
 {
     //use Stock;
 
+    protected $mainPaymentModuleId;
     protected $paymentModuleId;
     protected $paymentCdfTypeId;
     protected $paymentProcessingRelatedOfAllRequestData;
@@ -43,7 +44,10 @@ trait PaymentProcessTrait
         $ap->branch_id = authBranch_hh();
         $ap->payment_invoice_no = $makeInvoice;;
         $ap->payment_reference_no = "";
+        $ap->main_module_id = $this->mainPaymentModuleId;
         $ap->module_id = $this->paymentModuleId;
+        $ap->main_module_invoice_no = $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData['main_module_invoice_no'];
+        $ap->main_module_invoice_id = $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData['main_module_invoice_id'];
         $ap->module_invoice_no = $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData['module_invoice_no'];
         $ap->module_invoice_id = $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData['module_invoice_id'];
 
@@ -76,6 +80,9 @@ trait PaymentProcessTrait
         $ap->account_payment_invoice_id = $accPymntInvoice->id;
         $ap->payment_invoice_no = $accPymntInvoice->payment_invoice_no;
         $ap->payment_reference_no = $accPymntInvoice->payment_reference_no;
+        $ap->main_module_id = $accPymntInvoice->main_module_id;
+        $ap->main_module_invoice_no = $accPymntInvoice->main_module_invoice_no;
+        $ap->main_module_invoice_id = $accPymntInvoice->main_module_invoice_id;
         $ap->module_id = $accPymntInvoice->module_id;
         $ap->module_invoice_no = $accPymntInvoice->module_invoice_no;
         $ap->module_invoice_id = $accPymntInvoice->module_invoice_id;

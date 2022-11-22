@@ -39,7 +39,12 @@ class PurchaseInvoice extends Model
     
     public function invoicePayment()
     {
+        return $this->hasMany(AccountPayment::class,'main_module_invoice_id','id')->where('main_module_id',getModuleIdBySingleModuleLebel_hh("Purchase"));
+    }
+    public function moduleWiseInvoicePayment()
+    {
         return $this->hasMany(AccountPayment::class,'module_invoice_id','id')->where('module_id',getModuleIdBySingleModuleLebel_hh("Purchase"));
     }
+
 
 }

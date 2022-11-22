@@ -6,6 +6,151 @@ use App\Models\Backend\Price\ProductPrice;
 use App\Models\Backend\Stock\ProductStock;
 use App\Models\Backend\ProductAttribute\Unit;
 
+
+    /*
+    |--------------------------------------------------------------------------
+    |--------------------------------------------------------------------------
+    | Setting, App Name, App Address, Phone, and others
+    |----------------------------------------------------------------------------------------
+    */
+        function AppName_hh()
+        {
+            return "Amader Sanitary"; 
+        }
+        function AppPhone_hh()
+        {
+            return "01711 11 11 92";
+        }  
+        function AppPhoneOne_hh()
+        {
+            return "01711 11 11 92";
+        }
+        function AppPhoneTwo_hh()
+        {
+            return "01711 11 11 92";
+        }
+        function AppFullAddress_hh()
+        {
+            return "Janata Bank More, Hafej Bulding Under";
+        } 
+        function AppAddressFirstLine_hh()
+        {
+            return "Janata Bank More, Hafej Bulding Under";
+        } 
+        function AppAddressSecondLine_hh()
+        {
+            return "Graound, Faridpur";
+        }
+        
+        function companyName_hh()
+        {
+            return "Amader Sanitary";
+        }
+        function companyPhone_hh()
+        {
+            return "01711111192";
+        } 
+        function companyPhone1_hh()
+        {
+            return "";
+        } 
+        function companyPhone2_hh()
+        {
+            return "";
+        }
+        function companyFullAddress()
+        {   
+            return "Janata Bank More,Hafej Building Under Graound,FaridPur";
+        }
+
+        function companyAddressLine1()
+        {   
+            return "Janata Bank More,Hafej Building";
+        }
+        function companyAddressLine2()
+        {   
+            return "Under Graound,FaridPur";
+        }
+        function currencySymbol_hh()
+        {
+            return " ৳";
+        }    
+    /*
+    |--------------------------------------------------------------------------
+    | Setting, App Name, App Address, Phone, and others
+    |--------------------------------------------------------------------------
+    |----------------------------------------------------------------------------------------
+    */
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Date time and date format
+    |----------------------------------------------------------------------------------------
+    */
+        
+        function invoiceDateTimeFormat_hh()
+        {
+            return 'd-m-Y h:i:s a';
+        }
+        function randomDateTimeFormat_hh()
+        {
+            return 'd-m-Y h:i:s a';
+        }
+        function standardDateTimeFormat_hh()
+        {
+            return 'Y-m-d h:i:s a';
+        }
+        function invoiceDateFormat_hh()
+        {
+            return 'd-m-Y h:i:s a';
+        }
+        function randomDateFormat_hh()
+        {
+            return 'd-m-Y h:i:s a';
+        }
+        function standardDateFormat_hh()
+        {
+            return 'Y-m-d h:i:s a';
+        }
+    /*
+    |--------------------------------------------------------------------------
+    | Date time and date format
+    |----------------------------------------------------------------------------------------
+    */
+
+    /*
+    |--------------------------------------------------------------------------
+    | Payment status by total amount and paid amount
+    |----------------------------------------------------------------------------------------
+    */
+        function paymentStatus_hh($totalAmount,$totalPaidAmount)
+        {
+            if(($totalPaidAmount > 0 ) && ($totalAmount > $totalPaidAmount))
+            {
+                echo '<span class="badge badge-info"> Partial Paid </span>';
+            }
+            else if(($totalPaidAmount > 0) && ($totalAmount == $totalPaidAmount))
+            {
+                echo '<span class="badge badge-success"> Full Paid </span>';
+            } 
+            else if(($totalPaidAmount > 0 ) && ($totalAmount < $totalPaidAmount))
+            {
+                echo '<span class="badge badge-primary"> Over Paid </span>';
+            }
+            else if(($totalPaidAmount == 0))
+            {
+                echo '<span class="badge badge-danger">Due</span>';
+            }else{
+                echo '<span class="badge badge-default"> not processed </span>';
+            }
+        }
+    /*
+    |--------------------------------------------------------------------------
+    | Payment status by total amount and paid amount
+    |----------------------------------------------------------------------------------------
+    */
+    
+   
     function authBranch_hh()
     {
         return Auth::guard('web')->user()->branch_id;
@@ -967,36 +1112,6 @@ use App\Models\Backend\ProductAttribute\Unit;
     /*
     |--------------------------------------------------------------------------
     | Payment Details : when INSERT
-    |--------------------------------------------------------------------------
-    |----------------------------------------------------------------------------------------
-    */
-      
-
-    /*
-    |--------------------------------------------------------------------------
-    |--------------------------------------------------------------------------
-    | Setting, App Name, App Address, Phone, and others
-    |----------------------------------------------------------------------------------------
-    */
-        function AppName_hh()
-        {
-            return "Amader Sanitary"; 
-        }
-        function AppPhone_hh()
-        {
-            return "01711 11 11 92";
-        }
-        function AppAddressFirstLine_hh()
-        {
-            return "Janata Bank More, Hafej Bulding Under";
-        } 
-        function AppAddressSecondLine_hh()
-        {
-            return "Graound, Faridpur";
-        }
-    /*
-    |--------------------------------------------------------------------------
-    | Setting, App Name, App Address, Phone, and others
     |--------------------------------------------------------------------------
     |----------------------------------------------------------------------------------------
     */
