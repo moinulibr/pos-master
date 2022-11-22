@@ -16,7 +16,7 @@
 
             <div class="row">
                 <div class="col-sm-4 invoice-col">
-                    <b>Suppler</b>
+                    <b>Supplier</b>
                     <address>
                         Name<strong>: {{$data->supplier ? $data->supplier->name : NULL}}</strong>
                         <br/>
@@ -49,7 +49,7 @@
                 </div>
             </div>
 
-
+            <br/>
             
             <div class="row">
                 <div class="col-md-12">
@@ -130,23 +130,26 @@
                             <thead>
                                 <tr>
                                     <th>Date</th>
-                                    <th>Reference No</th>
+                                    <th> 
+                                        <small>Payment Invoice No</small>
+                                    </th>
                                     <th>Amount</th>
                                     <th>Payment Method</th>
                                     <th>Payment Account</th>
-                                    <th>Payment Note</th>
+                                    <th>Reference No</th>
                                     <th>Credit/Debit</th>
+                                    <th>Payment Note</th>
                                     <th class="no-print">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($data->invoicePayment as $item)
-                                <tr class="text-danger">
+                                <tr class="@if (getCdfLabelBySingleCdfId_hh($item->cdf_type_id) == "Credit") text-info @else text-danger @endif">
                                     <td style="font-size:11px">
                                         {{date('d-m-Y',strtotime($item->created_at))}}
                                     </td>
                                     <td style="font-size:12px">
-                                        {{ $item->payment_reference_no }}
+                                        {{ $item->payment_invoice_no }}
                                     </td>
                                     <td style="font-size:12px">
                                         {{ number_format($item->payment_amount,2,".","") }}
@@ -158,87 +161,22 @@
                                         {{ $item->paymentAccount ? $item->paymentAccount->account_name : NULL }}<br/>
                                         {{ $item->paymentAccount ? $item->paymentAccount->account_no : NULL }}
                                     </td>
+                                    <td>
+                                        {{ $item->payment_reference_no }}
+                                    </td>
+                                    <td style="font-size:11px">
+                                        {{getCdfLabelBySingleCdfId_hh($item->cdf_type_id)}}
+                                    </td>
                                     <td style="font-size:12px">
                                         <small style="font-size:11px;">
                                             {{ $item->accountPaymentInvoice ? $item->accountPaymentInvoice->payment_note : NULL }}
                                         </small>
                                     </td>
-                                    <td style="font-size:11px">
-                                        {{getCdfLabelBySingleCdfId_hh($item->cdf_type_id)}}
-                                    </td>
-                                    <td class="no-print" style="display: flex;font-size:11px;">
-                                        <a href="#" data-id="25" data-sale_final_id="13" data-payment_invoice_no="SI2022/0025" class="btn btn-danger btn-xs delete_payment" data-href=""><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                    <td class="no-print" style="display:flex;font-size:11px;">
+                                        <a href="#" data-id="25"  data-sale_final_id="13" data-payment_invoice_no="SI2022/0025" class="btn btn-danger btn-xs delete_payment" data-href="" style="cursor:no-drop;"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                     </td>
                                 </tr>
                                 @endforeach
-                                <tr class="text-danger">
-                                    <td style="font-size:11px">
-                                        25-04-2022
-                                    </td>
-                                    <td style="font-size:12px">
-                                        SI2022/0023
-                                    </td>
-                                    <td style="font-size:12px">
-                                        500.00
-                                    </td>
-                                    <td style="font-size:12px">
-                                        
-                                        Cash
-                                        <small>(Cash)</small>
-                                    </td>
-                                    <td style="font-size:12px">
-                                        <br>
-                                        <small>(Cash)</small>
-                                    </td>
-                                    <td style="font-size:12px">
-                                        <small style="font-size:11px;">
-                                            
-                                        </small>
-                                    </td>
-                                    <td style="font-size:11px">
-                                        Debit
-                                    </td>
-                                    <td class="no-print" style="display: flex;font-size:11px;">
-                                        
-                                        <a href="#" data-id="23" data-sale_final_id="13" data-payment_invoice_no="SI2022/0023" class="btn btn-danger btn-xs delete_payment" data-href=""><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                        &nbsp;
-                                        
-                                    </td>
-                                </tr>
-                                <tr class="text-success">
-                                    <td style="font-size:11px">
-                                        25-04-2022
-                                    </td>
-                                    <td style="font-size:12px">
-                                        SI2022/0021
-                                    </td>
-                                    <td style="font-size:12px">
-                                        2200.00
-                                    </td>
-                                    <td style="font-size:12px">
-                                        
-                                        Cash
-                                        <small>(Cash)</small>
-                                    </td>
-                                    <td style="font-size:12px">
-                                        <br>
-                                        <small>(Cash)</small>
-                                    </td>
-                                    <td style="font-size:12px">
-                                        <small style="font-size:11px;">
-                                            
-                                        </small>
-                                    </td>
-                                    <td style="font-size:11px">
-                                        Credit
-                                    </td>
-                                    <td class="no-print" style="display: flex;font-size:11px;">
-                                        
-                                        <a href="#" data-id="21" data-sale_final_id="13" data-payment_invoice_no="SI2022/0021" class="btn btn-danger btn-xs delete_payment" data-href=""><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                        &nbsp;
-                                        
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>

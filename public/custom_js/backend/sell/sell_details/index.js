@@ -111,6 +111,25 @@
 //-----------------------------------------------------------------------
 
 
+//-----------------------------------------------------------------------
+    $(document).on('click','.singleViewSellInvoiceWisePaymentDetailsModal',function(e){
+        e.preventDefault();
+        var url = $('.viewSellSingleInvoiceReceivePaymentModalRoute').val();
+        var id = $(this).data('id');
+        $.ajax({
+            url:url,
+            data:{id:id},
+            success:function(response){
+                if(response.status == true)
+                {
+                    $('#viewSellSingleInvoiceReceivePaymentModal').html(response.html).modal('show');
+                }
+            }
+        });
+    });
+//-----------------------------------------------------------------------
+
+
 
 
 /* $(document).on('click','.singleDeleteModal',function(e){

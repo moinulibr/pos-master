@@ -83,31 +83,36 @@
             
 
             <!-------single sell view Modal------> 
-            <div class="modal fade " id="singleModalView"  aria-modal="true"></div>
+            <div class="modal fade" id="singleModalView"  aria-modal="true"></div>
             <input type="hidden" class="singleViewModalRoute" value="{{ route('admin.sell.regular.sell.single.view') }}">
             <!-------single sell view Modal------> 
             
              <!-------single sell invoice profit loss view Modal------> 
-            <div class="modal fade " id="singleSellInvoiceProftLossModalView"  aria-modal="true"></div>
+            <div class="modal fade" id="singleSellInvoiceProftLossModalView"  aria-modal="true"></div>
             <input type="hidden" class="singleSellInvoiceProftLossModalRoute" value="{{ route('admin.sell.regular.sell.view.single.invoice.profit.loss') }}">
             <!-------single sell invoice profit loss view Modal------> 
             
 
             <!-------Sell product delivery Modal------> 
-            <div class="modal fade " id="sellProductDeliveryModal"  aria-modal="true"></div>
+            <div class="modal fade" id="sellProductDeliveryModal"  aria-modal="true"></div>
             <input type="hidden" class="sellProductDeliveryInvoiceWiseModalRoute" value="{{route('admin.sell.product.delivery.invoice.wise.list.index')}}">
             <!-------Sell product delivery Modal------> 
 
             <!-------Sell product delivery Modal------> 
-            <div class="modal fade " id="sellProductReturnModal"  aria-modal="true"></div>
+            <div class="modal fade" id="sellProductReturnModal"  aria-modal="true"></div>
             <input type="hidden" class="sellProductReturnInvoiceWiseModalRoute" value="{{route('admin.sell.product.return.invoice.wise.list.index')}}">
             <!-------Sell product delivery Modal------> 
 
             <!------Single Sell receive payment Modal------> 
-            <div class="modal fade " id="sellViewSingleInvoiceReceivePaymentModal"  aria-modal="true"></div>
+            <div class="modal fade" id="sellViewSingleInvoiceReceivePaymentModal"  aria-modal="true"></div>
             <input type="hidden" class="sellViewSingleInvoiceReceivePaymentModalRoute" value="{{route('admin.sell.regular.sell.view.single.invoice.receive.payment.modal')}}">
             <input type="hidden" class="paymentBankingOptionUrl" value="{{route('admin.payment.common.banking.option.data')}}">
             <!-------Single Sell receive payment Modal------> 
+
+             <!------view Single Sell payment Modal------> 
+             <div class="modal fade" id="viewSellSingleInvoiceReceivePaymentModal"  aria-modal="true"></div>
+             <input type="hidden" class="viewSellSingleInvoiceReceivePaymentModalRoute" value="{{route('admin.sell.regular.sell.view.single.invoice.wise.payment.details.modal')}}">
+             <!-------view Single Sell payment Modal------> 
 
 
            {{--  <!-------delete Customer Modal------> 
