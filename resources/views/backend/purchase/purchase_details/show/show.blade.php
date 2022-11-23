@@ -42,11 +42,6 @@
                                 <strong>Invoice No: </strong> <span style="font-size:14px;"> {{$data->invoice_no}}</span>
                             </label>
                         </div>
-                        {{--  <div class="mb-2">
-                            <label>
-                                <strong>Status: </strong>  <span style="font-size:14px;"> {{$data->order_no}}</span>
-                            </label>
-                        </div>  --}}
                         <div class="mb-2">
                             <label>
                                 <strong>Reference No: </strong> <span style="font-size:14px;"> {{$data->reference_no}}</span>
@@ -54,25 +49,7 @@
                             <br/>
                             <label>
                                 <strong>Payment Status: </strong>
-                                    {{-- @if($data->totalPaidAmount() > 0)
-                                        <span>
-                                            @if($data->totalSaleAmount() == $data->totalPaidAmount())
-                                                <span class="badge badge-primary"> Paid </span>
-
-                                            @elseif($data->totalSaleAmount() > 0 && $data->totalSaleAmount()  < $data->totalPaidAmount())
-                                                <small class="badge badge-warning"> Over</small><span class="badge badge-primary"> Paid </span>
-
-                                            @elseif($data->totalSaleAmount() > 0 && $data->totalSaleAmount()  > $data->totalPaidAmount())
-                                                <span class="badge badge-danger">Due</span>
-
-                                            @elseif($data->totalSaleAmount() < 0)
-                                                <span class="badge badge-defalut" style="backgrounc-color:#06061f;color:red;">Invalid </span>
-                                            @endif
-                                            </span>
-                                        @else
-                                        <span class="badge badge-danger">Due</span>
-                                    @endif --}}
-                                    <span class="badge badge-danger">Due</span>
+                                {{paymentStatus_hh($data->total_payable_amount,$data->total_paid_amount)}}
                             </label>
                         </div>
                     </div>
@@ -202,7 +179,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach($data->invoicePayment ?? [] as $payment)
-                                    <tr>
+                                    <tr class="@if (getCdfLabelBySingleCdfId_hh($payment->cdf_type_id) == "Credit") text-info @else text-danger @endif">
                                         <td>{{date('d-m-Y',strtotime($payment->payment_date))}}</td>
                                         <td>{{$payment->payment_invoice_no}}</td>
                                         <td>{{number_format($payment->payment_amount,2,'.','')}}</td>
@@ -320,8 +297,8 @@
 
         </div>
         <div class="modal-footer">
-            <a class="btn btn-primary print" target="_blank" href="{{route('admin.purchase.regular.normal.print.from.purchase.list',$data->id)}}" style="cursor: pointer">Print</a>
             <button type="button" class="btn btn-secondary btn-danger" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary print" target="_blank" href="{{route('admin.purchase.regular.normal.print.from.purchase.list',$data->id)}}" style="cursor: pointer">Print</a>
         </div>
     </div>
 </div>
