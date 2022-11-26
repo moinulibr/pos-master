@@ -5,6 +5,7 @@ namespace App\Models\Backend\Customer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Backend\Customer\CustomerShippingAddress;
+use App\User;
 
 class Customer extends Model
 {
@@ -30,4 +31,8 @@ class Customer extends Model
         return $this->hasMany(CustomerShippingAddress::class,'customer_id','id');
     }
 
+    public function createdBY()
+    {
+        return $this->belongsTo(User::class,'created_by','id');
+    }
 }

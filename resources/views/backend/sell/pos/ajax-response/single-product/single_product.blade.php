@@ -402,9 +402,9 @@
 
                                                     <div class="form-group" style="margin-bottom:1px;margin-top:2px;">
                                                         <div style="background-color:#ff4a00;padding:1px;padding-top:0px;color:white;">
-                                                            <strong>Less Amount</strong>
-                                                            <div style="background-color:#ededed;color:red;margin-bottom:1.5px;">
-                                                                <label class="switcher" style="padding-right: 7px;padding-left: 3px;">
+                                                            <strong>Total Less Amount</strong>
+                                                            <div style="background-color:#ededed;color:#3c3b3b;margin-bottom:1.5px;text-align:center;">
+                                                                {{-- <label class="switcher" style="padding-right: 7px;padding-left: 3px;">
                                                                         <input type="radio" disabled name="discount_type" class="switcher-input  discount_type" value="fixed" style="margin-top:5px;cursor:not-allowed;" />
                                                                         <small class="switcher-indicator" style="cursor: pointer;backgound-color:#140505 !important">
                                                                             <span class="switcher-yes"></span>
@@ -423,10 +423,15 @@
                                                                     <small class="switcher-label" style="cursor:not-allowed;color:#020222;font-size:8px;">
                                                                         Percentage(%)
                                                                     </small>
+                                                                </label> --}}
+                                                                <input type="hidden" name="discount_type"  value="fixed">
+                                                                <label style="padding-top:1px;font-size:11px;margin-bottom: 2px">
+                                                                    (Based on MRP) 
                                                                 </label>
                                                             </div>
                                                             
-                                                            <input type="text" disabled name="discount_amount"  class="form-control discount_amount inputFieldValidatedOnlyNumeric" placeholder="Less Amount" style="font-size: 15px;background-color:#ffff94;color:#1e0303;font-weight:700;cursor:not-allowed;" />
+                                                            <input type="text" disabled  class="form-control discount_amount inputFieldValidatedOnlyNumeric" placeholder="Less Amount" style="font-size:12px;background-color:#ffff94;color:#1e0303;font-weight:700;cursor:not-allowed;text-align:left;" />
+                                                            <input type="hidden" name="discount_amount"  class="form-control discount_amount" />
                                                             <strong class="discount_amount_err"></strong>
 
                                                             <div style="font-size:14px;margin-top:1px;width:100%;padding:1% 1%;background-color:green;color:white;">
@@ -445,11 +450,11 @@
                                                             
                                                             <!----selling price percentage----->
                                                             <div style="font-size:14px;margin-top:1px;width:100%;padding:1% 1%;background-color:#d0e7ef;color:#100f0f;">
-                                                                <div style="width:52%;float:left;border-right:1px solid white;margin-left:1px;background-color:#979393;color:#fffffd;padding:0px 1px 0px 2px;">
+                                                                <div style="width:52%;float:left;border-right:1px solid white;margin-left:1px;background-color:#979393;color:#fffffd;padding:3px 1px 3px 2px;">
                                                                     <span style="font-size: 12px;">P+ </span><strong class="percentage_of_sell_price_against_of_the_purchase_price_text" style="font-size:12px;color:#fffffd;" title="Purchase"></strong>%
                                                                     <input type="hidden" name="percentage_of_sell_price_against_of_the_purchase_price_value" class="percentage_of_sell_price_against_of_the_purchase_price_value">
                                                                 </div>
-                                                                <div style="width:45%;float:right;text-align:right;margin-right:2px;background-color:#979393;color:yellow;padding:0px 0px 0px 1px;">
+                                                                <div style="width:45%;float:right;text-align:right;margin-right:2px;background-color:#979393;color:yellow;padding:3px 0px 3px 2px;">
                                                                     <span style="font-size: 12px;">M- </span><strong class="percentage_of_sell_price_against_of_the_mrp_price_text" style="font-size:12px;color:yellow;" title="MRP"></strong>%
                                                                     <input type="hidden" name="percentage_of_sell_price_against_of_the_mrp_price_value" class="percentage_of_sell_price_against_of_the_purchase_price_value">
                                                                 </div>

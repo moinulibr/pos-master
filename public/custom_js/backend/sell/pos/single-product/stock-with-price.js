@@ -671,8 +671,12 @@
             jQuery('.percentage_of_sell_price_against_of_the_purchase_price_text').text(percentageOfPurchasePrice);
             jQuery('.percentage_of_sell_price_against_of_the_purchase_price_value').val(percentageOfPurchasePrice);
             
-            var mrpPrice           = nanCheck(jQuery('.selling_from_mrp_price').val());
+            var mrpPrice  = nanCheck(jQuery('.selling_from_mrp_price').val());
             var sellProfitOfASingleProductAginstOfMRP =  mrpPrice - finalSellingPrice;
+            
+            var totalQty = nanCheck(jQuery('.final_sell_quantity').val());
+            jQuery('.discount_amount').val(sellProfitOfASingleProductAginstOfMRP *  totalQty);
+            
             var percentageOfMRPPrice = 0;
             percentageOfMRPPrice = (((sellProfitOfASingleProductAginstOfMRP * 100) / mrpPrice).toFixed(2));
             jQuery('.percentage_of_sell_price_against_of_the_mrp_price_text').text(percentageOfMRPPrice);

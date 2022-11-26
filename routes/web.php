@@ -210,7 +210,10 @@ Route::group(['middleware' => ['auth']], function ()
 
             Route::get('edit','SupplierController@edit')->name('edit');//->middleware(['permissions:unit|index']);
             Route::post('update','SupplierController@update')->name('update');//->middleware(['permissions:unit|index']);
-        
+            
+            //for temporary
+            Route::get('history','SupplierController@history')->name('history');//->middleware(['permissions:unit|index']);
+            
             Route::get('delete','SupplierController@delete')->name('delete');//->middleware(['permissions:unit|index']);
         });
     /*
@@ -232,7 +235,11 @@ Route::group(['middleware' => ['auth']], function ()
 
             Route::get('edit','CustomerController@edit')->name('edit');//->middleware(['permissions:unit|index']);
             Route::post('update','CustomerController@update')->name('update');//->middleware(['permissions:unit|index']);
-        
+            
+            //for temporary
+            Route::get('history','CustomerController@history')->name('history');//->middleware(['permissions:unit|index']);
+            
+            //delete
             Route::get('delete','CustomerController@delete')->name('delete');//->middleware(['permissions:unit|index']);
         });
     /*

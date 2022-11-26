@@ -161,7 +161,8 @@ class CustomerController extends Controller
     
     public function delete(Customer $customer, Request $request)
     {
-        Customer::findOrFail($request->id)->delete();
+        //Customer::findOrFail($request->id)->delete();
+        Customer::findOrFail($request->id)->update(['deleted_at'=>date('Y-m-d')]);
         return response()->json([
             'status' => true,
             'type' => 'success',
@@ -177,5 +178,12 @@ class CustomerController extends Controller
     public function destroy(Customer $customer)
     {
         //
+    }  
+    
+    
+    public function history(Customer $customer)
+    {
+        return view('backend.customer.customer.history.history');
     }
+
 }
