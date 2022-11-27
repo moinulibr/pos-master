@@ -21,7 +21,7 @@
                             <div class="col-md-6">
                                 <label class="text-body">Shipping Charges</label>
                                 <fieldset class="form-group mb-3">
-                                    <input type="text" name="invoice_shipping_cost" class="invoice_shipping_cost form-control inputFieldValidatedOnlyNumeric" placeholder="Enter Shipping Charges" style="padding-left: 5px;;background-color:#c9c9c9;color:#0d0c10" />
+                                    <input type="text" name="invoice_shipping_cost" class="invoice_shipping_cost form-control inputFieldValidatedOnlyNumeric" placeholder="Enter Shipping Charges" style="padding-left:5px;background-color:#9dd1c2;color:#0d0c10" />
                                 </fieldset>
                             </div>
                             <div class="col-md-6">
@@ -47,6 +47,7 @@
                         </div>
                         <div class="form-group row justify-content-end mb-0">
                             <div class="col-md-6 text-right">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" style="padding:6px 20px;">Close</button>
                                 <input type="submit" class="btn btn-primary btn-md" value="Update Information" style="padding: 5px;">
                             </div>
                         </div>

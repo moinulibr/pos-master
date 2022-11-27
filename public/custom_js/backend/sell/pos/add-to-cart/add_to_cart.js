@@ -628,7 +628,7 @@
         
         jQuery(document).on('change','.use_shipping_address',function(){
             var id = jQuery('.use_shipping_address option:selected').val();
-            if(id == 1)
+            if(id == '1_existing')
             {
                 jQuery('.existing_shipping_address_div').show(200);
                 jQuery('.new_shipping_address_div').hide(200);

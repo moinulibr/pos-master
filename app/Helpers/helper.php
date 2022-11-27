@@ -614,7 +614,8 @@ use App\Models\Backend\ProductAttribute\Unit;
             return [
                 //value = label
                 1 => "Credit",
-                2 => "Debit"
+                2 => "Debit",
+                3 => "-"//not change
             ];
         }
 

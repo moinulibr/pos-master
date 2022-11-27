@@ -404,26 +404,28 @@
                                                         <div style="background-color:#ff4a00;padding:1px;padding-top:0px;color:white;">
                                                             <strong>Total Less Amount</strong>
                                                             <div style="background-color:#ededed;color:#3c3b3b;margin-bottom:1.5px;text-align:center;">
-                                                                {{-- <label class="switcher" style="padding-right: 7px;padding-left: 3px;">
-                                                                        <input type="radio" disabled name="discount_type" class="switcher-input  discount_type" value="fixed" style="margin-top:5px;cursor:not-allowed;" />
+                                                                {{-- 
+                                                                    <label class="switcher" style="padding-right: 7px;padding-left: 3px;">
+                                                                            <input type="radio" disabled name="discount_type" class="switcher-input  discount_type" value="fixed" style="margin-top:5px;cursor:not-allowed;" />
+                                                                            <small class="switcher-indicator" style="cursor: pointer;backgound-color:#140505 !important">
+                                                                                <span class="switcher-yes"></span>
+                                                                                <span class="switcher-no"></span>
+                                                                            </small>
+                                                                            <small class="switcher-label" style="cursor:not-allowed;font-size:10px;color:#020222;padding-right:1px;">
+                                                                                Fixed
+                                                                            </small>
+                                                                    </label>
+                                                                    <label class="switcher" style="padding-right: 7px;padding-left: 3px;">
+                                                                        <input type="radio" disabled name="discount_type" class="switcher-input  discount_type" value="percentage" style="margin-top:5px;cursor:not-allowed;" />
                                                                         <small class="switcher-indicator" style="cursor: pointer;backgound-color:#140505 !important">
                                                                             <span class="switcher-yes"></span>
                                                                             <span class="switcher-no"></span>
                                                                         </small>
-                                                                        <small class="switcher-label" style="cursor:not-allowed;font-size:10px;color:#020222;padding-right:1px;">
-                                                                            Fixed
+                                                                        <small class="switcher-label" style="cursor:not-allowed;color:#020222;font-size:8px;">
+                                                                            Percentage(%)
                                                                         </small>
-                                                                </label>
-                                                                <label class="switcher" style="padding-right: 7px;padding-left: 3px;">
-                                                                    <input type="radio" disabled name="discount_type" class="switcher-input  discount_type" value="percentage" style="margin-top:5px;cursor:not-allowed;" />
-                                                                    <small class="switcher-indicator" style="cursor: pointer;backgound-color:#140505 !important">
-                                                                        <span class="switcher-yes"></span>
-                                                                        <span class="switcher-no"></span>
-                                                                    </small>
-                                                                    <small class="switcher-label" style="cursor:not-allowed;color:#020222;font-size:8px;">
-                                                                        Percentage(%)
-                                                                    </small>
-                                                                </label> --}}
+                                                                    </label> 
+                                                                --}}
                                                                 <input type="hidden" name="discount_type"  value="fixed">
                                                                 <label style="padding-top:1px;font-size:11px;margin-bottom: 2px">
                                                                     (Based on MRP) 
@@ -574,70 +576,6 @@
                     </div>
                 </form>
             </div>
-
-
-
-
-
-
-
-
-            <!---selling price custom alert message--->
-            {{-- <div id="sellingPriceBaseLayer">
-                <div id="sellingPriceErrorMessageLayer">
-                    Do you want to sell less than purchasae pirce?
-                    <br />
-                    <div class="sellingPricePermissionLayer">
-                        <div class="sellingPricePermissionLayerYes" >
-                            <strong class="sellingPermissionApplicable" data-permission="1" onclick="hideSellingPriceBaseLayer();">Yes</strong>
-                        </div>
-                        <div class="sellingPricePermissionLayerNo" >
-                            <strong class="sellingPermissionApplicable" data-permission="0" onclick="hideSellingPriceBaseLayer();">No</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <script>
-                function showSellingPriceBaseLayer() {  document.getElementById('sellingPriceBaseLayer').style.visibility='visible';
-                  document.getElementById('sellingPriceErrorMessageLayer').style.visibility='visible';
-                }
-                function hideSellingPriceBaseLayer() {
-                  document.getElementById('sellingPriceBaseLayer').style.visibility='hidden';
-                  document.getElementById('sellingPriceErrorMessageLayer').style.visibility='hidden';
-                }
-            </script> --}}
-            <!---selling price custom alert message css--->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            {{---
-                <label>
-                    <small>Less Amount</small>: <br>
-                    <label style="cursor: pointer;margin-right:5px;">
-                        <input name="discountType" value="percentage" type="radio" class="colored-blue cr_discountTypeClass" style="font-size:12px;cursor: pointer">
-                        <span class="text" style="font-size:12px;">Percentage (%)</span>
-                    </label>
-                    <label style="cursor: pointer">
-                        <input name="discountType" checked="" value="fixed" type="radio" class="colored-blue cr_discountTypeClass" style="font-size:12px;cursor: pointer">
-                        <span class="text" style="font-size:12px;">Fixed</span>
-                    </label>
-                </label>
-            ---}}
-
 
 
 

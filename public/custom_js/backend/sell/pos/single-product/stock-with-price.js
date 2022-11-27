@@ -675,7 +675,9 @@
             var sellProfitOfASingleProductAginstOfMRP =  mrpPrice - finalSellingPrice;
             
             var totalQty = nanCheck(jQuery('.final_sell_quantity').val());
-            jQuery('.discount_amount').val(sellProfitOfASingleProductAginstOfMRP *  totalQty);
+            jQuery('.discount_amount').val((sellProfitOfASingleProductAginstOfMRP).toFixed(2));
+            jQuery('.total_discount_amount_text').text((sellProfitOfASingleProductAginstOfMRP *  totalQty).toFixed(2));
+            jQuery('.total_discount_amount_value').val((sellProfitOfASingleProductAginstOfMRP *  totalQty).toFixed(2));
             
             var percentageOfMRPPrice = 0;
             percentageOfMRPPrice = (((sellProfitOfASingleProductAginstOfMRP * 100) / mrpPrice).toFixed(2));
