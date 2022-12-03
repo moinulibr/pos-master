@@ -17,10 +17,8 @@ class CreateSellProductStocksTable extends Migration
             Schema::create('sell_product_stocks', function (Blueprint $table) {
                 $table->id();
                 $table->integer('branch_id')->nullable();
-
                 $table->integer('sell_invoice_id')->nullable();
-                $table->integer('sell_product_id')->nullable()->comment('sell product wise');
-
+                $table->integer('sell_product_id')->nullable()->comment('sell product relationship table pid');
                 $table->integer('product_id')->nullable();
                 $table->integer('stock_id')->nullable();
                 $table->integer('product_stock_id')->nullable()->comment('sell product stock id');
@@ -38,16 +36,24 @@ class CreateSellProductStocksTable extends Migration
                 
                 $table->decimal('remaining_delivery_qty',20,3)->default(0);
                 $table->decimal('total_delivered_qty',20,3)->default(0);
-
                 $table->decimal('total_return_qty',20,3)->default(0);
 
                 $table->tinyInteger('status')->nullable();
                 $table->tinyInteger('delivery_status')->nullable();
                 
+                //ict_isp_qty ->comment('instantly processed quantity for delivery. Meaning thant, this quantity is ready to delivery');
+                $table->decimal('stock_process_instantly_qty',20,3)->default(0)->comment('stock processed instantly quantity');
+                $table->decimal('stock_process_instantly_qty_reduced',20,3)->default(0)->default(0)->comment('stock_process_instantly_qty_reduce_status :- this field depend on reduced_base_stock_remaining_delivery field of product_stocks table.');
+                $table->decimal('stock_process_later_qty',20,3)->default(0)->comment('stock processe latter quantity');
+                $table->string('stock_process_later_date')->nullable();
+                $table->decimal('total_stock_remaining_process_qty',20,3)->default(0)->comment('stock processe latter quantity');
+                $table->decimal('total_stock_processed_qty',20,3)->default(0)->comment('stock processe latter quantity');
+
+
+
                 
                 $table->decimal('stock_process_instantly_qty',20,3)->default(0)->comment('stock processed instantly quantity');
                 $table->decimal('stock_process_instantly_qty_reduced',20,3)->default(0)->default(0)->comment('stock_process_instantly_qty_reduce_status :- this field depend on reduced_base_stock_remaining_delivery field of product_stocks table.');
-                
                 $table->decimal('stock_process_later_qty',20,3)->default(0)->comment('stock processe latter quantity');
                 $table->string('stock_process_later_date')->nullable();
                 $table->decimal('total_stock_remaining_process_qty',20,3)->default(0)->comment('stock processe latter quantity');

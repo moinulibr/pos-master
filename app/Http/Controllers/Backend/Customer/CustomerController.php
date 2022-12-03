@@ -181,9 +181,23 @@ class CustomerController extends Controller
     }  
     
     
-    public function history(Customer $customer)
+    public function history(Request $request)
     {
         return view('backend.customer.customer.history.history');
+    }
+
+    public function customerTransactionalStatement(Request $request)
+    {
+        $data = [];
+        $transactionalSummary =  view('backend.customer.customer.history.transactional_summary',$data)->render();
+        $transactionalStatement =  view('backend.customer.customer.history.transactional_statement',$data)->render();
+        return response()->json([
+            'status' => true,
+            'type' => 'success',
+            'message' => "Customer updated successfully",
+            'transactionalSummary' => $transactionalSummary,
+            'transactionalStatement' => $transactionalStatement,
+        ]);
     }
 
 }

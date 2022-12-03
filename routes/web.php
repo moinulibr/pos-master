@@ -238,6 +238,7 @@ Route::group(['middleware' => ['auth']], function ()
             
             //for temporary
             Route::get('history','CustomerController@history')->name('history');//->middleware(['permissions:unit|index']);
+            Route::get('transaction/statement','CustomerController@customerTransactionalStatement')->name('transactional.statement');//->middleware(['permissions:unit|index']);
             
             //delete
             Route::get('delete','CustomerController@delete')->name('delete');//->middleware(['permissions:unit|index']);
