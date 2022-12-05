@@ -193,6 +193,10 @@
                                     </table>
                                 </div>
 
+                                <div style="margin-left: 45%;margin-right:45%;margin-bottom:20px;">
+                                    <img class="processing" src="{{asset('loading-img')}}/loading1.gif" alt="" style="margin-left:auto;margin-right:auto;height:35px;display:none;background-color:#ffff;border-radius: 50%;">
+                                </div>
+
                                 <div class="renderedTransactionalSummary"></div>
                                 <div class="renderedTransactionalStatement"></div>
                                 
