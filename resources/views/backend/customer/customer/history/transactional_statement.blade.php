@@ -38,6 +38,9 @@
                 <tbody>
                     <tr style="background-color:#837f7f;color:white">
                         <td style="width:5%;text-align:center;">01</td>
+                        <td style="width:11%;text-align:center;">
+                            <small>--</small>
+                        </td>
                         <td style="width:5%;text-align:center;">
                             011
                         </td>
@@ -47,9 +50,6 @@
                         <td style="width:5%;text-align:center;">05-12-2022</td>
                         <td style="width:23%;text-align:center;">
                             Previous due  
-                        </td>
-                        <td style="width:11%;text-align:center;">
-                            <small>--</small>
                         </td>
                         <td style="width:11%;text-align:center;">50000.00</td>
                         <td style="width:10%;text-align:center;">
@@ -61,6 +61,9 @@
                     </tr>
                     <tr style="background-color:#b77878;color:white">
                         <td style="width:5%;text-align:center;">02</td>
+                        <td style="width:11%;text-align:center;">
+                            <small>#sel765432</small>
+                        </td>
                         <td style="width:5%;text-align:center;">
                             012
                         </td>
@@ -70,9 +73,6 @@
                         <td style="width:5%;text-align:center;">08-12-2022</td>
                         <td style="width:23%;text-align:center;">
                             Quotation  
-                        </td>
-                        <td style="width:11%;text-align:center;">
-                            <small>#sel765432</small>
                         </td>
                         <td style="width:11%;text-align:center;">20000.00</td>
                         <td style="width:10%;text-align:center;">
@@ -84,6 +84,9 @@
                     </tr>
                     <tr>
                         <td style="width:5%;text-align:center;">03</td>
+                        <td style="width:11%;text-align:center;">
+                            <small>#sel765433</small>
+                        </td>
                         <td style="width:5%;text-align:center;">
                             012
                         </td>
@@ -94,10 +97,7 @@
                         <td style="width:23%;text-align:center;">
                             Sell  
                         </td>
-                        <td style="width:11%;text-align:center;">
-                            <small>#sel765433</small>
-                        </td>
-                        <td style="width:11%;text-align:center;">30000.00</td>
+                        <td style="width:11%;text-align:center;">00.00</td>
                         <td style="width:10%;text-align:center;">
                             30000.00
                         </td>
@@ -107,6 +107,9 @@
                     </tr>
                     <tr  style="background-color:#727070;color:white">
                         <td style="width:5%;text-align:center;">04</td>
+                        <td style="width:11%;text-align:center;">
+                            <small>--</small>
+                        </td>
                         <td style="width:5%;text-align:center;">
                             012
                         </td>
@@ -117,19 +120,19 @@
                         <td style="width:23%;text-align:center;">
                             Loan  
                         </td>
-                        <td style="width:11%;text-align:center;">
-                            <small>--</small>
-                        </td>
                         <td style="width:11%;text-align:center;">10000.00</td>
                         <td style="width:10%;text-align:center;">
                             00.00
                         </td>
                         <td style="width:10%;text-align:center;">00.00</td>
-                        <td style="width:10%;text-align:center;">10000.00</td>
+                        <td style="width:10%;text-align:center;">00.00</td>
                         <td style="width:11%;text-align:center;">80000.00</td>
                     </tr>
                     <tr  style="background-color:#507850;color:white">
                         <td style="width:5%;text-align:center;">05</td>
+                        <td style="width:11%;text-align:center;">
+                            <small>--</small>
+                        </td>
                         <td style="width:5%;text-align:center;">
                             012
                         </td>
@@ -140,19 +143,19 @@
                         <td style="width:23%;text-align:center;">
                             Advance  
                         </td>
-                        <td style="width:11%;text-align:center;">
-                            <small>--</small>
-                        </td>
                         <td style="width:11%;text-align:center;">20000.00</td>
                         <td style="width:10%;text-align:center;">
                             00.00
                         </td>
-                        <td style="width:10%;text-align:center;">20000.00</td>
+                        <td style="width:10%;text-align:center;">00.00</td>
                         <td style="width:10%;text-align:center;">00.00</td>
                         <td style="width:11%;text-align:center;">60000.00</td>
                     </tr>
                     <tr>
                         <td style="width:5%;text-align:center;">06</td>
+                        <td style="width:11%;text-align:center;">
+                            <small>SR321453</small>
+                        </td>
                         <td style="width:5%;text-align:center;">
                             013
                         </td>
@@ -163,19 +166,19 @@
                         <td style="width:23%;text-align:center;">
                             Sell Return  
                         </td>
-                        <td style="width:11%;text-align:center;">
-                            <small>SR321453</small>
-                        </td>
-                        <td style="width:11%;text-align:center;">50000.00</td>
+                        <td style="width:11%;text-align:center;">00.00</td>
                         <td style="width:10%;text-align:center;">
                             00.00
                         </td>
-                        <td style="width:10%;text-align:center;">50000.00</td>
+                        <td style="width:10%;text-align:center;">00.00</td>
                         <td style="width:10%;text-align:center;">00.00</td>
                         <td style="width:11%;text-align:center;">55000.00</td>
                     </tr>
                     <tr>
                         <td style="width:5%;text-align:center;">07</td>
+                        <td style="width:11%;text-align:center;">
+                            <small>--</small>
+                        </td>
                         <td style="width:5%;text-align:center;">
                             013
                         </td>
@@ -184,21 +187,21 @@
                         </td>
                         <td style="width:5%;text-align:center;">13-12-2022</td>
                         <td style="width:23%;text-align:center;">
-                            SD Payment  
+                            Sell Due Payment  
                         </td>
-                        <td style="width:11%;text-align:center;">
-                            <small>--</small>
-                        </td>
-                        <td style="width:11%;text-align:center;">40000.00</td>
+                        <td style="width:11%;text-align:center;">4000.00</td>
                         <td style="width:10%;text-align:center;">
                             00.00
                         </td>
-                        <td style="width:10%;text-align:center;">40000.00</td>
+                        <td style="width:10%;text-align:center;">00.00</td>
                         <td style="width:10%;text-align:center;">00.00</td>
                         <td style="width:11%;text-align:center;">51000.00</td>
                     </tr>
                     <tr>
                         <td style="width:5%;text-align:center;">08</td>
+                        <td style="width:11%;text-align:center;">
+                            <small>--</small>
+                        </td>
                         <td style="width:5%;text-align:center;">
                             013
                         </td>
@@ -207,21 +210,21 @@
                         </td>
                         <td style="width:5%;text-align:center;">14-12-2022</td>
                         <td style="width:23%;text-align:center;">
-                               PD Payment  
+                            Previous Due Payment  
                         </td>
-                        <td style="width:11%;text-align:center;">
-                            <small>--</small>
-                        </td>
-                        <td style="width:11%;text-align:center;">110000.00</td>
+                        <td style="width:11%;text-align:center;">11000.00</td>
                         <td style="width:10%;text-align:center;">
                             00.00
                         </td>
-                        <td style="width:10%;text-align:center;">11000.00</td>
+                        <td style="width:10%;text-align:center;">00.00</td>
                         <td style="width:10%;text-align:center;">00.00</td>
                         <td style="width:11%;text-align:center;">40000.00</td>
                     </tr>
                     <tr>
                         <td style="width:5%;text-align:center;">09</td>
+                        <td style="width:11%;text-align:center;">
+                            <small>--</small>
+                        </td>
                         <td style="width:5%;text-align:center;">
                             013
                         </td>
@@ -230,16 +233,13 @@
                         </td>
                         <td style="width:5%;text-align:center;">15-12-2022</td>
                         <td style="width:23%;text-align:center;">
-                               SD Payment  
-                        </td>
-                        <td style="width:11%;text-align:center;">
-                            <small>--</small>
+                            Previous Due Payment   
                         </td>
                         <td style="width:11%;text-align:center;">40000.00</td>
                         <td style="width:10%;text-align:center;">
                             00.00
                         </td>
-                        <td style="width:10%;text-align:center;">40000.00</td>
+                        <td style="width:10%;text-align:center;">00.00</td>
                         <td style="width:10%;text-align:center;">00.00</td>
                         <td style="width:11%;text-align:center;">00.00</td>
                     </tr>

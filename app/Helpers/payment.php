@@ -671,9 +671,9 @@ use App\Models\Backend\Payment\Account;
                     4 => "Loan",
                     5 => "Advance",
                     6 => "Sell Return",
-                    7 => "SD Payment",//Sell Due Payment
-                    8 => "PD Payment", //Preious Due Payment
-                    9 => "SR Payment", // Sell Return Payment
+                    7 => "Sell Due Payment",//SD Payment
+                    8 => "Previous Due Payment", //PD Payment
+                    9 => "Sell Return Payment", // SR Payment
                     10 => "Adjustment", // Sell Return Payment
                 ]; 
             }
