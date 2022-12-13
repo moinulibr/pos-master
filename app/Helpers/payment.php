@@ -675,6 +675,7 @@ use App\Models\Backend\Payment\Account;
                     8 => "Previous Due Payment", //PD Payment
                     9 => "Sell Return Payment", // SR Payment
                     10 => "Adjustment", // Sell Return Payment
+                    11 => "Change Payment Date", // Change Payment Date
                 ]; 
             }
         /*
@@ -752,6 +753,43 @@ use App\Models\Backend\Payment\Account;
         | CDF during payment processing
         |--------------------------------------------------------------------------
         */
+
+        
+        /*
+        |--------------------------------------------------------------------------
+        | Customer payment processing from submit
+        |--------------------------------------------------------------------------
+        */
+            //payment data processing when selling submit from post
+            function customerTransactionRequestDataProcessing_hp($requestData)
+            {
+                $paymentAllData = [ 
+                    'amount' => $requestData['ledger_page_no'] ?? 0,
+
+                    'ledger_page_no' => $requestData['ledger_page_no'] ?? NULL,
+                    'next_payment_date' => $requestData['next_payment_date'] ?? NULL,
+                    'short_note' => $requestData['short_note'] ?? NULL,
+                    
+                    'sell_amount' => $requestData['sell_amount'] ?? 0,
+                    'sell_paid' => $requestData['sell_paid'] ?? 0,
+                    'sell_due' => $requestData['sell_due'] ?? 0,
+
+                    'user_id' => $requestData['user_id'] ?? NULL,
+                    'tt_module_invoice_no' => $requestData['tt_module_invoice_no'] ?? NULL,
+                    'tt_module_invoice_id' => $requestData['tt_module_invoice_id'] ?? NULL,
+               
+                    'sell_invoice_ids' => [
+                        //'invoice_continue_with' => $requestData['invoice_continue_with'], 
+                    ],
+                ];
+                return $paymentAllData;
+            }
+        /*
+        |--------------------------------------------------------------------------
+        | Customer payment processing from submit
+        |--------------------------------------------------------------------------
+        */
+        
     /*
     |--------------------------------------------------------------------------
     | Customer transaction and statement history part only Payment 

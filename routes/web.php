@@ -242,6 +242,10 @@ Route::group(['middleware' => ['auth']], function ()
             
             //delete
             Route::get('delete','CustomerController@delete')->name('delete');//->middleware(['permissions:unit|index']);
+            
+            //render next payment date modal
+            Route::get('render/next/payment/date/modal','CustomerController@renderNextPaymentDateModal')->name('render.next.payment.date.modal');
+            Route::post('store/next/payment/date','CustomerController@soteNextPaymentDate')->name('store.next.payment.date');
         });
     /*
     |----------------------------------------

@@ -1,11 +1,10 @@
 <?php
 namespace App\Traits\Backend\Payment;
 
+use App\Models\Backend\Customer\CustomerTransactionHistory;
 use App\Models\Backend\Payment\AccountPayment;
-use App\Models\Backend\Payment\AccountPaymentDetails;
-use App\Models\Backend\Payment\AccountPaymentInvoice;
 
-//use App\Models\Backend\Stock\Stock;
+
 
 
 /**
@@ -16,12 +15,14 @@ trait CustomerPaymentProcessTrait
 {
     //use Stock;
 
-    protected $mainPaymentModuleId;
-    protected $paymentModuleId;
-    protected $paymentCdfTypeId;
-    protected $paymentProcessingRelatedOfAllRequestData;
-    protected $paymentProcessingRequiredOfAllRequestOfModuleRelatedData;
-    protected $invoiceTotalPayingAmount;
+    protected $processingOfAllCustomerTransactionRequestData;
+
+    //customer transaction statement, transaction type == tt
+    protected $ctsTTModuleId;
+    protected $ctsCustomerId;
+    protected $ttModuleInvoicsDataArrayFormated;
+    protected $ctsCdsTypeId;
+    protected $amount;
 
     private $currentPaymentAmount;
     private $lastPaymentAmount;
@@ -29,8 +30,9 @@ trait CustomerPaymentProcessTrait
     /*
     * Processing Payment
     */
-    public function processingPayment()
+    public function processingOfAllCustomerTransaction()
     {   
+
         $this->insertAccountPaymentInvoice();
         return true;
     }
@@ -38,37 +40,30 @@ trait CustomerPaymentProcessTrait
     //insert account payment invoice
     protected function insertAccountPaymentInvoice()
     {
-        $ap = new AccountPaymentInvoice();
+        $ap = new CustomerTransactionHistory();
         $rand = rand(01,99);
         $makeInvoice = date("iHsymd").$rand;
         $ap->branch_id = authBranch_hh();
-        $ap->payment_invoice_no = $makeInvoice;;
-        $ap->payment_reference_no = "";
-        $ap->main_module_id = $this->mainPaymentModuleId;
-        $ap->module_id = $this->paymentModuleId;
-        $ap->main_module_invoice_no = $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData['main_module_invoice_no'];
-        $ap->main_module_invoice_id = $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData['main_module_invoice_id'];
-        $ap->module_invoice_no = $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData['module_invoice_no'];
-        $ap->module_invoice_id = $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData['module_invoice_id'];
-
-        $ap->cdf_type_id = $this->paymentCdfTypeId;
-        $ap->payment_amount = $this->invoiceTotalPayingAmount;
-        $ap->user_id = $this->paymentProcessingRequiredOfAllRequestOfModuleRelatedData['user_id'];
+      
+        $ap->ledger_page_no = $this->processingOfAllCustomerTransactionRequestData['ledger_page_no'];
+        $ap->next_payment_date = $this->processingOfAllCustomerTransactionRequestData['next_payment_date'];
+        $ap->created_date = date('Y-m-d');
+        $ap->tt_module_id = $this->ctsTTModuleId;
+        $ap->tt_module_invoice_no = $this->ttModuleInvoicsDataArrayFormated['invoice_no'];
+        $ap->tt_module_invoice_id = $this->ttModuleInvoicsDataArrayFormated['invoice_id'];
+        $ap->cdf_type_id = $this->ctsCdsTypeId;
+        $ap->amount = $this->amount;
+        $ap->sell_amount = $this->processingOfAllCustomerTransactionRequestData['sell_amount'];
+        $ap->sell_paid = $this->processingOfAllCustomerTransactionRequestData['sell_paid'];
+        $ap->sell_due = $this->processingOfAllCustomerTransactionRequestData['sell_due'];
+        $ap->user_id = $this->ctsCustomerId;
         $ap->received_by = authId_hh();
-        $ap->payment_date = date('Y-m-d');
-
-        $ap->payment_method_details = json_encode($this->paymentProcessingRelatedOfAllRequestData['payment_method_details']);
-
-        $ap->next_payment_date = $this->paymentProcessingRelatedOfAllRequestData['next_payment_date'];
-        $ap->payment_note = $this->paymentProcessingRelatedOfAllRequestData['payment_note'];
-        $ap->sms_send = $this->paymentProcessingRelatedOfAllRequestData['sms_send'];
-        $ap->email_send = $this->paymentProcessingRelatedOfAllRequestData['email_send'];
+        $ap->short_note = $this->processingOfAllCustomerTransactionRequestData['short_note'];
         $ap->save();
-        
-        $lopping = paymentMethodsBasedLooping_hh($this->paymentProcessingRelatedOfAllRequestData['payment_method_id']);
-        for ($paymentOptionId=1; $paymentOptionId <= $lopping; $paymentOptionId++) { 
-            $this->insertAccountPaymentInformation($ap,$paymentOptionId);
-        }
+
+        //$this->ctsCustomerId
+        $ap->cdc_amount = $this->currentCdcAmountAfterCalculationByCtsCdfType();
+        $ap->save();
         return $ap;
     }
 
@@ -89,7 +84,7 @@ trait CustomerPaymentProcessTrait
 
         $ap->cdf_type_id = $accPymntInvoice->cdf_type_id;
         $ap->payment_date = $accPymntInvoice->payment_date;
-        $ap->cdf_type_id = $this->paymentCdfTypeId;
+        $ap->cdf_type_id = $this->ctsCdsTypeId;
         $ap->user_id = $accPymntInvoice->user_id;
        
         
@@ -109,9 +104,9 @@ trait CustomerPaymentProcessTrait
         
         $ap->payment_amount = $payingAmountNow;
 
-        //required parameter 2 : $this->paymentCdfTypeId, $this->currentPaymentAmount
+        //required parameter 2 : $this->ctsCdsTypeId, $this->currentPaymentAmount
         $this->currentPaymentAmount = $payingAmountNow;
-        $cdcAmountBeforeInsertingThisPayment = $this->currentCdcAmountAfterCalculationByCdfType();
+        $cdcAmountBeforeInsertingThisPayment = $this->currentCdcAmountAfterCalculationByCtsCdfType();
 
         $ap->cdc_amount = $cdcAmountBeforeInsertingThisPayment;
 
@@ -128,11 +123,11 @@ trait CustomerPaymentProcessTrait
 
     
     //current cdc amount after culculation by cdf type id
-    private function currentCdcAmountAfterCalculationByCdfType()
+    private function currentCdcAmountAfterCalculationByCtsCdfType()
     {
-        //required parameter 2 : $this->paymentCdfTypeId, $this->currentPaymentAmount
+        //required parameter 2 : $this->ctsCdsTypeId, $this->currentPaymentAmount
 
-        $lastPaymentAmount = AccountPayment::select('cdc_amount','cdf_type_id')->latest()->first();
+        $lastPaymentAmount = CustomerTransactionHistory::select('cdc_amount','cdf_type_id','user_id')->where('user_id',$this->ctsCustomerId)->latest()->first();
         if($lastPaymentAmount)
         {
             $lastAmount = $lastPaymentAmount->cdc_amount;
@@ -140,11 +135,16 @@ trait CustomerPaymentProcessTrait
             $lastAmount = 0;
         }
         $cdcAmount = 0;
-        if($this->paymentCdfTypeId == 1)
+        if($this->ctsCdsTypeId == 1) // credit = paid
         {
             $cdcAmount = $lastAmount + $this->currentPaymentAmount;
-        }else{
-           $cdcAmount = $lastAmount - $this->currentPaymentAmount;
+        }
+        else if($this->ctsCdsTypeId == 2)
+        {
+            $cdcAmount = $lastAmount - $this->currentPaymentAmount;
+        }
+        else{
+           $cdcAmount = $lastAmount;
         }
         return $cdcAmount;
     }

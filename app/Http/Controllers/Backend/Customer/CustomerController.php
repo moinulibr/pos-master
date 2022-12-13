@@ -14,8 +14,10 @@ use App\Models\Backend\Customer\CustomerShippingAddress;
 use App\Models\Backend\Customer\CustomerType;
 use App\Traits\Backend\ProductAttribute\Unit\UnitTrait;
 use App\Traits\Permission\Permission;
+use App\Traits\Backend\Payment\CustomerPaymentProcessTrait;
 class CustomerController extends Controller
 {
+    use CustomerPaymentProcessTrait;
     use CustomerValidationTrait;
     /**
      * Display a listing of the resource.
@@ -197,6 +199,42 @@ class CustomerController extends Controller
             'message' => "Customer updated successfully",
             'transactionalSummary' => $transactionalSummary,
             'transactionalStatement' => $transactionalStatement,
+        ]);
+    }
+
+
+    public function renderNextPaymentDateModal(Request $request)
+    {
+        $data['customer'] = Customer::select('id','next_payment_date')->findOrFail($request->id);
+        $view =  view('backend.customer.customer.next_payment_date',$data)->render();
+        return response()->json([
+            'status' => true,
+            'type' => 'success',
+            'view' => $view,
+        ]);
+    }
+
+    public function soteNextPaymentDate(Request $request)
+    {
+        $data['customer'] = Customer::select('id','next_payment_date')->findOrFail($request->customer_id);
+        $data['customer']->update(['next_payment_date'=>$request->next_payment_date]);
+
+        $this->processingOfAllCustomerTransactionRequestData = customerTransactionRequestDataProcessing_hp($request);
+        $this->amount = 0;
+        $this->ctsTTModuleId = getCTSModuleIdBySingleModuleLebel_hp('Change Payment Date');
+        $this->ctsCustomerId = $request->customer_id;
+        $ttModuleInvoics = [
+            'invoice_no' => NULL,
+            'invoice_id' => NULL
+        ];
+        $this->ttModuleInvoicsDataArrayFormated = $ttModuleInvoics;
+        $this->ctsCdsTypeId = getCTSCdfIdBySingleCdfLebel_hp('-');
+        $this->processingOfAllCustomerTransaction();
+
+        return response()->json([
+            'status' => true,
+            'type' => 'success',
+            'message' => "Next payment date store successfully",
         ]);
     }
 

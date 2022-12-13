@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div class="table-responsive  table-responsive-index-page">
     <table class="table table-bordered mb-0">
         <thead>
             <tr>
@@ -69,7 +69,7 @@
                         {{$item->previous_due}}
                     </td> 
                     <td>
-                        {{$item->previous_due_date}}
+                        {{$item->next_payment_date}}
                     </td>
                     <td>
                         <small>

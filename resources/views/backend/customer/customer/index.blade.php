@@ -99,6 +99,11 @@
             <input type="hidden" class="deleteCustomerModalRoute" value="{{ route('admin.customer.delete') }}">
             <!-------delete Customer Modal------> 
             
+            <!-------render next payment modal------> 
+            <div class="modal fade" id="renderNextPaymentDateModal"  aria-modal="true"></div>
+            <input type="hidden" class="renderNextPaymentDateModalRoute" value="{{ route('admin.customer.render.next.payment.date.modal') }}">
+            <!-------render next payment modal------> 
+            
 
 
 

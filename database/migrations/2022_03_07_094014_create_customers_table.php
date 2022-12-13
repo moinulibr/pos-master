@@ -35,31 +35,63 @@ class CreateCustomersTable extends Migration
                 $table->string('company_name',100)->nullable();
                 $table->text('address')->nullable();
 
-                $table->decimal('ct_sell_invoice_amount', 20, 2)->default(00.00)->comment('creating time.just keep it, not change - before started this app');
-                $table->decimal('previous_sell_invoice_amount', 20, 2)->default(00.00)->comment('before started this app');
-                $table->decimal('current_sell_invoice_amount', 20, 2)->default(00.00)->comment('during using this app');
-                $table->decimal('total_sell_invoice_amount', 20, 2)->default(00.00)->comment('previous + current sell invoice total amount');
- 
-
-                $table->decimal('ct_previous_due', 20, 2)->default(00.00)->comment('creating time.just keep it, not change - before started this app');
-                $table->decimal('previous_due', 20, 2)->default(00.00)->comment('before started this app');
-                $table->decimal('current_due', 20, 2)->default(00.00)->comment('during using this app');
-                $table->decimal('total_due', 20, 2)->default(00.00)->comment('previous + current due');
- 
-                $table->decimal('previous_paid', 20, 2)->default(00.00)->comment('before started this app');
-                $table->decimal('current_paid', 20, 2)->default(00.00)->comment('during using this app');
-                $table->decimal('total_paid', 20, 2)->default(00.00)->comment('previous + current paid');
-                
-                $table->decimal('previous_loan', 20, 2)->default(00.00)->comment('before started this app');
-                $table->decimal('current_loan', 20, 2)->default(00.00)->comment('during using this app');
-                $table->decimal('total_loan', 20, 2)->default(00.00)->comment('previous + current loan');
-            
-                $table->decimal('previous_advance', 20, 2)->default(00.00)->comment('before started this app');
-                $table->decimal('current_advance', 20, 2)->default(00.00)->comment('during using this app');
-                $table->decimal('total_advance', 20, 2)->default(00.00)->comment('previous + current advance');
-
-                $table->string('previous_due_date',25)->nullable();
                 $table->string('next_payment_date',25)->nullable();
+                $table->string('previous_due_date',25)->nullable();
+                
+                $table->decimal('previous_total_sell_amount', 20, 2)->default(00.00)->comment('creating time.just keep it, not change - before started this app');
+                $table->decimal('previous_total_sell_reference_amount', 20, 2)->default(00.00)->comment('creating time.just keep it, not change - before started this app');
+                $table->decimal('previous_total_sell_profit_amount', 20, 2)->default(00.00)->comment('creating time.just keep it, not change - before started this app');
+                
+                $table->decimal('previous_due', 20, 2)->default(00.00)->comment('creating time.just keep it, not change - before started this app');
+                $table->decimal('previous_advance', 20, 2)->default(00.00)->comment('creating time.just keep it, not change - before started this app');
+                $table->decimal('previous_loan', 20, 2)->default(00.00)->comment('creating time.just keep it, not change - before started this app');
+                $table->decimal('previous_return', 20, 2)->default(00.00)->comment('creating time.just keep it, not change - before started this app');
+                
+                $table->decimal('previous_due_paid', 20, 2)->default(00.00)->comment('creating time.just keep it, not change - before started this app');
+                $table->decimal('previous_advance_paid', 20, 2)->default(00.00)->comment('creating time.just keep it, not change - before started this app');
+                $table->decimal('previous_loan_paid', 20, 2)->default(00.00)->comment('creating time.just keep it, not change - before started this app');
+                $table->decimal('previous_return_paid', 20, 2)->default(00.00)->comment('creating time.just keep it, not change - before started this app');
+
+                $table->decimal('previous_due_paid_now', 20, 2)->default(00.00)->comment('paid after using this app.');
+                $table->decimal('previous_advance_paid_now', 20, 2)->default(00.00)->comment('paid after using this app.');
+                $table->decimal('previous_loan_paid_now', 20, 2)->default(00.00)->comment('paid after using this app.');
+                $table->decimal('previous_return_paid_now', 20, 2)->default(00.00)->comment('paid after using this app.');
+
+                $table->decimal('previous_total_due', 20, 2)->default(00.00)->comment('after using this app.');
+                $table->decimal('previous_total_advance', 20, 2)->default(00.00)->comment('after using this app.');
+                $table->decimal('previous_total_loan', 20, 2)->default(00.00)->comment('after using this app.');
+                $table->decimal('previous_total_return', 20, 2)->default(00.00)->comment('after using this app.');
+
+ 
+                $table->decimal('current_due', 20, 2)->default(00.00)->comment('after using this app.');
+                $table->decimal('current_advance', 20, 2)->default(00.00)->comment('after using this app.');
+                $table->decimal('current_loan', 20, 2)->default(00.00)->comment('after using this app.');
+                $table->decimal('current_return', 20, 2)->default(00.00)->comment('after using this app.');
+
+                $table->decimal('current_paid_due', 20, 2)->default(00.00)->comment('after using this app.');
+                $table->decimal('current_paid_advance', 20, 2)->default(00.00)->comment('after using this app.');
+                $table->decimal('current_paid_loan', 20, 2)->default(00.00)->comment('after using this app.');
+                $table->decimal('current_paid_return', 20, 2)->default(00.00)->comment('after using this app.');
+
+                $table->decimal('current_total_due', 20, 2)->default(00.00)->comment('after using this app.');
+                $table->decimal('current_total_advance', 20, 2)->default(00.00)->comment('after using this app.');
+                $table->decimal('current_total_loan', 20, 2)->default(00.00)->comment('after using this app.');
+                $table->decimal('current_total_return', 20, 2)->default(00.00)->comment('after using this app.');
+
+                $table->decimal('total_due', 20, 2)->default(00.00)->comment('total before + after using this app.');
+                $table->decimal('total_advance', 20, 2)->default(00.00)->comment('total before + after using this app.');
+                $table->decimal('total_loan', 20, 2)->default(00.00)->comment('total before + after using this app.');
+                $table->decimal('total_return', 20, 2)->default(00.00)->comment('total before + after using this app.');
+
+                $table->decimal('current_total_sell_amount', 20, 2)->default(00.00)->comment('after using this app.');
+                $table->decimal('current_total_sell_reference_amount', 20, 2)->default(00.00)->comment('after using this app.');
+                $table->decimal('current_total_sell_profit_amount', 20, 2)->default(00.00)->comment('after using this app.');
+                
+                $table->decimal('total_sell_amount', 20, 2)->default(00.00)->comment('total before + after using this app.');
+                $table->decimal('total_sell_reference_amount', 20, 2)->default(00.00)->comment('total before + after using this app.');
+                $table->decimal('total_sell_profit_amount', 20, 2)->default(00.00)->comment('total before + after using this app.');
+                
+                
                 $table->text('note')->nullable();
                 $table->tinyInteger('status')->nullable();
                 $table->string('verified',25)->nullable();
