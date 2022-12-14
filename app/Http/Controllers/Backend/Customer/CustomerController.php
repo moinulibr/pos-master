@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Backend\Customer;
 
-use App\Http\Controllers\Controller;
-use App\Models\Backend\Customer\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 //use Illuminate\Support\Facades\Validator;
 
-use App\Http\Requests\Backend\Customer\CustomerValidationTrait;
-use App\Models\Backend\Customer\CustomerShippingAddress;
+use App\Traits\Permission\Permission;
+use App\Models\Backend\Customer\Customer;
 use App\Models\Backend\Customer\CustomerType;
 use App\Traits\Backend\ProductAttribute\Unit\UnitTrait;
-use App\Traits\Permission\Permission;
+use App\Models\Backend\Customer\CustomerShippingAddress;
 use App\Traits\Backend\Payment\CustomerPaymentProcessTrait;
+use App\Http\Requests\Backend\Customer\CustomerValidationTrait;
+
 class CustomerController extends Controller
 {
     use CustomerPaymentProcessTrait;
@@ -85,6 +87,20 @@ class CustomerController extends Controller
         }
 
         $saveData =  auth()->user()->customerUsers()->create($request->all());
+
+        //customer transaction statement history
+        $this->processingOfAllCustomerTransactionRequestData = customerTransactionRequestDataProcessing_hp($request);
+        $this->amount = $request->previous_due ?? 0;
+        $this->ctsTTModuleId = getCTSModuleIdBySingleModuleLebel_hp('Previous Due');
+        $this->ctsCustomerId = $saveData->id;
+        $ttModuleInvoics = [
+            'invoice_no' => NULL,
+            'invoice_id' => NULL
+        ];
+        $this->ttModuleInvoicsDataArrayFormated = $ttModuleInvoics;
+        $this->ctsCdsTypeId = getCTSCdfIdBySingleCdfLebel_hp('-');
+        $this->processingOfAllCustomerTransaction();
+        //customer transaction statement history
 
         //shipping address
         $shipping = new CustomerShippingAddress();
@@ -183,14 +199,15 @@ class CustomerController extends Controller
     }  
     
     
-    public function history(Request $request)
+    public function history($id)
     {
-        return view('backend.customer.customer.history.history');
+        $data['customer'] = Customer::findOrFail($id);
+        return view('backend.customer.customer.history.history',$data);
     }
 
     public function customerTransactionalStatement(Request $request)
     {
-        $data = [];
+        $data['customer'] = Customer::findOrFail($request->id);
         $transactionalSummary =  view('backend.customer.customer.history.transactional_summary',$data)->render();
         $transactionalStatement =  view('backend.customer.customer.history.transactional_statement',$data)->render();
         return response()->json([
@@ -216,26 +233,37 @@ class CustomerController extends Controller
 
     public function soteNextPaymentDate(Request $request)
     {
-        $data['customer'] = Customer::select('id','next_payment_date')->findOrFail($request->customer_id);
-        $data['customer']->update(['next_payment_date'=>$request->next_payment_date]);
-
-        $this->processingOfAllCustomerTransactionRequestData = customerTransactionRequestDataProcessing_hp($request);
-        $this->amount = 0;
-        $this->ctsTTModuleId = getCTSModuleIdBySingleModuleLebel_hp('Change Payment Date');
-        $this->ctsCustomerId = $request->customer_id;
-        $ttModuleInvoics = [
-            'invoice_no' => NULL,
-            'invoice_id' => NULL
-        ];
-        $this->ttModuleInvoicsDataArrayFormated = $ttModuleInvoics;
-        $this->ctsCdsTypeId = getCTSCdfIdBySingleCdfLebel_hp('-');
-        $this->processingOfAllCustomerTransaction();
-
-        return response()->json([
-            'status' => true,
-            'type' => 'success',
-            'message' => "Next payment date store successfully",
-        ]);
+        DB::beginTransaction();
+        try {
+            $data['customer'] = Customer::select('id','next_payment_date')->findOrFail($request->customer_id);
+            $data['customer']->update(['next_payment_date'=>$request->next_payment_date]);
+    
+            $this->processingOfAllCustomerTransactionRequestData = customerTransactionRequestDataProcessing_hp($request);
+            $this->amount = 0;
+            $this->ctsTTModuleId = getCTSModuleIdBySingleModuleLebel_hp('Change Payment Date');
+            $this->ctsCustomerId = $request->customer_id;
+            $ttModuleInvoics = [
+                'invoice_no' => NULL,
+                'invoice_id' => NULL
+            ];
+            $this->ttModuleInvoicsDataArrayFormated = $ttModuleInvoics;
+            $this->ctsCdsTypeId = getCTSCdfIdBySingleCdfLebel_hp('-');
+            $this->processingOfAllCustomerTransaction();
+            DB::commit();
+            return response()->json([
+                'status' => true,
+                'type' => 'success',
+                'message' => "Next payment date store successfully",
+            ]);
+        } catch (\Exception  $e) {
+            DB::rollback();
+            throw $e;
+            return response()->json([
+                'status' => 'exception',
+                'type' => 'warning',
+                'message'=>  $e->getMessage()
+            ]);
+        }
     }
 
 }

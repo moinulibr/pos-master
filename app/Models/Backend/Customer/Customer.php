@@ -2,10 +2,11 @@
 
 namespace App\Models\Backend\Customer;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Backend\Customer\CustomerShippingAddress;
-use App\User;
+use App\Models\Backend\Customer\CustomerTransactionHistory;
 
 class Customer extends Model
 {
@@ -36,5 +37,11 @@ class Customer extends Model
     public function createdBY()
     {
         return $this->belongsTo(User::class,'created_by','id');
+    }
+
+
+    public function customerTransactionStatement()
+    {
+        return $this->hasMany(CustomerTransactionHistory::class,'user_id','id');
     }
 }

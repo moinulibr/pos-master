@@ -212,7 +212,7 @@ Route::group(['middleware' => ['auth']], function ()
             Route::post('update','SupplierController@update')->name('update');//->middleware(['permissions:unit|index']);
             
             //for temporary
-            Route::get('history','SupplierController@history')->name('history');//->middleware(['permissions:unit|index']);
+            Route::get('history/{id}','SupplierController@history')->name('history');//->middleware(['permissions:unit|index']);
             
             Route::get('delete','SupplierController@delete')->name('delete');//->middleware(['permissions:unit|index']);
         });
@@ -237,7 +237,7 @@ Route::group(['middleware' => ['auth']], function ()
             Route::post('update','CustomerController@update')->name('update');//->middleware(['permissions:unit|index']);
             
             //for temporary
-            Route::get('history','CustomerController@history')->name('history');//->middleware(['permissions:unit|index']);
+            Route::get('history/{id}','CustomerController@history')->name('history');//->middleware(['permissions:unit|index']);
             Route::get('transaction/statement','CustomerController@customerTransactionalStatement')->name('transactional.statement');//->middleware(['permissions:unit|index']);
             
             //delete

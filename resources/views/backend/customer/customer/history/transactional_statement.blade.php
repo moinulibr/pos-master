@@ -36,6 +36,31 @@
                     <tr  style="background-color:#ffff;color:white;height:5px;"><td colspan="11"></td></tr>
                 </thead>
                 <tbody>
+                    @foreach ($customer->customerTransactionStatement ? $customer->customerTransactionStatement : [] as $item)
+                    <tr style="background-color:#837f7f;color:white">
+                        <td style="width:5%;text-align:center;">01</td>
+                        <td style="width:11%;text-align:center;">
+                            <small>--</small>
+                        </td>
+                        <td style="width:5%;text-align:center;">
+                            011
+                        </td>
+                        <td style="width:5%;text-align:center;">
+                            10-12-2022
+                        </td>
+                        <td style="width:5%;text-align:center;">05-12-2022</td>
+                        <td style="width:23%;text-align:center;">
+                            Previous due  
+                        </td>
+                        <td style="width:11%;text-align:center;">50000.00</td>
+                        <td style="width:10%;text-align:center;">
+                            00.00
+                        </td>
+                        <td style="width:10%;text-align:center;">00.00</td>
+                        <td style="width:10%;text-align:center;">50000.00</td>
+                        <td style="width:11%;text-align:center;">50000.00</td>
+                    </tr>
+                    @endforeach
                     <tr style="background-color:#837f7f;color:white">
                         <td style="width:5%;text-align:center;">01</td>
                         <td style="width:11%;text-align:center;">

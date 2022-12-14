@@ -30,7 +30,7 @@
                             </button>
                             <div class="dropdown-menu " x-placement="top-start" style="position: absolute; will-change: top, left; top: -183px; left: 0px;">
                                 {{-- <a class="dropdown-item" href="javascript:void(0)">View</a> --}}
-                                <a class="dropdown-item singleHistoryModal" data-id="{{$item->id}}" href="{{route('admin.customer.history')}}">History</a>
+                                <a class="dropdown-item singleHistoryModal" data-id="{{$item->id}}" href="{{route('admin.customer.history',$item->id)}}">History</a>
                                 <a class="dropdown-item singleNextPaymentDateModal" data-id="{{$item->id}}" href="javascript:void(0)">Next Payment Date</a>
                                 <a class="dropdown-item singleAddLoanModal" data-id="{{$item->id}}" href="javascript:void(0)">Add Loan</a>
                                 <a class="dropdown-item singleAddAdvanceModal" data-id="{{$item->id}}" href="javascript:void(0)">Add Advance</a>

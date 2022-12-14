@@ -768,7 +768,7 @@ use App\Models\Backend\Payment\Account;
 
                     'ledger_page_no' => $requestData['ledger_page_no'] ?? NULL,
                     'next_payment_date' => $requestData['next_payment_date'] ?? NULL,
-                    'short_note' => $requestData['short_note'] ?? NULL,
+                    'short_note' => $requestData['short_note'] ? $requestData['short_note'] : $requestData['note'],
                     
                     'sell_amount' => $requestData['sell_amount'] ?? 0,
                     'sell_paid' => $requestData['sell_paid'] ?? 0,

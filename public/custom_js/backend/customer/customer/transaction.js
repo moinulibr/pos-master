@@ -1,8 +1,10 @@
 
 $(document).ready(function(){
     var url =  $('.customerTransactionalAndStatementUrl').val();
+    var id =  $('.customer_id').val();
     $.ajax({
         url: url,
+        data:{id:id},
         type: "GET",
         datatype:"HTML",
         beforeSend:function(){

@@ -95,6 +95,12 @@
                                 <strong class="note_err color-red"></strong>
                                 <div class="clearfix"></div>
                             </div>
+                            <div class="col-sm-6">
+                                <label class="col-form-label text-sm-right">Ledger Page No</label>
+                                <textarea name="ledger_page_no" class="form-control" placeholder="Ledger Page No"></textarea>
+                                <strong class="ledger_page_no_err color-red"></strong>
+                                <div class="clearfix"></div>
+                            </div>
                         </div>
 
                     </div>

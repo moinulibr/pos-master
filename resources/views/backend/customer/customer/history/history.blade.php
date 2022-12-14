@@ -199,7 +199,7 @@
 
                                 <div class="renderedTransactionalSummary"></div>
                                 <div class="renderedTransactionalStatement"></div>
-                                
+                                <input type="hidden" value="{{$customer->id}}" class="customer_id">    
                             </div>
                         </div>
                     </div>
