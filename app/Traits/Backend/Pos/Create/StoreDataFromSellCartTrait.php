@@ -10,6 +10,7 @@ use App\Models\Backend\Sell\SellQuotation;
 use App\Models\Backend\Sell\SellProductStock;
 use App\Traits\Backend\Stock\Logical\StockChangingTrait;
 use App\Traits\Backend\Payment\PaymentProcessTrait;
+use App\Traits\Backend\Payment\CustomerPaymentProcessTrait;
 /**
  * pricing trait
  * 
@@ -17,6 +18,7 @@ use App\Traits\Backend\Payment\PaymentProcessTrait;
 trait StoreDataFromSellCartTrait
 {
     use StockChangingTrait, PaymentProcessTrait;
+    use CustomerPaymentProcessTrait;
 
     protected $sellCreateFormData;
 
@@ -73,7 +75,7 @@ trait StoreDataFromSellCartTrait
         $sellInvoice->total_invoice_profit = (($sellInvoiceSummeryCart['lineInvoicePayableAmountWithRounding']) - ($this->totalPurchasePriceOfAllQuantityOfThisInvoice) - ($sellInvoiceSummeryCart['totalShippingCost'] + $sellInvoiceSummeryCart['invoiceOtherCostAmount'] ));
         $sellInvoice->save();
 
-
+        //general statement- ledger 
         if(($this->sellCreateFormData['invoice_total_paying_amount'] ?? 0) > 0)
         {
             //for payment processing 
@@ -92,6 +94,41 @@ trait StoreDataFromSellCartTrait
             $this->invoiceTotalPayingAmount = $this->sellCreateFormData['invoice_total_paying_amount'] ?? 0 ;
             $this->processingPayment();
         }
+        //general statement- ledger 
+
+        //customer transaction statement history
+        $requestCTSData = [];
+        $requestCTSData['amount'] = 0;
+        $requestCTSData['ledger_page_no'] = NULL;
+        $requestCTSData['next_payment_date'] = NULL;
+        $requestCTSData['short_note'] = "Create Sell";
+        $requestCTSData['sell_amount'] = $sellInvoice->paid_amount;
+        $requestCTSData['sell_paid'] = $sellInvoice->total_paid_amount;
+        $requestCTSData['sell_due'] = $sellInvoice->due_amount;
+        $this->processingOfAllCustomerTransactionRequestData = customerTransactionRequestDataProcessing_hp($requestCTSData);
+        $this->amount = 0;
+        $this->ctsCurrentPaymentAmount = $sellInvoice->total_payable_amount;
+        $sellType = $this->sellCreateFormData['sell_type'];
+        $ctsTypeModule = '';
+        $ctsCdfType = '';
+        if($sellType == 1)//final sell
+        {
+            $ctsTypeModule = 'Sell';
+            $ctsCdfType = 'Due';
+        }else{ // quotation
+            $ctsTypeModule = 'Quotation';
+            $ctsCdfType = 'No Change';
+        }
+        $this->ctsTTModuleId = getCTSModuleIdBySingleModuleLebel_hp($ctsTypeModule);
+        $this->ctsCustomerId = $sellInvoice->customer_id;
+        $ttModuleInvoics = [
+            'invoice_no' => $sellInvoice->invoice_no,
+            'invoice_id' => $sellInvoice->id
+        ];
+        $this->ttModuleInvoicsDataArrayFormated = $ttModuleInvoics;
+        $this->ctsCdsTypeId = getCTSCdfIdBySingleCdfLebel_hp($ctsCdfType);
+        $this->processingOfAllCustomerTransaction();
+        // customer transaction statement history        
         return $sellCart;
     }
 

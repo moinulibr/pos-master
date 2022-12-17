@@ -36,29 +36,29 @@
                     <tr  style="background-color:#ffff;color:white;height:5px;"><td colspan="11"></td></tr>
                 </thead>
                 <tbody>
-                    @foreach ($customer->customerTransactionStatement ? $customer->customerTransactionStatement : [] as $item)
+                    @foreach ($customer->customerTransactionStatement ? $customer->customerTransactionStatement : [] as $index => $tsitem)
                     <tr style="background-color:#837f7f;color:white">
-                        <td style="width:5%;text-align:center;">01</td>
+                        <td style="width:5%;text-align:center;">{{ $index + (1)}}</td>
                         <td style="width:11%;text-align:center;">
-                            <small>--</small>
+                            <small>{{$tsitem->tt_module_invoice_no}}</small>
                         </td>
                         <td style="width:5%;text-align:center;">
-                            011
+                            {{$tsitem->ledger_page_no}}
                         </td>
                         <td style="width:5%;text-align:center;">
-                            10-12-2022
+                            {{$tsitem->next_payment_date}}
                         </td>
-                        <td style="width:5%;text-align:center;">05-12-2022</td>
+                        <td style="width:5%;text-align:center;">{{date('d-m-Y',strtotime($tsitem->created_at))}}</td>
                         <td style="width:23%;text-align:center;">
-                            Previous due  
+                            {{ getCTSModuleBySingleModuleId_hp($tsitem->tt_module_id) }}
                         </td>
-                        <td style="width:11%;text-align:center;">50000.00</td>
+                        <td style="width:11%;text-align:center;">{{$tsitem->amount}}</td>
                         <td style="width:10%;text-align:center;">
-                            00.00
+                           {{$tsitem->sell_amount}}
                         </td>
-                        <td style="width:10%;text-align:center;">00.00</td>
-                        <td style="width:10%;text-align:center;">50000.00</td>
-                        <td style="width:11%;text-align:center;">50000.00</td>
+                        <td style="width:10%;text-align:center;">{{$tsitem->sell_paid}}</td>
+                        <td style="width:10%;text-align:center;">{{$tsitem->sell_due}}</td>
+                        <td style="width:11%;text-align:center;">{{$tsitem->cdc_amount}}</td>
                     </tr>
                     @endforeach
                     <tr style="background-color:#837f7f;color:white">

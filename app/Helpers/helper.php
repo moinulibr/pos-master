@@ -87,7 +87,6 @@ use App\Models\Backend\ProductAttribute\Unit;
     | Date time and date format
     |----------------------------------------------------------------------------------------
     */
-        
         function invoiceDateTimeFormat_hh()
         {
             return 'd-m-Y h:i:s a';

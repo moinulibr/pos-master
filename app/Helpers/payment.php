@@ -665,16 +665,16 @@ use App\Models\Backend\Payment\Account;
             {
                 return [
                     //value = label
-                    1 => "Previous Due",//(Opening Due)
-                    2 => "Sell", //
-                    3 => "Quotation",
-                    4 => "Loan",
-                    5 => "Advance",
-                    6 => "Sell Return",
-                    7 => "Sell Due Payment",//SD Payment
-                    8 => "Previous Due Payment", //PD Payment
-                    9 => "Sell Return Payment", // SR Payment
-                    10 => "Adjustment", // Sell Return Payment
+                    1 => "Previous Due",//(Opening Due) //due
+                    2 => "Sell", //                     //Due
+                    3 => "Quotation",//                 //nothing
+                    4 => "Loan",//                      // Due
+                    5 => "Advance", //                  // Paid
+                    6 => "Sell Return",//               // Paid
+                    7 => "Sell Due Payment",//SD Payment // Paid
+                    8 => "Previous Due Payment", //PD Payment // Paid
+                    9 => "Sell Return Payment", // SR Payment // Paid
+                    10 => "Adjustment", // Sell Return Payment // 
                     11 => "Change Payment Date", // Change Payment Date
                 ]; 
             }
@@ -715,7 +715,8 @@ use App\Models\Backend\Payment\Account;
                         }
                     }
                 }
-                return $indexOfValue; 
+                return customerTransactionTypeDebitOrCredit_hp($indexOfValue);
+                //return $indexOfValue;
             }
             function allCTSCdf_hp()
             {
@@ -723,10 +724,53 @@ use App\Models\Backend\Payment\Account;
                     //value = label
                     1 => "Paid",//Credit //Paid
                     2 => "Due",//Debit //due
-                    3 => "-"//not change
+                    3 => "Not Change"//not change
                 ];
             }
+            /*
+            |------------------------------------------------------------
+            |   *Setting*
+            | Customer Due increment == +, like: previus due,loan,
+            | Company Received Amount == - , like: advance, Due payment,
+            |------------------------------------------------------------
+            */
+                function customerFocusOnDebitOrCredit_hp()
+                {
+                    return "Credit"; //"Debit" //'Credit'
+                    // customer total due or debit to the company == credit [for company requirement]
+                    // company total received amount from the customer == debit [for company requirement]
+                }
 
+                function customerTransactionTypeDebitOrCredit_hp($result)
+                {
+                    if(customerFocusOnDebitOrCredit_hp() == 'Credit' && $result == 1)
+                    {
+                        return 2; // Minus = - 
+                    }
+                    else if(customerFocusOnDebitOrCredit_hp() == 'Credit' && $result == 2)
+                    {
+                        return 1;// plus = + 
+                    }
+
+                    else if(customerFocusOnDebitOrCredit_hp() == 'Debit' && $result == 1)
+                    {
+                        return 1; // Plus = + 
+                    } 
+                    else if(customerFocusOnDebitOrCredit_hp() == 'Debit' && $result == 2)
+                    {
+                        return 2; // Minus = - 
+                    }
+                    else{
+                        return 3;
+                    }
+                }
+            /*
+            |------------------------------------------------------------
+            | Customer Due increment == +, like: previus due,loan,
+            | Company Received Amount == - , like: advance, Due payment,
+            |------------------------------------------------------------
+            */
+            
             //not using this..just for understand
             //get cdf sign by single cdf id
             function getCTSCdfSignBySingleCdfId_hp($key)
@@ -764,7 +808,8 @@ use App\Models\Backend\Payment\Account;
             function customerTransactionRequestDataProcessing_hp($requestData)
             {
                 $paymentAllData = [ 
-                    'amount' => $requestData['ledger_page_no'] ?? 0,
+                    'module' => $requestData['module'] ?? NULL,
+                    'amount' => $requestData['amount'] ?? 0,
 
                     'ledger_page_no' => $requestData['ledger_page_no'] ?? NULL,
                     'next_payment_date' => $requestData['next_payment_date'] ?? NULL,

@@ -84,7 +84,7 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="text-center">Basic Information</h4>
+                                <h4 class="text-center">Basic Information {{getCTSCdfIdBySingleCdfLebel_hp('Paid')}}</h4>
                                 <div class="table-responsive">
                                     <table id="example1" class="table table-bordered table-striped table-hover">
                                         <tbody>
