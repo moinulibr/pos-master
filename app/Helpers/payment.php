@@ -674,8 +674,8 @@ use App\Models\Backend\Payment\Account;
                     7 => "Sell Due Payment",//SD Payment // Paid
                     8 => "Previous Due Payment", //PD Payment // Paid
                     9 => "Sell Return Payment", // SR Payment // Paid
-                    10 => "Adjustment", // Sell Return Payment // 
-                    11 => "Change Payment Date", // Change Payment Date
+                    10 => "Change Payment Date", // Change Payment Date
+                    11 => "Adjustment", // Sell Return Payment // 
                 ]; 
             }
         /*
@@ -808,7 +808,6 @@ use App\Models\Backend\Payment\Account;
             function customerTransactionRequestDataProcessing_hp($requestData)
             {
                 $paymentAllData = [ 
-                    'module' => $requestData['module'] ?? NULL,
                     'amount' => $requestData['amount'] ?? 0,
 
                     'ledger_page_no' => $requestData['ledger_page_no'] ?? NULL,

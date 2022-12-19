@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Backend\Sell\SellInvoice;
+use App\Traits\Backend\Payment\CustomerPaymentProcessTrait;
 
 use App\Traits\Backend\Payment\PaymentProcessTrait;
 class SellController extends Controller
 {
     use PaymentProcessTrait;
+    use CustomerPaymentProcessTrait;
 
     /**
      * Display a listing of the resource.
@@ -114,6 +116,29 @@ class SellController extends Controller
                 $this->paymentProcessingRelatedOfAllRequestData = paymentDataProcessingWhenSellingSubmitFromPos_hh($request);// $paymentAllData;
                 $this->invoiceTotalPayingAmount = $request->invoice_total_paying_amount ?? 0 ;
                 $this->processingPayment();
+
+                //customer transaction statement history
+                $requestCTSData = [];
+                $requestCTSData['amount'] = $request->invoice_total_paying_amount ?? 0 ;
+                $requestCTSData['ledger_page_no'] = NULL;
+                $requestCTSData['next_payment_date'] = NULL;
+                $requestCTSData['short_note'] = "Sell Due Payment";
+                $requestCTSData['sell_amount'] = 0;
+                $requestCTSData['sell_paid'] = 0;
+                $requestCTSData['sell_due'] = 0;
+                $this->processingOfAllCustomerTransactionRequestData = customerTransactionRequestDataProcessing_hp($requestCTSData);
+                $this->amount = $request->invoice_total_paying_amount ?? 0 ;
+                
+                $this->ctsTTModuleId = getCTSModuleIdBySingleModuleLebel_hp('Sell Due Payment');
+                $this->ctsCustomerId = $invoiceData->customer_id;
+                $ttModuleInvoics = [
+                    'invoice_no' => $invoiceData->invoice_no,
+                    'invoice_id' => $invoiceData->id
+                ];
+                $this->ttModuleInvoicsDataArrayFormated = $ttModuleInvoics;
+                $this->ctsCdsTypeId = getCTSCdfIdBySingleCdfLebel_hp('Paid');
+                $this->processingOfAllCustomerTransaction();
+                //customer transaction statement history  
 
                 //change amount from sellinvoice 
                 $invoiceData->paid_amount =   $invoiceData->paid_amount + $request->invoice_total_paying_amount ?? 0;

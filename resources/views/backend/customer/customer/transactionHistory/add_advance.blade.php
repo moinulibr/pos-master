@@ -22,7 +22,7 @@
                         <div class="form-group row">
                             <div class="col-sm-6">
                                 <label class="col-form-label text-sm-right">Total Advance</label>
-                                <input type="text" disabled class="form-control" value="{{$customer->next_payment_date}}">
+                                <input type="text" disabled class="form-control" value="{{$customer->total_advance}}">
                                 <div class="clearfix"></div>
                             </div>
                             

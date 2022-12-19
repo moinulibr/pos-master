@@ -90,51 +90,51 @@
                                         <tbody>
                                             <tr>
                                                 <th>Customer ID</th>
-                                                <td>1</td>
+                                                <td>{{$customer->custom_id}}</td>
             
                                                 <th>User ID</th>
-                                                <td>1001</td>
+                                                <td>{{$customer->id}}</td>
                                             </tr>
                                             <tr>
                                                 <th>Customer Name</th>
-                                                <td>Md  Abu Taleb</td>
-            
+                                                <td>{{$customer->name}}</td>
                                                 <th>Phone</th>
                                                 <td>
-                                                    01779325718 <br>
-                                                    
+                                                    {{$customer->phone}}<br/>
+                                                    {{$customer->phone_2}}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th>Customer Email</th>
-                                                <td></td>
+                                                <td>{{$customer->email}}</td>
             
                                                 <th>Address</th>
-                                                <td>Dhaka</td>
+                                                <td>{{$customer->address}}</td>
                                             </tr>
                                             <tr>
                                                 <th>
-                                                    Next payment date</th>
-                                                <td>
-                                                    12-12-2022
-                                                </td>
-                                                <th>
-                                                    Account Create Date <br>
+                                                    Next payment date
                                                 </th>
                                                 <td>
-                                                    16-04-2022
+                                                    {{ $customer->next_payment_date ? date('d-m-Y',strtotime($customer->next_payment_date)) : NULL}}
+                                                </td>
+                                                <th>
+                                                    Account Create Date 
+                                                </th>
+                                                <td>
+                                                    {{date('d-m-Y',strtotime($customer->created_at))}}
                                                 </td>
                                             </tr>                                            
                                             <tr>
                                                 <th>Customer Notes 
                                                 <td>
-                                                    not set
+                                                    {{$customer->note}}
                                                 </td>
                                                 <th>
                                                     Added By
                                                 </th>
                                                 <td>
-                                                    Admin
+                                                    {{$customer->createdBY ?$customer->createdBY->name : NULL}}
                                                 </td>
                                             </tr>
                                             <tr>

@@ -100,22 +100,22 @@
             <!-------delete Customer Modal------> 
             
             <!-------render next payment modal------> 
-            <div class="modal fade" id="renderNextPaymentDateModal"  aria-modal="true"></div>
+            <div class="modal fade" id="renderNextPaymentDateModal" aria-modal="true"></div>
             <input type="hidden" class="renderNextPaymentDateModalRoute" value="{{ route('admin.customer.render.next.payment.date.modal') }}">
             <!-------render next payment modal------> 
 
             <!-------render Add loan modal------> 
-            <div class="modal fade" id="renderAddLoanModal"  aria-modal="true"></div>
+            <div class="modal fade" id="renderAddLoanModal" aria-modal="true"></div>
             <input type="hidden" class="renderAddLoanModalRoute" value="{{ route('admin.customer.render.add.loan.modal') }}">
             <!-------render Add loan modal------> 
             
             <!-------render Add Advance modal------> 
-            <div class="modal fade" id="renderAddAdvanceModal"  aria-modal="true"></div>
+            <div class="modal fade" id="renderAddAdvanceModal" aria-modal="true"></div>
             <input type="hidden" class="renderAddAdvanceModalRoute" value="{{ route('admin.customer.render.next.add.advance.modal') }}">
             <!-------render Add Advance modal------> 
             
             <!-------render  receive Previous Due modal------> 
-            <div class="modal fade" id="renderReceivePreviousDueModal"  aria-modal="true"></div>
+            <div class="modal fade" id="renderReceivePreviousDueModal" aria-modal="true"></div>
             <input type="hidden" class="renderReceivePreviousDueModalRoute" value="{{ route('admin.customer.render.receive.previous.due.modal') }}">
             <!-------render receive Previous Due modal------> 
             

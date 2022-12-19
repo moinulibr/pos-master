@@ -97,28 +97,40 @@ trait StoreDataFromSellCartTrait
         //general statement- ledger 
 
         //customer transaction statement history
-        $requestCTSData = [];
-        $requestCTSData['amount'] = 0;
-        $requestCTSData['ledger_page_no'] = NULL;
-        $requestCTSData['next_payment_date'] = NULL;
-        $requestCTSData['short_note'] = "Create Sell";
-        $requestCTSData['sell_amount'] = $sellInvoice->paid_amount;
-        $requestCTSData['sell_paid'] = $sellInvoice->total_paid_amount;
-        $requestCTSData['sell_due'] = $sellInvoice->due_amount;
-        $this->processingOfAllCustomerTransactionRequestData = customerTransactionRequestDataProcessing_hp($requestCTSData);
-        $this->amount = 0;
-        $this->ctsCurrentPaymentAmount = $sellInvoice->total_payable_amount;
         $sellType = $this->sellCreateFormData['sell_type'];
+        $sellAmount = 0;
+        $paidAmount = 0;
+        $dueAmount = 0;
         $ctsTypeModule = '';
         $ctsCdfType = '';
+        $note = "";
         if($sellType == 1)//final sell
         {
             $ctsTypeModule = 'Sell';
             $ctsCdfType = 'Due';
+            $note = "Create sell";
+            $sellAmount = $sellInvoice->total_payable_amount;
+            $paidAmount = $sellInvoice->total_paid_amount;
+            $dueAmount = $sellInvoice->due_amount;
         }else{ // quotation
             $ctsTypeModule = 'Quotation';
             $ctsCdfType = 'No Change';
+            $note = "Create quotation";
+            $sellAmount = 0;
+            $paidAmount = 0;
+            $dueAmount = 0;
         }
+        $requestCTSData = [];
+        $requestCTSData['amount'] = 0;
+        $requestCTSData['ledger_page_no'] = NULL;
+        $requestCTSData['next_payment_date'] = NULL;
+        $requestCTSData['short_note'] =   $note;
+        $requestCTSData['sell_amount'] = $sellAmount;//$sellInvoice->total_payable_amount;
+        $requestCTSData['sell_paid'] = $paidAmount;
+        $requestCTSData['sell_due'] = $dueAmount;
+        $this->processingOfAllCustomerTransactionRequestData = customerTransactionRequestDataProcessing_hp($requestCTSData);
+        $this->amount = $sellInvoice->total_payable_amount;
+        
         $this->ctsTTModuleId = getCTSModuleIdBySingleModuleLebel_hp($ctsTypeModule);
         $this->ctsCustomerId = $sellInvoice->customer_id;
         $ttModuleInvoics = [
@@ -128,7 +140,7 @@ trait StoreDataFromSellCartTrait
         $this->ttModuleInvoicsDataArrayFormated = $ttModuleInvoics;
         $this->ctsCdsTypeId = getCTSCdfIdBySingleCdfLebel_hp($ctsCdfType);
         $this->processingOfAllCustomerTransaction();
-        // customer transaction statement history        
+        //customer transaction statement history        
         return $sellCart;
     }
 

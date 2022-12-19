@@ -56,7 +56,6 @@ class CustomerTransactionalController extends Controller
     
             $this->processingOfAllCustomerTransactionRequestData = customerTransactionRequestDataProcessing_hp($request);
             $this->amount = 0;
-            $this->ctsCurrentPaymentAmount = 0;
             $this->ctsTTModuleId = getCTSModuleIdBySingleModuleLebel_hp('Change Payment Date');
             $this->ctsCustomerId = $request->customer_id;
             $ttModuleInvoics = [
@@ -100,11 +99,10 @@ class CustomerTransactionalController extends Controller
         DB::beginTransaction();
         try {
             $data['customer'] = Customer::select('id','next_payment_date')->findOrFail($request->customer_id);
-            $data['customer']->update(['next_payment_date'=>$request->next_payment_date]);
+            //$data['customer']->update(['next_payment_date'=>$request->next_payment_date]);
     
             $this->processingOfAllCustomerTransactionRequestData = customerTransactionRequestDataProcessing_hp($request);
             $this->amount = $request->amount;
-            $this->ctsCurrentPaymentAmount = $request->amount;
             $this->ctsTTModuleId = getCTSModuleIdBySingleModuleLebel_hp('Loan');
             $this->ctsCustomerId = $request->customer_id;
             $ttModuleInvoics = [
@@ -148,11 +146,10 @@ class CustomerTransactionalController extends Controller
         DB::beginTransaction();
         try {
             $data['customer'] = Customer::select('id','total_advance')->findOrFail($request->customer_id);
-            $data['customer']->update(['next_payment_date'=>$request->next_payment_date]);
+            //$data['customer']->update(['next_payment_date'=>$request->next_payment_date]);
     
             $this->processingOfAllCustomerTransactionRequestData = customerTransactionRequestDataProcessing_hp($request);
             $this->amount = $request->amount;
-            $this->ctsCurrentPaymentAmount = $request->amount;
             $this->ctsTTModuleId = getCTSModuleIdBySingleModuleLebel_hp('Advance');
             $this->ctsCustomerId = $request->customer_id;
             $ttModuleInvoics = [
@@ -197,11 +194,10 @@ class CustomerTransactionalController extends Controller
         DB::beginTransaction();
         try {
             $data['customer'] = Customer::select('id','total_advance')->findOrFail($request->customer_id);
-            $data['customer']->update(['next_payment_date'=>$request->next_payment_date]);
+            //$data['customer']->update(['next_payment_date'=>$request->next_payment_date]);
     
             $this->processingOfAllCustomerTransactionRequestData = customerTransactionRequestDataProcessing_hp($request);
             $this->amount = $request->amount;
-            $this->ctsCurrentPaymentAmount = $request->amount;
             $this->ctsTTModuleId = getCTSModuleIdBySingleModuleLebel_hp('Previous Due Payment');
             $this->ctsCustomerId = $request->customer_id;
             $ttModuleInvoics = [

@@ -14,9 +14,11 @@ use App\Models\Backend\SellReturn\SellReturnProduct;
 use App\Models\Backend\SellReturn\SellReturnProductInvoice;
 use App\Traits\Backend\Stock\Logical\StockChangingTrait;
 use App\Traits\Backend\Payment\PaymentProcessTrait;
+use App\Traits\Backend\Payment\CustomerPaymentProcessTrait;
 class SellProductReturnController extends Controller
 {
     use StockChangingTrait, PaymentProcessTrait;
+    use CustomerPaymentProcessTrait;
 
     private $invoiceTotalQuantity;
     private $invoiceTotalPayableAmount;
@@ -84,7 +86,8 @@ class SellProductReturnController extends Controller
                 $dataRequest['invoice_total_paying_amount'] = $request->invoice_total_paying_amount ?? 0 ;
                 $dataRequest['customer_id'] = $request->customer_id;
                 $rand = rand(01,99);
-                $makeInvoice = 'SREL'.date("iHsymd").$rand;
+                //$makeInvoice = 'SREL'.date("iHsymd").$rand;
+                $makeInvoice = date("iHsymd").$rand;
                 $invoiceData = SellInvoice::where('id',$request->sell_invoice_id)->first();
                 
                 $returnInvoice  = $this->sellReturnProductInvoice($makeInvoice,$invoiceData,$dataRequest);
@@ -113,8 +116,31 @@ class SellProductReturnController extends Controller
                     $this->paymentProcessingRelatedOfAllRequestData = paymentDataProcessingWhenSellingSubmitFromPos_hh($request);// $paymentAllData;
                     $this->invoiceTotalPayingAmount = $request->invoice_total_paying_amount ?? 0 ;
                     $this->processingPayment();
-                }
+                    //for payment processing 
 
+                    //customer transaction statement history
+                    $requestCTSData = [];
+                    $requestCTSData['amount'] =$request->invoice_total_paying_amount ?? 0 ;
+                    $requestCTSData['ledger_page_no'] = NULL;
+                    $requestCTSData['next_payment_date'] = NULL;
+                    $requestCTSData['short_note'] = "Sell Return";
+                    $requestCTSData['sell_amount'] = 0;
+                    $requestCTSData['sell_paid'] = 0;
+                    $requestCTSData['sell_due'] = 0;
+                    $this->processingOfAllCustomerTransactionRequestData = customerTransactionRequestDataProcessing_hp($requestCTSData);
+                    $this->amount = $request->invoice_total_paying_amount ?? 0 ;
+                    
+                    $this->ctsTTModuleId = getCTSModuleIdBySingleModuleLebel_hp('Sell Return');
+                    $this->ctsCustomerId = $invoiceData->customer_id;
+                    $ttModuleInvoics = [
+                        'invoice_no' => $makeInvoice,
+                        'invoice_id' => $returnInvoice->id
+                    ];
+                    $this->ttModuleInvoicsDataArrayFormated = $ttModuleInvoics;
+                    $this->ctsCdsTypeId = getCTSCdfIdBySingleCdfLebel_hp('Paid');
+                    $this->processingOfAllCustomerTransaction();
+                    //customer transaction statement history    
+                }
                 DB::commit();
             }else{
                 return response()->json([

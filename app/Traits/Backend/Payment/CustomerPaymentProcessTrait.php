@@ -25,7 +25,10 @@ trait CustomerPaymentProcessTrait
     protected $amount;
     protected $ctsCurrentPaymentAmount;
 
-    private $ctsLastPaymentAmount;
+    private $ctsPaymentChangingAmount;
+    private $ctsPaymentMainAmount;
+    private $ctsCdsChangingTypeId;
+
     
     /*
     * Processing Payment
@@ -40,6 +43,7 @@ trait CustomerPaymentProcessTrait
     protected function insertCustomerTransactionHistory()
     {   
         //$this->ctsCustomerId
+        $this->makeableCurrentCdcAmount();
         $lastAmountOfThisCustomer = $this->currentCdcAmountAfterCalculationByCtsCdfType();
         
         $customerTransaction = new CustomerTransactionHistory();
@@ -54,7 +58,7 @@ trait CustomerPaymentProcessTrait
         $customerTransaction->tt_module_invoice_no = $this->ttModuleInvoicsDataArrayFormated['invoice_no'];
         $customerTransaction->tt_module_invoice_id = $this->ttModuleInvoicsDataArrayFormated['invoice_id'];
         $customerTransaction->cdf_type_id = $this->ctsCdsTypeId;
-        $customerTransaction->amount = $this->amount;
+        $customerTransaction->amount = $this->ctsPaymentMainAmount;//$this->amount;
         $customerTransaction->sell_amount = $this->processingOfAllCustomerTransactionRequestData['sell_amount'];
         $customerTransaction->sell_paid = $this->processingOfAllCustomerTransactionRequestData['sell_paid'];
         $customerTransaction->sell_due = $this->processingOfAllCustomerTransactionRequestData['sell_due'];
@@ -69,6 +73,37 @@ trait CustomerPaymentProcessTrait
         return $customerTransaction;
     }
     
+    //depend on its.. first call this method
+    public function makeableCurrentCdcAmount()
+    {
+        $changingAmount = 0;
+        $ctsCdfType = $this->ctsCdsTypeId;
+        $mainAmount = 0;
+        if(getCTSModuleBySingleModuleId_hp($this->ctsTTModuleId) == 'Sell')
+        {
+            $mainAmount = 0;
+            $changingAmount = $this->processingOfAllCustomerTransactionRequestData['sell_due'];
+            $ctsCdfType = $this->ctsCdsTypeId; //plus or minus +/-
+        } 
+        else if(getCTSModuleBySingleModuleId_hp($this->ctsTTModuleId) == 'Quotation')
+        {
+            $mainAmount = $this->amount;
+            $changingAmount = 0;
+            $ctsCdfType = 3;//no change
+        }
+        else{
+            $changingAmount = $this->amount;
+            $mainAmount = $this->amount;
+            $ctsCdfType = $this->ctsCdsTypeId;//plus or minus +/-
+        }
+        $this->ctsPaymentMainAmount = $mainAmount;
+        $this->ctsPaymentChangingAmount = $changingAmount;
+        $this->ctsCdsChangingTypeId = $ctsCdfType;
+        return true;
+        allCTSModule_hp();//its when chack only
+        getCTSModuleBySingleModuleId_hp($this->ctsTTModuleId);//its when chack only
+    }
+
     //current cdc amount after culculation by cdf type id
     private function currentCdcAmountAfterCalculationByCtsCdfType()
     {
@@ -83,13 +118,13 @@ trait CustomerPaymentProcessTrait
         }
 
         $cdcAmount = 0;
-        if($this->ctsCdsTypeId == 1) // credit = paid
+        if($this->ctsCdsChangingTypeId == 1) // credit = paid
         {
-            $cdcAmount = $lastAmount + $this->ctsCurrentPaymentAmount;//$this->currentPaymentAmount;
+            $cdcAmount = $lastAmount + $this->ctsPaymentChangingAmount;//$this->currentPaymentAmount;
         }
-        else if($this->ctsCdsTypeId == 2)
+        else if($this->ctsCdsChangingTypeId == 2)
         {
-            $cdcAmount = $lastAmount - $this->ctsCurrentPaymentAmount;//$this->currentPaymentAmount;
+            $cdcAmount = $lastAmount - $this->ctsPaymentChangingAmount;//$this->currentPaymentAmount;
         }
         else{
            $cdcAmount = $lastAmount;
