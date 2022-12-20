@@ -1,8 +1,8 @@
 
     <br/><br/>
-    <button class="btn btn-primary pull-left" name="pdf"> <i class="fa fa-download"></i>
+    {{-- <button class="btn btn-primary pull-left" name="pdf"> <i class="fa fa-download"></i>
         PDF
-    </button>
+    </button> --}}
     <div class="action-buttons">
         <h4 class="text-center">Transactional Statement </h4>
         <div class="table-responsive">

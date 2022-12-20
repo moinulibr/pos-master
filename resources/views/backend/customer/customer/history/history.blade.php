@@ -84,7 +84,7 @@
                     <div class="col-xs-12 col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="text-center">Basic Information {{getCTSCdfIdBySingleCdfLebel_hp('Paid')}}</h4>
+                                <h4 class="text-center">Basic Information</h4>
                                 <div class="table-responsive">
                                     <table id="example1" class="table table-bordered table-striped table-hover">
                                         <tbody>
@@ -142,51 +142,58 @@
                                                     
                                                     <div class="btn-group btnGroupForMoreAction">
                                                         <button type="button" class="btn btn-sm btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                                        {{-- <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="true"> --}}
+                                                            <!-- <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="true"> -->
                                                             <i class="fa fa-gear tiny-icon"></i> <span class="caret"></span>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-left" role="menu" style="">
-                                                            <li><a class="btn w-100 btn-info" href="https://test.nanarokom247.com/customer/1/edit"><i class="fa fa-pencil tiny-icon"></i> Edit</a></li>
                                                             <li>
-                                                                <button class="btn w-100 btn-danger addLoanBtn" data-id="1">
+                                                                <button class="btn w-100 btn-danger singleNextPaymentDateModal" data-id="{{$customer->id}}" >
+                                                                    <i class="fa fa-plus tiny-icon"></i> Next Payment Date
+                                                                </button>
+                                                            </li>
+                                                            <li>
+                                                                <button class="btn w-100 btn-warning singleAddLoanModal" data-id="{{$customer->id}}" >
                                                                     <i class="fa fa-plus tiny-icon"></i> Add Loan
                                                                 </button>
                                                             </li>
                                                             <li>
-                                                                <button class="btn w-100 btn-warning addAdvanceBtn" data-id="1">
+                                                                <button class="btn w-100 btn-info singleAddAdvanceModal" data-id="{{$customer->id}}" >
                                                                     <i class="fa fa-plus tiny-icon"></i> Add Advance
                                                                 </button>
                                                             </li>
                                                             <li>
-                                                                <button class="btn w-100 btn-info getPaymentBtn" data-id="1">
-                                                                    <i class="fa fa-plus tiny-icon"></i> Receive Prev due
+                                                                <button class="btn w-100 btn-success singleReceivePreviousDueModal" data-bs-toggle="modal" data-id="{{$customer->id}}" >
+                                                                    <i class="fa fa-plus tiny-icon"></i> Receive Previous Due
                                                                 </button>
                                                             </li>
                                                             <li>
-                                                                <button class="btn w-100 btn-success" data-bs-toggle="modal" data-bs-target="#changeDate" onclick="setChangeDateModalForm(1)">
-                                                                    <i class="fa fa-pencil tiny-icon"></i> Next Payment Date
+                                                                <button class="btn w-100 btn-danger singleEditModal" data-id="{{$customer->id}}" >
+                                                                    <i class="fa fa-edit tiny-icon"></i> Edit
                                                                 </button>
                                                             </li>
+                                                            <!--<li><a class="btn w-100 btn-primary" href=""><i class="fa fa-pencil tiny-icon"></i> Edit</a></li>-->
                                                         </ul>
                                                     </div> 
                                                     
-                                                    {{-- <div class="btn-group btnGroupForMoreAction">
-                                                        <button type="button" class="btn btn-sm btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                                            <!--
-                                                                <i class="fas fa-ellipsis-v"></i>
-                                                                <i class="fas fa-cogs"></i>
-                                                            -->
-                                                        </button>
-                                                        <div class="dropdown-menu " x-placement="top-start" style="position: absolute; will-change: top, left; top: -183px; left: 0px;">
-                                                            <a class="dropdown-item singleHistoryModal" data-id="" href="{{route('admin.customer.history')}}">History</a>
-                                                            <a class="dropdown-item singleNextPaymentDateModal" data-id="" href="javascript:void(0)">Next Payment Date</a>
-                                                            <a class="dropdown-item singleAddLoanModal" data-id="" href="javascript:void(0)">Add Loan</a>
-                                                            <a class="dropdown-item singleAddAdvanceModal" data-id="" href="javascript:void(0)">Add Advance</a>
-                                                            <a class="dropdown-item singleReceivePreviousDueModal" data-id="" href="javascript:void(0)">Receive Previous Due</a>
-                                                            <a class="dropdown-item singleEditModal" data-id="" href="javascript:void(0)">Edit</a>
-                                                            <a class="dropdown-item singleDeleteModal" data-id="" data-name="" href="javascript:void(0)">Delete</a>
-                                                        </div>
-                                                    </div> --}}
+                                                    {{-- 
+                                                        <div class="btn-group btnGroupForMoreAction">
+                                                            <button type="button" class="btn btn-sm btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                                                <!--
+                                                                    <i class="fas fa-ellipsis-v"></i>
+                                                                    <i class="fas fa-cogs"></i>
+                                                                -->
+                                                            </button>
+                                                            <div class="dropdown-menu " x-placement="top-start" style="position: absolute; will-change: top, left; top: -183px; left: 0px;">
+                                                                <a class="dropdown-item singleHistoryModal" data-id="" href="{{route('admin.customer.history',1)}}">History</a>
+                                                                <a class="dropdown-item singleNextPaymentDateModal" data-id="" href="javascript:void(0)">Next Payment Date</a>
+                                                                <a class="dropdown-item singleAddLoanModal" data-id="" href="javascript:void(0)">Add Loan</a>
+                                                                <a class="dropdown-item singleAddAdvanceModal" data-id="" href="javascript:void(0)">Add Advance</a>
+                                                                <a class="dropdown-item singleReceivePreviousDueModal" data-id="" href="javascript:void(0)">Receive Previous Due</a>
+                                                                <a class="dropdown-item singleEditModal" data-id="" href="javascript:void(0)">Edit</a>
+                                                                <a class="dropdown-item singleDeleteModal" data-id="" data-name="" href="javascript:void(0)">Delete</a>
+                                                            </div>
+                                                        </div> 
+                                                    --}}
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -211,18 +218,32 @@
             <!-------responsive table------> 
 
 
-            <!-------add Customer Modal------> 
-            <div class="modal fade " id="addCustomerModal"  aria-modal="true"></div>
-            <input type="hidden" class="addCustomerModalRoute" value="{{ route('admin.customer.create') }}">
-            <!-------add Customer Modal------> 
+            
+            <!-------render next payment modal------> 
+            <div class="modal fade" id="renderNextPaymentDateModal" aria-modal="true"></div>
+            <input type="hidden" class="renderNextPaymentDateModalRoute" value="{{ route('admin.customer.render.next.payment.date.modal') }}">
+            <!-------render next payment modal------> 
+
+            <!-------render Add loan modal------> 
+            <div class="modal fade" id="renderAddLoanModal" aria-modal="true"></div>
+            <input type="hidden" class="renderAddLoanModalRoute" value="{{ route('admin.customer.render.add.loan.modal') }}">
+            <!-------render Add loan modal------> 
+            
+            <!-------render Add Advance modal------> 
+            <div class="modal fade" id="renderAddAdvanceModal" aria-modal="true"></div>
+            <input type="hidden" class="renderAddAdvanceModalRoute" value="{{ route('admin.customer.render.next.add.advance.modal') }}">
+            <!-------render Add Advance modal------> 
+            
+            <!-------render  receive Previous Due modal------> 
+            <div class="modal fade" id="renderReceivePreviousDueModal" aria-modal="true"></div>
+            <input type="hidden" class="renderReceivePreviousDueModalRoute" value="{{ route('admin.customer.render.receive.previous.due.modal') }}">
+            <!-------render receive Previous Due modal------> 
             
 
-            <!-------delete Customer Modal------> 
-            @include('backend.customer.customer.partial.delete_modal')
-            <input type="hidden" class="deleteCustomerModalRoute" value="{{ route('admin.customer.delete') }}">
-            <!-------delete Customer Modal------> 
-            
-
+            <!-------edit Customer Modal------> 
+            <div class="modal fade " id="editCustomerModal"  aria-modal="true"></div>
+            <input type="hidden" class="editCustomerModalRoute" value="{{ route('admin.customer.edit') }}">
+            <!-------edit Customer Modal------> 
 
 
         
@@ -250,8 +271,9 @@
 <!--=================js=================-->
 @push('js')
 <!--=================js=================-->
-<script src="{{asset('custom_js/backend')}}/customer/customer/transaction.js?v=1"></script>
-
+<script src="{{asset('custom_js/backend')}}/customer/customer/transaction_statement_summary.js?v=1"></script>
+<script src="{{asset('custom_js/backend')}}/customer/customer/transactional_process.js?v=1"></script>
+<script src="{{asset('custom_js/backend')}}/customer/customer/edit.js?v=3"></script>
 <!--=================js=================-->
 @endpush
 <!--=================js=================-->

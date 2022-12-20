@@ -1,5 +1,10 @@
 
 $(document).ready(function(){
+    customerList();
+});
+
+function customerList()
+{
     var url =  $('.customerTransactionalAndStatementUrl').val();
     var id =  $('.customer_id').val();
     $.ajax({
@@ -21,6 +26,8 @@ $(document).ready(function(){
             $('.processing').fadeOut();
         },
     });
-});
+}
+
+
 
 
