@@ -5,18 +5,21 @@ namespace App\Http\Controllers\Backend\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-
 use App\Traits\Permission\Permission;
 use App\Models\Backend\Customer\Customer;
 
 use App\Traits\Backend\Payment\CustomerPaymentProcessTrait;
 
+use App\Traits\Backend\Customer\Logical\ManagingCalculationOfCustomerSummaryTrait;
+
 class CustomerTransactionalController extends Controller
 {
-    use CustomerPaymentProcessTrait;
+    use CustomerPaymentProcessTrait, ManagingCalculationOfCustomerSummaryTrait;
+
 
     public function history($id)
     {
+        //return $this->managingCustomerCalculation($customerId=2,$dbField='total_due',$calType='plus',$amount=10);
         $data['customer'] = Customer::findOrFail($id);
         return view('backend.customer.customer.history.history',$data);
     }

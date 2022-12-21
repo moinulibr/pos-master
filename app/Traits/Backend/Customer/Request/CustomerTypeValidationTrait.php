@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Requests\Backend\Customer;
+namespace App\Traits\Backend\Customer\Request;
 
 //use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
