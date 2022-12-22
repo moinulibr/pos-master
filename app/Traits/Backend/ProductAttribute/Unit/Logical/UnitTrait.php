@@ -13,7 +13,7 @@ trait UnitTrait
      * from units table
      * @var integer
      */
-    public int $unitId;
+    public $unitId;
 
     /**
      * get unit by unit id function

@@ -2,7 +2,7 @@
 <html lang="en" class="default-style layout-fixed layout-navbar-fixed">
     <!-- Mirrored from html.phoenixcoded.net/empire/bootstrap/default/pages_invoice-print.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 21 Jun 2020 11:02:16 GMT -->
     <head>
-        <title>Empire | B4+ admin template</title>
+        <title>   {{ config('app.name') }} </title>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />

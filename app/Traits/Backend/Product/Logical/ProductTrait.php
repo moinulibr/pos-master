@@ -25,7 +25,7 @@ use App\Traits\Backend\Price\Logical\PricingTrait;
      * Its containt product mainid
      * @var integer
      */
-    public int $productId;
+    public  $productId;
 
 
     public function getProductByProductId()

@@ -4,10 +4,10 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="keywords" content="Amader Sanitary">
+        <meta name="keywords" content="{{ config('app.name') }} ">
         <meta name="author" content="GeniusOcean">
 
-        <title>Amader Sanitary</title>
+        <title> {{ config('app.name') }} </title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   
@@ -158,11 +158,11 @@
     <div class="mini-invoice">
         <div id="top" style="margin-top: -10px">
             <h2 class="brand" style="margin-bottom:2px;font-size: 1.2em">
-                AMADER SANITARY
+                {{ companyName_hh() }}
             </h2>
             <div class="info" style="font-size: 0.9em;">
-                <p>Janata Bank More, Hafej Bulding Under Graound, Faridpur </p>
-                <p>Call: 01711 11 11 92</p>
+                <p>{{ AppFullAddress_hh() }} </p>
+                <p>Call: {{ companyPhone_hh() }}</p>
                 <b>Invoice No. #{{$data->invoice_no}}</b>
                 <p>Date: {{date('d/m/Y, h:i:s A')}}</p>
                 <p class="serve">Served by: {{Auth::guard('web')->user()->name}} </p>
